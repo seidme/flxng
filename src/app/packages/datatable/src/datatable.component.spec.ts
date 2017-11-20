@@ -259,8 +259,8 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
             });
 
             // ------------------------------ METHODS ----------------------------------
-            it('`checkInputDataChanges` method should be defined', () => {
-                expect(typeof dtComp.checkInputDataChanges === 'function').toBe(true);
+            it('`checkAndProcessInputDataChanges` method should be defined', () => {
+                expect(typeof dtComp.checkAndProcessInputDataChanges === 'function').toBe(true);
             });
 
             it('`onInputDataChanges` member should be initialized as empty array', () => {
@@ -450,25 +450,25 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
         describe('`ngDoCheck` Lifecycle Hook >> ', () => {
 
             beforeEach(() => {
-                spyOn(dtComp, 'checkInputDataChanges');
+                spyOn(dtComp, 'checkAndProcessInputDataChanges');
 
                 dtComp.ngDoCheck();
             });
 
 
-            it('should call `checkInputDataChanges` method', () => {
-                expect(dtComp.checkInputDataChanges).toHaveBeenCalled();
+            it('should call `checkAndProcessInputDataChanges` method', () => {
+                expect(dtComp.checkAndProcessInputDataChanges).toHaveBeenCalled();
             });
         });
 
 
-        describe('`checkInputDataChanges` method >> ', () => {
+        describe('`checkAndProcessInputDataChanges` method >> ', () => {
 
             it('`gridData` member should be initialized as empty array if input data is undefined or non-array type', () => {
                 dtComp.data = undefined;
                 dtComp.gridData = [{}, {}];
 
-                dtComp.checkInputDataChanges();
+                dtComp.checkAndProcessInputDataChanges();
 
                 expect(dtComp.gridData).toEqual([]);
             });
@@ -478,7 +478,7 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
                 dtComp.data = undefined;
                 spyOn(dtComp, 'onInputDataChanges');
 
-                dtComp.checkInputDataChanges();
+                dtComp.checkAndProcessInputDataChanges();
 
                 expect(dtComp.onInputDataChanges).not.toHaveBeenCalled();
             });
