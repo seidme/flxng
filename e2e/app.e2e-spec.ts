@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('ng-datatable App', () => {
+describe('flxng App', () => {
   let page: AppPage;
 
   beforeEach(() => {

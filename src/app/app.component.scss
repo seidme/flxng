@@ -1,0 +1,203 @@
+//@import "shared/styles/colors.scss";
+
+:host {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .flx-layout {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .flx-layout-head {
+            flex: 0 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        .flx-layout-body {
+            flex: 1 1 auto;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+
+            .flx-layout-body-sidebar {
+                flex: 0 0 auto;
+                position: relative;
+                z-index: 11;
+                display: flex;
+                flex-direction: column;
+                overflow: visible;
+            }
+
+            .flx-layout-body-content {
+                flex: 1 1 auto;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                // min-height: min-content;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                background: #f7f7f7;
+            }
+        }
+    }
+
+
+
+
+
+
+    .flx-header {
+        width: 100%; 
+        height: 70px; 
+        //background: #207179;
+        background: #40337f;
+
+        display: flex;
+        flex-direction: row;
+
+        .left {
+            flex: 0 0 auto;
+            width: 228px; 
+
+            display: flex;
+            //justify-content: center;
+            align-items: center;
+
+            span {
+                margin-left: 10px;
+                color: #FFF;
+                font-size: 25px;
+                letter-spacing: 10px;
+            }
+        }
+
+        .right {
+            flex: 1 1 100%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            span.heading {
+                margin-left: 20px;
+                color: #FFF;
+                font-size: 25px;
+                letter-spacing: 2px;
+            }
+
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 80px;
+                height: 30px;
+                margin-right: 10px;
+                background-color: #eff3f6;
+                border: 1px solid #d1d2d3;
+                border-radius: 0.25em;
+                color: #24292e;
+                outline: 0;
+
+                span.btn-text {
+                    margin-left: 5px;
+                    margin-top: -2px;
+                    color: #24292e;
+                }
+            }
+        }
+    }
+
+    .flx-sidebar {
+        width: 230px; 
+        height: 100%; 
+        overflow-x: hidden;
+        overflow-y: auto;
+        
+
+        //min-height: min-content;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        a {
+            flex: 0 0 25px;
+            display: flex;
+            align-items: center;
+
+            padding: 10px;
+
+            span {
+                margin-left: 20px;
+                color: #40337f;
+                font-size: 15px;
+                letter-spacing: 2px;
+            }
+
+            &.root {
+                span {
+                    font-size: 18px;
+                    margin-left: 0;
+                    font-weight: bold;
+                }
+            }
+            
+            &:hover {
+                background-color: #f7f7f7;
+            }
+
+            &.active {
+                background-color: #f7f7f7;
+            }
+        }
+    }
+
+    .flx-component-wrapper {
+        margin-top: 20px; 
+        margin-left: 50px; 
+        margin-right: 50px; 
+        margin-bottom: 20px; 
+        //height: 100%; 
+        //min-height: min-content;
+    }
+
+
+    .right-shadow {
+        box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.15);
+    }
+
+
+
+
+
+
+
+    
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-track {
+        //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+        //background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #bfbfbf;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.13);
+    }
+}

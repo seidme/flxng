@@ -1,1 +1,104 @@
 /* You can add global styles to this file, and also import other style files */
+
+//@import "/app/shared/styles/mixins.scss";
+
+html {
+    margin:0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    //touch-action: manipulation;
+    //font-size: 14px;
+    //color:#333;
+}
+
+body {
+    margin:0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
+    //font-size: 14px;
+    //color:#333;
+}
+
+//  ::-webkit-scrollbar {
+// 	width: 8px;
+//     height: 8px;
+// 	background-color: #F5F5F5;
+// }
+
+// ::-webkit-scrollbar-track {
+// 	//-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+// 	background-color: #F5F5F5;
+//     //background: transparent;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//     background-color: #bfbfbf;
+// 	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.13);
+// }
+
+
+
+.flx-box-shadow {
+    //box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px -2px rgba(0, 0, 0, 0.2), 0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+}
+
+.flx-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.flx-link {
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        font-weight: bold;
+    }
+}
+
+.flx-whole-content-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+ }
+
+.flx-selectable-list {
+    padding: 0;
+
+    .flx-selectable-list-item {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        height: 3rem;
+        background-color: #FFFFFF;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &:hover {
+            font-weight: bold;
+            background-color: rgba(238, 238, 238, 0.5);
+        }
+
+        > span {
+            //flex-grow: 0;
+            color: rgba(0, 0, 0, 0.69);
+            //font-family: omnes_att_ii_medium;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .material-icons {
+            color: #51dec2;
+        }
+    }
+}

@@ -1,0 +1,50 @@
+
+  
+  <flx-datatable class="flx-box-shadow"
+                [data]="data" 
+                [bodyStyle]="{height: '400px'}"
+                [resizeMode]="'fit'" 
+                [reorderable]="true" 
+                [saveSettings]="true" 
+                [settingsStorageKey]="'test-test'" 
+                [globalFilterInputRef]="globalFilterInput" 
+                id="items-datatable">
+
+    <ng-template flxTemplate="options" let-cols="columns" let-colsMap="columnsMap">
+      <div class="grid-options-container">
+        <span class="global-filter">
+          <input type="text" id="flx-datatable-global-filter" placeholder="Filter..." value="">
+        </span>
+
+        <span>
+          <button type="button" (click)="puuush()">PUSH</button>
+        </span>
+
+        <span>
+            <button type="button" (click)="spliiice()">SPLICE</button>
+          </span>
+      </div>
+    </ng-template>
+
+    <flx-column [expander]="true" [rowExpandableIndicatorProperty]="'children'"></flx-column>
+    <flx-column [field]="'id'" [header]="'ID'"></flx-column>
+    <flx-column [field]="'name'" [header]="'NAME'"></flx-column>
+    <flx-column [field]="'age'" [header]="'AGE'"></flx-column>
+    <flx-column [field]="'race'" [header]="'RACE'"></flx-column>
+
+    <ng-template flxTemplate="rowExpansion" #rowExpansionTemplateRef let-item="rowData" let-ri="rowIndex" let-cols="columns" let-colsMap="columnsMap" let-level="level" let-self="self">
+      <flx-datatable [data]="item.children" [includeHead]="false" [bodyStyle]="{height: '150px'}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
+        <ng-container *ngFor="let col of cols">
+          <flx-column [field]="col.field" [expander]="col.expander" [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty" [templateRefs]="col.templateRefs"></flx-column>
+        </ng-container>
+        <!-- <flx-paginator-meta [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta> -->
+      </flx-datatable>
+    </ng-template>
+
+    <ng-template flxTemplate="noResults">
+    </ng-template>
+
+    <flx-paginator-meta [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta>
+
+  </flx-datatable>
+  

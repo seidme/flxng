@@ -1,6 +1,6 @@
 {
-  "name": "ng-datatable",
-  "version": "0.0.0",
+  "name": "flxng",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "@flxng/common": "file:./src/app/packages/common/flxng-common-1.0.0.tgz",
+    "@flxng/datatable": "file:./src/app/packages/datatable/flxng-datatable-1.0.0.tgz",   
     "core-js": "^2.4.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"

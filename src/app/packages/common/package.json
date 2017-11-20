@@ -1,0 +1,14 @@
+{
+    "name": "@flxng/common",
+    "version": "1.0.0",
+    "description": "Flxng common package",
+    "main": "./bundles/common.umd.js",
+    "module": "./esm5/common.js",
+    "es2015": "./esm2015/common.js",
+    "typings": "./common.d.ts",
+    "author": "flxng",
+    "license": "MIT",
+    "dependencies": {
+
+    }
+  }

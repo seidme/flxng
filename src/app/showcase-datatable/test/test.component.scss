@@ -1,0 +1,46 @@
+:host {
+
+    flx-datatable {
+        //height: 100%; 
+        //min-height: min-content;
+
+        //height: 500px;
+        background: #FFF;
+    }
+    
+    .grid-options-container {
+        position: relative;
+        height: 4.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        cp-menu {
+            margin-right: 3rem;
+        }
+
+        .global-filter {
+            margin-left: 1rem;
+
+             input[type=text] {
+                height: 2.2rem;
+                width: 15rem;
+                padding-left: 2.5rem;
+                border: none;
+                outline: none;
+                border-radius: 1.7rem;
+                background: transparent;
+                transition: background-color 0.2s ease-in-out;
+                //font: 14px $omnesMedium;
+                //background-image: url(/assets/images/filter-icon.png);
+                background-repeat: no-repeat;
+                background-position: 1rem 0.7rem;
+
+                &:focus {
+                    background-color: rgba(229, 232, 244, 0.48);
+                }
+
+             }
+        }
+    }
+}
