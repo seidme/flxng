@@ -213,7 +213,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     ngDoCheck(): void {
         if (this.readyToProcessData) {
-            this.checkInputDataChanges();
+            this.checkAndProcessInputDataChanges();
 
             // if(this.metas.resizeMode.value !== this.ResizeModes.expand ) {
             //     this._changeDetectorRef.detectChanges();
@@ -245,7 +245,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    checkInputDataChanges(): void {
+    checkAndProcessInputDataChanges(): void {
         if (!this.data || this.data.constructor !== Array || !this.data.length) {
             if (this.gridData.length) {
                 this.gridData = [];
@@ -347,7 +347,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
             // set metas that are non-inheritable but can be restored from storage
             let storedMetasMap = this.getStoredMetasMap(false);
-            if(this.canApplyStoredMetas(storedMetasMap)) { // TODO: no need for check using canApplyStoredMetas method? Is the method even doing right thing????????????????????????????????
+            if(this.canApplyStoredMetas(storedMetasMap)) { // TODO: no need for check using canApplyStoredMetas method? Is the method even doing right thing??
                 let gridMetaKeysToApply = ['itemsPerPage'];
                 let colMetaKeysToApply = ['sortOrder'];
 
