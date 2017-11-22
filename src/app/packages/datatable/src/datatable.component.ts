@@ -288,9 +288,9 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         });
 
 
-        let sortColumn = this.cols && this.cols.find(c => c.metas.sortOrder.value !== 0);
-        if (sortColumn)
-            this.sortColumn(sortColumn, true);
+        let sortedColumns = this.getSortedColumns();
+        if (sortedColumns.length)
+            this.sortColumn(sortedColumns[0], true);
 
         this.globalFilterValue
             ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
@@ -299,6 +299,19 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         this.paginatorMeta
             ? this.initPagination()
             : this.renderData = this.filteredData.slice();
+    }
+
+
+    getSortedColumns(): ColumnComponent[] {
+        if(!this.cols) {
+            return [];
+        }
+
+        return this.cols
+            .filter(c => c.metas.sortIndex.value > -1)
+            .sort((cA: ColumnComponent, cB: ColumnComponent) => {
+                return cA.metas.sortIndex.value - cB.metas.sortIndex.value;
+            });
     }
 
 
@@ -349,7 +362,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             let storedMetasMap = this.getStoredMetasMap(false);
             if(this.canApplyStoredMetas(storedMetasMap)) { // TODO: no need for check using canApplyStoredMetas method? Is the method even doing right thing??
                 let gridMetaKeysToApply = ['itemsPerPage'];
-                let colMetaKeysToApply = ['sortOrder'];
+                let colMetaKeysToApply = ['sortOrder', 'sortIndex'];
 
                 this.applyStoredMetas(storedMetasMap, gridMetaKeysToApply, colMetaKeysToApply);
             }
@@ -365,7 +378,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
             if(this.canApplyStoredMetas(storedMetasMap)) {
                 let storableGridMetaKeys = ['width', 'resizeMode', 'itemsPerPage'];
-                let storableColMetaKeys = ['width', 'position', 'visibility', 'sortOrder'];
+                let storableColMetaKeys = ['width', 'position', 'visibility', 'sortOrder', 'sortIndex'];
 
                 this.applyStoredMetas(storedMetasMap, storableGridMetaKeys, storableColMetaKeys)
             }
@@ -446,7 +459,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     setDefaultMetas(): void {
-        // Grid metas -->
+        // Datatable metas -->
         this.metas.resizeMode.value = this.resizeMode;
         this.metas.itemsPerPage.value = this.paginatorMeta 
             ? this.paginatorMeta.itemsPerPage
@@ -457,6 +470,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             col.metas.position.value = i; // set default position (as they appear in the template)
             col.metas.visibility.value = true;
             col.metas.sortOrder.value = 0;
+            col.metas.sortIndex.value = -1;
         });
 
         // Width -->
@@ -726,44 +740,80 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    sortColumn(col: ColumnComponent, autoSorting: boolean): void {
+    sortColumn(col: ColumnComponent, autoSorting: boolean, event?: any): void {
+        let columnsToSort = this.getSortedColumns();
+
         if (!autoSorting) {
             // previously ordered ? reverse order : set ascending order
             col.metas.sortOrder.value = col.metas.sortOrder.value ? col.metas.sortOrder.value * -1 : 1;
 
-            // reset all other columns
-            this.cols.forEach(c => {
-                if (c.id !== col.id)
-                    c.metas.sortOrder.value = 0;
-            });
+            if(event && event.ctrlKey) { // TODO: what about auto sorting multiple columns?
+                if(columnsToSort.indexOf(col) === -1) {
+                    col.metas.sortIndex.value = columnsToSort.length
+                        ? columnsToSort[columnsToSort.length - 1].metas.sortIndex.value + 1 // column with highest sortIndex incremented
+                        : 0; // make it first column to sort by
+
+                    columnsToSort.push(col);
+                }
+            }
+            else {
+                // make it first column to sort by
+                col.metas.sortIndex.value = 0;
+                columnsToSort = [col];
+
+                // reset all other columns
+                this.cols.forEach((c: ColumnComponent) => {
+                    if (c !== col) {
+                        c.metas.sortOrder.value = 0;
+                        c.metas.sortIndex.value = -1;
+                    }
+                });
+            }
 
             if (this.saveSettings)
                 this.storeMetasMap(true);
         }
 
 
-        this.gridData.sort((a, b) => {
-            let compareResult = col.sortComparator
-                ? col.sortComparator(a, b)
-                : compareValues(this.resolveFieldValue(a, col.field), this.resolveFieldValue(b, col.field), col.sortCollator);
+        let getCompareResult = (c: ColumnComponent, rowDataA: any, rowDataB: any): number => {
+            if(c.sortComparator) {
+                return c.sortComparator(rowDataA, rowDataB);
+            }
+            else {
+                let valA = this.resolveFieldValue(rowDataA, c.field);
+                let valB = this.resolveFieldValue(rowDataB, c.field);
 
-            return compareResult === 0 || typeof compareResult !== 'number' || isNaN(compareResult)
-                ? a.dtIndex > b.dtIndex ? 1 : -1 // fix for Chromium's unstable sorting algorithm: http://stackoverflow.com/questions/3195941/sorting-an-array-of-objects-in-chrome
-                : compareResult * col.metas.sortOrder.value;
+                return compareValues(valA, valB, c.sortCollator);
+            }
+        }
+
+        this.gridData.sort((a, b) => {
+            let columnToSortIndex = 0;
+            let compareResult = 0;
+
+            while(compareResult === 0 || typeof compareResult !== 'number' || isNaN(compareResult)) {
+                compareResult = columnsToSort[columnToSortIndex]
+                    ? getCompareResult(columnsToSort[columnToSortIndex], a, b) * columnsToSort[columnToSortIndex].metas.sortOrder.value
+                    : a.dtIndex > b.dtIndex ? 1 : -1; // fix for Chromium's unstable sorting algorithm: http://stackoverflow.com/questions/3195941/sorting-an-array-of-objects-in-chrome
+
+                columnToSortIndex++;
+            }
+
+            return compareResult;
         });
 
         this.gridData.forEach((rowData: any, i: number) => {
-            // set new index
+            // set new order index
             rowData.dtIndex = i;
         });
 
 
         if (!autoSorting) {
             this.gridData.length !== this.filteredData.length
-                ? this.filteredData.sort((a: any, b: any) => a.dtIndex - b.dtIndex)
+                ? this.filteredData.sort((rowDataA: any, rowDataB: any) => rowDataA.dtIndex - rowDataB.dtIndex)
                 : this.filteredData = this.gridData.slice();
 
-            this.paginatorMeta
+            this.paginatorMeta // TODO: move to method, updateDataToRender? 
                 ? this.navigateToPage(1)
                 : this.renderData = this.filteredData.slice();
         }

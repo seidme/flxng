@@ -28,7 +28,11 @@
 
     <flx-column [expander]="true" [rowExpandableIndicatorProperty]="'children'"></flx-column>
     <flx-column [field]="'id'" [header]="'ID'"></flx-column>
-    <flx-column [field]="'name'" [header]="'NAME'"></flx-column>
+    <flx-column [field]="'name'" [header]="'NAME'">
+      <ng-template flxTemplate="headCell" let-col="column" let-colsMap="columnsMap">
+        <button (mousedown)="$event.stopPropagation();" (click)="$event.stopPropagation(); col.sort($event)">naaaame</button>
+      </ng-template>
+    </flx-column>
     <flx-column [field]="'age'" [header]="'AGE'"></flx-column>
     <flx-column [field]="'race'" [header]="'RACE'"></flx-column>
 

@@ -50,6 +50,9 @@ export class ColumnComponent implements OnInit, AfterContentInit {
         },
         sortOrder: {
             value: 0
+        },
+        sortIndex: {
+            value: -1
         }
     };
 
@@ -87,7 +90,7 @@ export class ColumnComponent implements OnInit, AfterContentInit {
     }
 
     sort(event: any): void {
-        this._dtcRef.sortColumn(this, false);
+        this._dtcRef.sortColumn(this, false, event);
     }
 
     isVisible(): boolean {

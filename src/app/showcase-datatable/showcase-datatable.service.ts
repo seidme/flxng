@@ -39,7 +39,7 @@ export class ShowcaseDatatableService {
                 id: i,
                 createdDate: new Date(new Date().getTime() - i).toISOString(),
                 status: i % 2 === 0 ? 200 : 400,
-                message: 'blaaaaaaaaaaaaaaa'
+                message: i % 4 === 0 ? 'A' : 'B'
             });
         }
 
