@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
  import { ShowcaseDatatableModule } from './showcase-datatable/showcase-datatable.module';
 
@@ -14,7 +14,7 @@ import { routes } from './app-routes.const';
     AppComponent
   ],
   imports: [
-    HttpModule,
+    HttpClientModule,
     BrowserModule,
     RouterModule.forRoot(routes, {useHash: true}),
     ShowcaseDatatableModule

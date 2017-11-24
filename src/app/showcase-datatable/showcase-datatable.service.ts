@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-    Http,
-    Response,
-    RequestOptions,
-    Headers
-} from '@angular/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import 'rxjs/add/operator/catch';
 
 export interface Log {
     id: number,
@@ -20,14 +16,13 @@ export class ShowcaseDatatableService {
 
     constructor(
         //private _ngZone: NgZone
-        private _http: Http
+        private _http: HttpClient
     ) { }
 
 
     getGhFileContent(url: string): any {
-        return this._http.get(url)
-        .map((response: Response) => response.text())
-        .catch((error: any) => Observable.throw(error.json()));
+        return this._http.get(url, { responseType: 'text' })
+        .catch((error: any) => Observable.throw(error));
     }
 
 
