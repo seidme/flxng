@@ -1,0 +1,20 @@
+.flx-tabs{
+    height: 100%;
+    width: 850px;
+    background-color: yellow;
+    border: solid grey 1px;
+}
+.flx-tabs-link {
+    background-color: grey;
+    margin-top: 10px;
+    margin: 5px;
+    padding: 5px;    
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        font-weight: bold;
+    }
+}

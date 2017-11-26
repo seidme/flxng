@@ -3,12 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: '/datatable',
+        redirectTo: '/datatable/overview',
         pathMatch: 'full'
     },
     {
         path: '**',
-        redirectTo: '/datatable',
+        redirectTo: '/datatable/overview',
         pathMatch: 'full'
     }
 ];
