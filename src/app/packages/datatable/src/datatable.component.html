@@ -6,7 +6,7 @@
     </div>
 
 
-    <div class="dt-content" #dtContentRef [class.scrollable-horizontally]="!inheritsMetas && metas.resizeMode.value === ResizeModes.expand">
+    <div class="dt-content" #dtContentRef [class.scrollable-horizontally]="!inheritsMetas && metas.resizeMode.value === ResizeModes.expand" [hidden]="!readyToProcessData">
         <div class="dt-content-inner" #dtContentInnerRef [style.width]="metas.width.value">
             <div class="dt-head" #dtHeadRef *ngIf="includeHead">
                 <div class="dt-head-inner">
@@ -22,19 +22,16 @@
                                 </ng-container>
 
                                 <ng-container *ngIf="!col.templateRefs[ColumnTemplates.headCell]">
-                                    <div *ngIf="col.expander" class="dt-cell-inner-expander">
-
-                                    </div>
-                                    <div *ngIf="!col.expander" class="dt-cell-inner">
-                                        <div class="dt-col-resizer left no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'left')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'left')"></div>
-                                        <div class="dt-col-header no-select">
+                                    <div class="dt-cell-inner">
+                                        <div class="dt-col-resizer left flx-no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'left')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'left')"></div>
+                                        <div class="dt-col-header flx-no-select">
                                             <span title="{{col.header}}">{{col.header}}</span>
                                         </div>
-                                        <div class="dt-col-sorter no-select" (click)="stopPropagation($event); col.sort($event)" (mousedown)="stopPropagation($event)" *ngIf="col.sortable">
+                                        <div class="dt-col-sorter flx-no-select" (click)="stopPropagation($event); col.sort($event)" (mousedown)="stopPropagation($event)" *ngIf="col.sortable && !!col.field">
                                             <i *ngIf="col.metas.sortOrder.value === 1" class="material-icons arrow active">arrow_drop_up</i>
                                             <i *ngIf="col.metas.sortOrder.value === 0 || col.metas.sortOrder.value === -1" class="material-icons arrow" [class.active]="col.metas.sortOrder.value !== 0">arrow_drop_down</i>
                                         </div>
-                                        <div class="dt-col-resizer right no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'right')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'right')"></div>
+                                        <div class="dt-col-resizer right flx-no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'right')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'right')"></div>
                                     </div>
                                 </ng-container>
                             </div>
@@ -56,15 +53,14 @@
                                     </ng-container>
 
                                     <ng-container *ngIf="!col.templateRefs[ColumnTemplates.bodyCell]">
-                                        <div *ngIf="col.expander" class="dt-cell-inner-expander no-select">
-                                            <div *ngIf="isRowExpandable(rowData, rowIndex)" (click)="toggleRow(rowData)">
-                                                <i class="material-icons chevron"  [style.margin-left]="level * 30 + 'px'" [class.chevron-down]="rowData.dtExpanded">chevron_right</i>
-                                            </div>
-                                        </div>
-
-                                        <div *ngIf="!col.expander" class="dt-cell-inner">
-                                            <ng-container *flxVar="resolveFieldValue(rowData, col.field) as resolvedFieldValue">
-                                                <span title="{{resolvedFieldValue}}">{{resolvedFieldValue}}</span>
+                                        <div class="dt-cell-inner">
+                                            <ng-container *ngIf="col.expander">
+                                                <div class="flx-css-icon-container" [style.margin-left]="level * 30 + 'px'">
+                                                    <span class="flx-chevron flx-chevron-circle flx-clickable flx-no-select" [class.flx-chevron-down]="rowData.dtExpanded" (click)="toggleRow(rowData)" *ngIf="isRowExpandable(rowData, rowIndex)"></span>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container *ngIf="!!col.field">
+                                                <span *flxVar="resolveFieldValue(rowData, col.field) as resolvedFieldValue" class="dt-field-value" title="{{resolvedFieldValue}}">{{resolvedFieldValue}}</span>
                                             </ng-container>
                                         </div>
                                     </ng-container>
@@ -87,7 +83,7 @@
         </div>
     </div>
 
-    <div class="dt-paginator-container no-select" *ngIf="paginatorMeta">
+    <div class="dt-paginator-container flx-no-select" *ngIf="paginatorMeta">
         <div class="dt-paginator">
             <button type="button" title="Previous" class="dt-paginator-item dt-navigate-btn" (click)="navigateToPage(currentPage - 1, $event)" [disabled]="currentPage === pageLinks[0]">
                 <span>Previous</span>

@@ -1,8 +1,8 @@
 
   
   <flx-datatable class="flx-box-shadow"
-                [data]="data" 
-                [bodyStyle]="{height: '400px'}"
+                [data]="logs" 
+                [bodyStyle]="{height: '450px'}"
                 [resizeMode]="'fit'" 
                 [reorderable]="true" 
                 [saveSettings]="true" 
@@ -26,18 +26,18 @@
       </div>
     </ng-template>
 
-    <flx-column [expander]="true" [rowExpandableIndicatorProperty]="'children'"></flx-column>
-    <flx-column [field]="'id'" [header]="'ID'"></flx-column>
-    <flx-column [field]="'name'" [header]="'NAME'">
-      <ng-template flxTemplate="headCell" let-col="column" let-colsMap="columnsMap">
-        <button (mousedown)="$event.stopPropagation();" (click)="$event.stopPropagation(); col.sort($event)">naaaame</button>
-      </ng-template>
+    <!-- <flx-column [expander]="true" [rowExpandableIndicatorProperty]="'children'"></flx-column> -->
+    <flx-column field="id" header="ID" [expander]="true" [rowExpandableIndicatorProperty]="'children'"></flx-column>
+    <flx-column field="status" header="STATUS"></flx-column>
+    <flx-column field="createdDate" header="CREATED DATE">
+        <ng-template flxTemplate="headCell" let-col="column" let-colsMap="columnsMap">
+            <button (mousedown)="$event.stopPropagation();" (click)="$event.stopPropagation(); col.sort($event)">naaaame</button>
+        </ng-template>
     </flx-column>
-    <flx-column [field]="'age'" [header]="'AGE'"></flx-column>
-    <flx-column [field]="'race'" [header]="'RACE'"></flx-column>
+    <flx-column field="message" header="MESSAGE"></flx-column>
 
     <ng-template flxTemplate="rowExpansion" #rowExpansionTemplateRef let-item="rowData" let-ri="rowIndex" let-cols="columns" let-colsMap="columnsMap" let-level="level" let-self="self">
-      <flx-datatable [data]="item.children" [includeHead]="false" [bodyStyle]="{height: '150px'}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
+      <flx-datatable [data]="item.children" [includeHead]="false" [bodyStyle]="{height: '200px'}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
         <ng-container *ngFor="let col of cols">
           <flx-column [field]="col.field" [expander]="col.expander" [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty" [templateRefs]="col.templateRefs"></flx-column>
         </ng-container>

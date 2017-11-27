@@ -107,7 +107,7 @@ export class ColumnComponent implements OnInit, AfterContentInit {
 
 
     private _setId(): void {
-        this.id = this.expander
+        this.id = this.expander && !this._isFieldInputParamValid()
             ? 'expander'
             : Array.isArray(this.field)
                 ? this.field.join(',')

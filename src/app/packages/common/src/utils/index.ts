@@ -7,3 +7,4 @@ export * from './obj-find';
 export * from './resolve-deep-value';
 export * from './is-null-or-undefined';
 export * from './is-empty-string-or-white-space';
+export * from './filter-duplicates';

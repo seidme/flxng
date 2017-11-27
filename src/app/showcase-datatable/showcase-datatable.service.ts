@@ -4,10 +4,11 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 
 export interface Log {
-    id: number,
+    id: number | string,
     createdDate: string,
     status: number,
-    message: string
+    message: string,
+    children?: Log[]
 }
 
 

@@ -32,7 +32,7 @@ import { animate, style, trigger, transition } from '@angular/animations';
 import { Observable } from 'rxjs';
 
 //import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth } from '@flxng/common';
-import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth } from '../../common';
+import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, filterDuplicates } from '../../common';
 
 //import { DatatableComponent as ParentDatatableComponent } from './datatable.component';
 
@@ -289,8 +289,11 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
         let sortedColumns = this.getSortedColumns();
-        if (sortedColumns.length)
+        if (sortedColumns.length) {
+            // does not really matter which one is passed if there are multiple sorted columns, 
+            // they will be sorted respecting the sortIndex meta
             this.sortColumn(sortedColumns[0], true);
+        }
 
         this.globalFilterValue
             ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
@@ -324,6 +327,11 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         // at this point cols are ordered by default (as defined in the template),
         // they will be appropriately ordered after setting the metas
         this.cols = this.columnList.toArray();
+
+        let dupColIds = filterDuplicates(this.cols.map(c => c.id));
+        if(dupColIds.length) {
+            throw new Error(`Duplicate column field: ${dupColIds[0]}`);
+        }
 
         let expanderColIdx = this.cols.findIndex(c => c.expander);
         if (expanderColIdx !== -1) {
@@ -747,7 +755,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             // previously ordered ? reverse order : set ascending order
             col.metas.sortOrder.value = col.metas.sortOrder.value ? col.metas.sortOrder.value * -1 : 1;
 
-            if(event && event.ctrlKey) { // TODO: what about auto sorting multiple columns?
+            if(event && event.ctrlKey) {
                 if(columnsToSort.indexOf(col) === -1) {
                     col.metas.sortIndex.value = columnsToSort.length
                         ? columnsToSort[columnsToSort.length - 1].metas.sortIndex.value + 1 // column with highest sortIndex incremented
@@ -806,6 +814,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             // set new order index
             rowData.dtIndex = i;
         });
+
 
 
         if (!autoSorting) {
