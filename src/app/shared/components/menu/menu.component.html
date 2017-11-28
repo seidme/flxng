@@ -1,0 +1,20 @@
+<div #containerRef class="flx-menu-container" flxOutsideClick (onOutsideClick)="close();">
+
+    <div #headRef class="flx-menu-head" *ngIf="templateRefs[templateTypes.menuHead] else defaultMenuHeadTemplateRef">
+        <flx-templateLoader [templateRef]="templateRefs[templateTypes.menuHead]"
+                            [templateCtx]="{ 'props': props, 'toggle': bindFnContext(toggle), 'open': bindFnContext(open), 'close': bindFnContext(close) }"></flx-templateLoader>
+    </div>
+
+    <ng-template #defaultMenuHeadTemplateRef>
+        <div #headRef class="flx-menu-head">
+            <button type="button" class="flx-menu-ctrl-btn" (click)="toggle();">
+                <p>{{header}}</p>
+                <i class="material-icons">arrow_drop_down</i>
+            </button>
+        </div>
+    </ng-template>
+
+    <div #bodyRef class="flx-menu-body" [ngStyle]="bodyStyle" *ngIf="props.opened" [@slideFadeIn] >
+        <ng-content></ng-content>
+    </div>
+</div>

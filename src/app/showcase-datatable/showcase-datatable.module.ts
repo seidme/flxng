@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule as FlxngCommonModule } from '../packages/common';
 import { DatatableModule as FlxngDatatableModule } from '../packages/datatable';
 
+import { SharedModule } from '../shared/shared.module';
+
 import { showcaseDatatableRoutes } from './showcase-datatable-routes.const';
 import { ShowcaseDatatableService } from './showcase-datatable.service';
 import { ShowcaseDatatableComponent } from './showcase-datatable.component';
@@ -18,6 +20,7 @@ import { ScrollingComponent } from './scrolling/scrolling.component';
   imports: [
     CommonModule,
     RouterModule.forChild(showcaseDatatableRoutes),
+    SharedModule,
     FlxngCommonModule,
     FlxngDatatableModule
   ],
