@@ -1,9 +1,9 @@
 
-  
-  <flx-datatable class="flx-box-shadow"
+  <div class="table-container">
+    <flx-datatable class=""
                 [data]="logs" 
-                [bodyStyle]="{height: '450px'}"
-                [resizeMode]="'expand'" 
+                [bodyStyle]="{'max-height': '500px'}"
+                [resizeMode]="'fit'" 
                 [reorderable]="true" 
                 [saveSettings]="true" 
                 [settingsStorageKey]="'test-test'" 
@@ -52,7 +52,7 @@
     <flx-column field="message" header="MESSAGE"></flx-column>
 
     <ng-template flxTemplate="rowExpansion" #rowExpansionTemplateRef let-item="rowData" let-ri="rowIndex" let-cols="columns" let-colsMap="columnsMap" let-level="level" let-self="self">
-      <flx-datatable [data]="item.children" [includeHead]="false" [bodyStyle]="{height: '200px'}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
+      <flx-datatable [data]="item.children" [includeHead]="false" [bodyStyle]="{'max-height': level > 1 ? '300px' : ''}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
         <ng-container *ngFor="let col of cols">
           <flx-column [field]="col.field" [expander]="col.expander" [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty" [templateRefs]="col.templateRefs"></flx-column>
         </ng-container>
@@ -66,4 +66,4 @@
     <flx-paginator-meta [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta>
 
   </flx-datatable>
-  
+</div>

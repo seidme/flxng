@@ -6,7 +6,7 @@
     </div>
 
 
-    <div class="dt-content" #dtContentRef [class.scrollable-horizontally]="!inheritsMetas && metas.resizeMode.value === ResizeModes.expand" [hidden]="!readyToProcessData">
+    <div class="dt-content" #dtContentRef [class.scrollable-horizontally]="!inheritsMetas && metas.resizeMode.value === ResizeModes.expand">
         <div class="dt-content-inner" #dtContentInnerRef [style.width]="metas.width.value">
             <div class="dt-head" #dtHeadRef *ngIf="includeHead">
                 <div class="dt-head-inner">
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="dt-body" #dtBodyRef [ngClass]="level === 0 ? 'dt-root': 'dt-nested'" [ngStyle]="bodyStyle" [flxObserveWidth]="readyToProcessData && metas.resizeMode.value !== ResizeModes.expand" (onWidthChange)="onBodyWidthChange($event)">
+            <div class="dt-body" #dtBodyRef [ngClass]="level === 0 ? 'dt-root': 'dt-nested'"  [class.in-focus]="isInFocus" [ngStyle]="bodyStyle" [flxObserveWidth]="readyToProcessData && metas.resizeMode.value !== ResizeModes.expand" (onWidthChange)="onBodyWidthChange($event)">
                 <div class="dt-body-inner" [style.width]="bodyWidth" *ngIf="gridData.length">
                     <ng-container *ngFor="let rowData of renderData; let rowIndex = index; let firstRow = first; let lastRow = last;">
                         <div class="dt-row" [class.expanded]="rowData.dtExpanded">
@@ -149,6 +149,11 @@
             </div>
         </div>
     </div>
+
+
+    <!-- <div class="dt-paginator-container flx-no-select dt-footer" *ngIf="!paginatorMeta && this.level > 0">
+        Total: {{this.gridData.length}}
+    </div> -->
 
     <div class="dt-foot" #dtFoot *ngIf="templateRefs[GridTemplates.footer]">
         <flx-templateLoader [templateRef]="templateRefs[GridTemplates.footer]"

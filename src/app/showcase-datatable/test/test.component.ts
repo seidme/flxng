@@ -17,17 +17,22 @@ export class TestComponent implements OnInit {
 
 
   ngOnInit() {
+    //this.logs = [];
+
     this.logs = this._service.getGenerateLogs(10);
     this.assignIds(this.logs, 0);
 
     this.logs[1].children = this._service.getGenerateLogs(10);
     this.assignIds(this.logs[1].children, 1);
 
-    this.logs[1].children[1].children = this._service.getGenerateLogs(50);
-    this.assignIds(this.logs[1].children[1].children, 2);
+    this.logs[1].children[2].children = this._service.getGenerateLogs(50);
+    this.assignIds(this.logs[1].children[2].children, 2);
 
-    this.logs[1].children[1].children[1].children = this._service.getGenerateLogs(10);
-    this.assignIds(this.logs[1].children[1].children[1].children, 3);
+    this.logs[1].children[2].children[3].children = this._service.getGenerateLogs(10);
+    this.assignIds(this.logs[1].children[2].children[3].children, 3);
+
+    this.logs[1].children[2].children[3].children[4].children = this._service.getGenerateLogs(10);
+    this.assignIds(this.logs[1].children[2].children[3].children[4].children, 4);
   }
 
 
@@ -37,7 +42,7 @@ export class TestComponent implements OnInit {
 
 
   puuush(): void {
-    Array.prototype.push.apply(this.logs, this._service.getGenerateLogs(200));
+    Array.prototype.push.apply(this.logs, this._service.getGenerateLogs(40));
     this.assignIds(this.logs, 0);
   }
 

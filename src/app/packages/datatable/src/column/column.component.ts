@@ -25,6 +25,7 @@ export class ColumnComponent implements OnInit, AfterContentInit {
 
     @Input() field: string | Array<string>;
     @Input() header: string = '';
+    @Input() width: string = '';
     @Input() expander: boolean = false;
     @Input() sortable: boolean = true;
     @Input() sortComparator: Function;

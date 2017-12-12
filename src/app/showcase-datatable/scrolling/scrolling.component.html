@@ -2,13 +2,14 @@
 <h2>Vertical scrolling</h2>
 
 <p>
-    Datatable's height, by default, is dynamic - determined by the content. Data scrolling can be enabled by providing the <code>bodyStyle</code> object containing the <code>height</code> attribute:
+    Datatable's height, by default, is dynamic - determined by the content. Data scrolling can be enabled by providing the <code>bodyStyle</code> object containing the <code>height</code> attribute 
+    (or <code>max-height</code> if body needs to shirnk in absence of records):
     <br>
 </p>
 
 <div class="datatable-container">
     
-    <flx-datatable [data]="logs" [bodyStyle]="{ height: '200px' }">
+    <flx-datatable [data]="logs" [bodyStyle]="{ 'height': '200px' }">
 
         <flx-column field="id" header="ID"></flx-column>
         <flx-column field="createdDate" header="CREATED DATE"></flx-column>
@@ -41,6 +42,15 @@
 
 <button type="button" (click)="geeet()">geeet</button>
 <pre><code>{{content}}</code></pre>
+
+
+<br>
+<h2>Nested tables scrolling (tree view)</h2>
+<p>
+    examples and docs for scrolling nested tables using max-height attribute..
+    <br>
+</p>
+
 
 
 <br>

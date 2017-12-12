@@ -166,9 +166,16 @@
 
                 .dt-body {
                     overflow-x: hidden;
-                    overflow-y: auto;
+                    overflow-y: hidden;
                     //overflow-y: overlay; // fixes issue with 'fit' resize mode when scrollbar appears (for webkit broesers only...)
-                    -ms-overflow-style: -ms-autohiding-scrollbar; // does the similar to overflow-y: overlay; for IE..
+                    //-ms-overflow-style: -ms-autohiding-scrollbar; // does the similar to overflow-y: overlay; for IE..
+
+                    &.in-focus {
+                        overflow-y: auto;
+                        //overflow-y: overlay; // fixes issue with 'fit' resize mode when scrollbar appears (for webkit broesers only...)
+                        //-ms-overflow-style: -ms-autohiding-scrollbar; // does the similar to overflow-y: overlay; for IE..
+                    }
+
 
 
                     //&.dt-root {
@@ -181,7 +188,6 @@
                         //max-height: 200px; // TODO; ngStyle...
                     //}
 
-
                     .dt-body-inner {
                         // width: {{ngStyle}};
                         // height: {{ngStyle}}; // TODO..
@@ -190,7 +196,13 @@
                             display: flex;
                             flex-direction: row;
 
-                            &.expanded, &:hover {
+                            &.expanded {
+                                .dt-cell {
+                                    background-color: #f5f7fe;
+                                }
+                            }
+
+                            &:hover {
                                 .dt-cell {
                                     background-color: #e9ecf5;
                                 }
@@ -256,6 +268,11 @@
                         position: relative;
                     }
                 }
+
+                // .dt-footer {
+                //     height: 2rem;
+                //     background-color: #e4e4e4;
+                // }
             }
         }
 

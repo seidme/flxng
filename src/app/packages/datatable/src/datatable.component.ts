@@ -23,7 +23,6 @@ import {
     KeyValueDiffer,
     Renderer,
     NgZone,
-    Injector,
     ViewContainerRef,
     ChangeDetectorRef
 } from '@angular/core';
@@ -32,7 +31,7 @@ import { animate, style, trigger, transition } from '@angular/animations';
 import { Observable } from 'rxjs';
 
 //import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth } from '@flxng/common';
-import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, filterDuplicates } from '../../common';
+import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, animateScroll, filterDuplicates } from '../../common';
 
 //import { DatatableComponent as ParentDatatableComponent } from './datatable.component';
 
@@ -60,18 +59,17 @@ declare var componentHandler: any;
         ])
     ]
 })
-export class DatatableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, AfterViewChecked {
+export class DatatableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, AfterViewChecked, OnDestroy {
 
     @Input() data: Array<any>;
     @Input() includeHead: boolean = true;
     @Input() reorderable: boolean = false;
-    //@Input() supportMdl: boolean = false;
     @Input() saveSettings: boolean = false;
     @Input() settingsStorageKey: string = '';
     @Input() globalFilterInputRef: ElementRef;
     @Input() resizeMode: string = '';
     @Input() templateRefs: any = {};
-    @Input() bodyStyle: any;
+    @Input() bodyStyle: any = {};
     @Input() parentRef: DatatableComponent;
 
 
@@ -100,6 +98,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     level: number = 0;
     inheritsMetas: boolean = false;
     readyToProcessData: boolean = false;
+    isInFocus: boolean = false;
     iterableDiffer: any;
 
     pageLinks: Array<number> = [1];
@@ -107,11 +106,10 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     currentPage: number = 1;
 
     globalFilterValue: string = '';
-
-    bodyScrollbarWidthOffset: string = '';
     bodyWidth: string = '';
+    parentRowElement: any;
 
-    //storable/inheritable properties
+    // storable/inheritable properties
     metas: any = {
         width: {
             value: ''
@@ -139,7 +137,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         private _iterableDiffers: IterableDiffers,
         private _changeDetectorRef: ChangeDetectorRef,
         private _storageService: StorageService,
-        //private _injector: Injecto
+        //private _injector: Injector
         //private _viewContainerRef: ViewContainerRef,
        // @SkipSelf() @Optional() @Inject(forwardRef(() => ParentDatatableComponent)) private _parentRef?: DatatableComponent
     ) { }
@@ -152,8 +150,15 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         this.iterableDiffer = this._iterableDiffers.find([]).create(null);
 
-        if (!this.parentRef)
+        if (!this.parentRef) {
             this.includeHead = true;
+            this.isInFocus = true;
+        }
+    }
+
+
+    ngOnDestroy(): void {
+
     }
 
 
@@ -166,6 +171,15 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     ngAfterViewInit() {
         this.setMetas();
 
+        if(this.parentRef) {
+            this.parentRowElement = this.getParentRowElement();
+
+            this.checkAndAdjustBodyHeight();
+        }
+
+        this.initShowHideScrollbarHandlers();
+
+
         this.onColsMetaPositionChange.subscribe(_ => {
             // sort columns by their meta position value
             this.cols.sort((colA: ColumnComponent, colB: ColumnComponent) => colA.metas.position.value - colB.metas.position.value);
@@ -175,34 +189,17 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
         if (this.paginatorMeta) {
-            this.subscribeToItemsPerPageSelectEvents();
+            this.listenItemsPerPageSelectEvents();
         }
 
         let globalFilterInputElem = this.globalFilterInputRef 
-            ? this.globalFilterInputRef // TODO: add input param validity check...
+            ? this.globalFilterInputRef
             : this._elementRef.nativeElement.querySelector(`input#${ElementIds.globalFilter}`);
     
         if (globalFilterInputElem) {
             this.globalFilterValue = globalFilterInputElem.value;
-            this.subscribeToGlobalFilterInputEvents(globalFilterInputElem);
+            this.listenGlobalFilterInputEvents(globalFilterInputElem);
         }
-
-        
-        // if(this.metas.resizeMode.value !== this.ResizeModes.expand ) { // TODO: issue is still presetn after expanding row (due to animation?)
-        //     // TODO: open issue..
-        //     // Non-resizable or 'fit' resize mode uses percentages when representing widths (as opposed to the 'expand' resize mode),
-        //     // as a result, body content is being shrinked when scrollbar appears, which causes misalignment between head and body cells.
-        //     // (alternative to this cumbersome solution was to use overflow-y: overlay; on dtBody element, unfortunately works for webkit browsers only..)
-        //     this._ngZone.runOutsideAngular(() => {
-        //         this._renderer.listen(window, 'resize', (e) => {
-        //             let bodyScrollbarWidthOffset = this.getScrollbarWidthOffset(this.dtBodyRef.nativeElement);
-        //             if(this.bodyScrollbarWidthOffset !== bodyScrollbarWidthOffset) {
-        //                 this.bodyScrollbarWidthOffset = bodyScrollbarWidthOffset;
-        //                 this._changeDetectorRef.detectChanges();
-        //             }
-        //         });
-        //     });
-        // }
 
 
         this.readyToProcessData = true;
@@ -212,27 +209,15 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     ngDoCheck(): void {
+        // console.log('doCheck!');
         if (this.readyToProcessData) {
             this.checkAndProcessInputDataChanges();
-
-            // if(this.metas.resizeMode.value !== this.ResizeModes.expand ) {
-            //     this._changeDetectorRef.detectChanges();
-            //     this.bodyScrollbarWidthOffset = this.getScrollbarWidthOffset(this.dtBodyRef.nativeElement);
-            // }
         }
-
-        // if (this.supportMdl) {
-        //     this._ngZone.runOutsideAngular(() => {
-        //         setTimeout(() => {
-        //             componentHandler.upgradeAllRegistered();
-        //         });
-        //     });
-        // }
     }
 
 
     ngAfterViewChecked(): void {
-        //this.bodyWidth = getComputedStyle(this.dtBodyRef.nativeElement).width;
+
     }
 
 
@@ -242,6 +227,12 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         if (this.saveSettings && (!this.settingsStorageKey || typeof this.settingsStorageKey !== 'string'))
             throw new Error('Mandatory parameter is missing or invalid: \'settingsStorageKey\'.');
+
+        if (this.bodyStyle && this.bodyStyle['max-height'] && (typeof this.bodyStyle['max-height'] !== 'string' || this.bodyStyle['max-height'].indexOf('px') === -1 || !parseInt(this.bodyStyle['max-height'])))
+            throw new Error('Invalid value for: \'max-height\'. Expecting positive number as string representing the value in px.');
+
+        if (this.bodyStyle && this.bodyStyle['height'] && (typeof this.bodyStyle['height'] !== 'string' || this.bodyStyle['height'].indexOf('px') === -1 || !parseInt(this.bodyStyle['height'])))
+            throw new Error('Invalid value for: \'height\'. Expecting positive number as string representing the value in px.');
     }
 
 
@@ -482,15 +473,17 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         });
 
         // Width -->
-        setTimeout(() => { // TODO: try to get rid of the timer, or return promise.
+        //setTimeout(() => { // TODO: try to get rid of the timer, or return promise.
             this.reflectComputedStyleWidths();
-        });
+        //});
     }
 
 
     reflectComputedStyleWidths(): void {
         let dtContentInnerElem = this.dtContentInnerRef.nativeElement;
         let dtContentInnerElemComputedWidth = parseFloat(getComputedStyle(dtContentInnerElem).width);
+
+        console.log('dtContentInnerElemComputedWidth', dtContentInnerElemComputedWidth);
 
         let visibleCols = this.getVisibleCols();
 
@@ -640,19 +633,128 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     //                 this.initPagination();
 
     //                 this._changeDetectorRef.detectChanges();
-
-    //                 // // TODO...
-    //                 // if(this.metas.resizeMode.value !== this.ResizeModes.expand ) {
-    //                 //     this.bodyScrollbarWidthOffset = this.getScrollbarWidthOffset(this.dtBodyRef.nativeElement);
-    //                 //     this._changeDetectorRef.detectChanges();
-    //                 // }
-
     //             });
     //     });
     // }
 
 
-    subscribeToItemsPerPageSelectEvents(): void {
+    initShowHideScrollbarHandlers(): void {
+        let mousemoveListener;
+        let mouseleaveListener;
+
+        this._ngZone.runOutsideAngular(() => {
+            mousemoveListener = this._renderer.listen(this._elementRef.nativeElement, 'mousemove', (e) => {
+                e.stopPropagation();
+
+                this.setInFocus();
+            });
+        });
+
+        this._ngZone.runOutsideAngular(() => {
+            mouseleaveListener = this._renderer.listen(this._elementRef.nativeElement, 'mouseleave', (e) => {
+                if(this.level !== 0) { // keep scrollbar on root table if mouse leaves
+                    this.setNotInFocus(false);
+                }
+            });
+        });
+    }
+
+
+    setInFocus(): void {
+        if(this.isInFocus) {
+            return;
+        }
+
+        if(!this.isBodyScrollableVertically() && this.parentRef) {
+            // find first scrollable instance up the tree (end with the root table)
+            this.parentRef.setInFocus();
+        }
+        else {
+            this.isInFocus = true;
+            
+            if (this.parentRef) {
+                this.parentRef.setNotInFocus(true);
+    
+                if(this.parentRowElement && this.parentRef.level !== 0 && this.parentRef.isBodyScrollableVertically()) {
+                    this.parentRef.scrollRowElemIntoView(this.parentRowElement);
+                }
+            }
+            else {
+                this._changeDetectorRef.detectChanges();
+            }
+        }
+    }
+
+
+    setNotInFocus(bubble: boolean): void {
+        this.isInFocus = false;
+
+        if (bubble && this.parentRef) {
+            this.parentRef.setNotInFocus(true);
+        }
+        else {
+            this._changeDetectorRef.detectChanges();
+        }
+    }
+
+
+    findAncestor(el: HTMLElement, cls: string): HTMLElement {
+        // TODO: move to utils-dom
+        while ((el = el.parentElement) && !el.classList.contains(cls));
+        return el;
+    }
+
+
+    scrollRowElemIntoView(rowElem: any): void {
+        this._ngZone.runOutsideAngular(() => {
+            // TODO: breaks initial mouse wheel scrolling in Chrome (for nested tables)..
+            animateScroll(this.dtBodyRef.nativeElement, rowElem.offsetTop, 250);
+            //this.dtBodyRef.nativeElement.scrollTop = rowElem.offsetTop;
+        });
+    }
+
+
+    getParentRowElement(): HTMLElement {
+        let parentExpandedContentContainerElem = this.findAncestor(this._elementRef.nativeElement, 'dt-row-expanded-content-container');
+        if(!parentExpandedContentContainerElem) {
+            return null;
+        }
+
+        let parentTableRowNodes = Array.prototype.slice.call(parentExpandedContentContainerElem.parentElement.children);
+        let parentExpandedContentContainerElemIndex = parentTableRowNodes.indexOf(parentExpandedContentContainerElem);
+
+        // 'dt-row-expanded-content-container' element always comes right after expanded row
+        return parentTableRowNodes[parentExpandedContentContainerElemIndex - 1];
+    }
+
+
+    checkAndAdjustBodyHeight(): void {
+        if(!this.parentRowElement || !this.isBodyHeightProvided()) {
+            return;
+        }
+
+        const attrKey = this.bodyStyle['max-height'] 
+            ? 'max-height' 
+            : 'height';
+
+        const parentRowElemHeight = parseFloat(getComputedStyle(this.parentRowElement).height);
+        
+        // child table's height can't be higher then parent's.. Increse parent's height or decrese child's
+        this.bodyStyle[attrKey] = parseInt(this.bodyStyle[attrKey]) - (this.level - 1) * parentRowElemHeight + 'px'; // TODO: max-height and height have to be in pixels..? Also, root's height has to be heigher..
+    }
+
+
+    isBodyHeightProvided(): boolean {
+        return !!(this.bodyStyle && (this.bodyStyle['max-height'] || this.bodyStyle['height']));
+    }
+
+
+    isBodyScrollableVertically(): boolean {
+        return this.isBodyHeightProvided() || !!(this.bodyStyle && this.bodyStyle['flex-basis']);
+    }
+
+
+    listenItemsPerPageSelectEvents(): void {
         Observable.fromEvent(this.itemsPerPageSelectElemRef.nativeElement, 'change') // TODO: get rid of Observable..
         .subscribe((e: any) => {
             this.metas.itemsPerPage.value = parseInt(e.target.value);
@@ -662,7 +764,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    subscribeToGlobalFilterInputEvents(filterInputElem: Element): void {
+    listenGlobalFilterInputEvents(filterInputElem: Element): void {
         //this._ngZone.runOutsideAngular(() => {
             Observable.fromEvent(filterInputElem, 'input') // TODO: get rid of Observable..
                 .debounceTime(200)
@@ -679,13 +781,6 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                         : this.renderData = this.filteredData.slice();
 
                     //this._changeDetectorRef.detectChanges();
-                    
-                    // // TODO...
-                    // if(this.metas.resizeMode.value !== this.ResizeModes.expand ) {
-                    //     this.bodyScrollbarWidthOffset = this.getScrollbarWidthOffset(this.dtBodyRef.nativeElement);
-                    //     this._changeDetectorRef.detectChanges();
-                    // }
-
                 });
         //});
     }

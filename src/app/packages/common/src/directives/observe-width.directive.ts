@@ -38,8 +38,8 @@ export class ObserveWidthDirective implements OnInit, OnChanges, AfterViewChecke
     ngOnChanges(changes: SimpleChanges): void {
         if(changes.shouldObserve) {
             if(changes.shouldObserve.currentValue) {
-                this._ngZone.runOutsideAngular(() => {
-                    setTimeout(() => {
+                //this._ngZone.runOutsideAngular(() => {
+                    //setTimeout(() => {
                         this.width = getComputedStyle(this._elementRef.nativeElement).width;
                         this.onWidthChange.emit(this.width);
 
@@ -50,8 +50,8 @@ export class ObserveWidthDirective implements OnInit, OnChanges, AfterViewChecke
                                 this.onWidthChange.emit(this.width);
                             }
                         });
-                    });
-                });
+                    //});
+                //});
             }
             else {
                 if(this.width) {
