@@ -28,10 +28,9 @@ import {
 } from '@angular/core';
 
 import { animate, style, trigger, transition } from '@angular/animations';
-import { Observable } from 'rxjs';
 
 //import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth } from '@flxng/common';
-import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, animateScroll, filterDuplicates } from '../../common';
+import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, animateScroll, filterDuplicates, debounce } from '../../common';
 
 //import { DatatableComponent as ParentDatatableComponent } from './datatable.component';
 
@@ -209,7 +208,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     ngDoCheck(): void {
-        // console.log('doCheck!');
+         // console.log('doCheck!');
         if (this.readyToProcessData) {
             this.checkAndProcessInputDataChanges();
         }
@@ -755,8 +754,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     listenItemsPerPageSelectEvents(): void {
-        Observable.fromEvent(this.itemsPerPageSelectElemRef.nativeElement, 'change') // TODO: get rid of Observable..
-        .subscribe((e: any) => {
+        this._renderer.listen(this.itemsPerPageSelectElemRef.nativeElement, 'change', (e) => {
             this.metas.itemsPerPage.value = parseInt(e.target.value);
             this.storeMetasMap(true);
             this.initPagination();
@@ -765,24 +763,23 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     listenGlobalFilterInputEvents(filterInputElem: Element): void {
-        //this._ngZone.runOutsideAngular(() => {
-            Observable.fromEvent(filterInputElem, 'input') // TODO: get rid of Observable..
-                .debounceTime(200)
-                .distinctUntilChanged()
-                .subscribe((e: any) => {
-                    this.globalFilterValue = e.target.value.trim();
+        this._ngZone.runOutsideAngular(() => {
+            let onInput = debounce((e) => {
+                this.globalFilterValue = e.target.value.trim();
+                
+                this.globalFilterValue
+                    ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
+                    : this.filteredData = this.gridData.slice();
 
-                    this.globalFilterValue
-                        ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
-                        : this.filteredData = this.gridData.slice();
+                this.paginatorMeta
+                    ? this.initPagination()
+                    : this.renderData = this.filteredData.slice();
 
-                    this.paginatorMeta
-                        ? this.initPagination()
-                        : this.renderData = this.filteredData.slice();
+                this._changeDetectorRef.detectChanges();
+            }, 250, false);
 
-                    //this._changeDetectorRef.detectChanges();
-                });
-        //});
+            this._renderer.listen(filterInputElem, 'input', onInput);
+        });
     }
 
 

@@ -46,6 +46,12 @@ export class TestComponent implements OnInit {
     this.assignIds(this.logs, 0);
   }
 
+  interval(): void {
+      setInterval(() => {
+          this.logs[0].status = this.logs[0].status + 1;
+      }, 500);
+  }
+
 
   assignIds(logs: Log[], level: number): void {
       logs.forEach((log, i) => {
