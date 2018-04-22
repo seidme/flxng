@@ -13,8 +13,7 @@ import {
 
 import { animate, style, trigger, transition } from '@angular/animations';
 
- //import { TemplateDirective, mapToIterable } from '@flxng/common';
-import { TemplateDirective, mapToIterable } from '../../../packages/common';
+import { TemplateDirective, mapToIterable } from '@flxng/common';
 
 
 @Component({

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-//import { CommonModule as FlxngCommonModule } from '@flxng/common';
-import { CommonModule as FlxngCommonModule } from '../../common';
+import { CommonModule as FlxngCommonModule } from '@flxng/common';
+import { PaginatorModule as FlxngPaginatorModule } from '@flxng/paginator';
 
 import { DatatableComponent } from './datatable.component';
 import { ColumnComponent } from './column/column.component';
@@ -15,7 +15,8 @@ import { PaginatorMetaComponent } from './paginator-meta/paginator-meta.componen
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule, // TODO: mark it as peer dependency..
-    FlxngCommonModule
+    FlxngCommonModule,
+    FlxngPaginatorModule
   ],
   exports: [
     DatatableComponent,

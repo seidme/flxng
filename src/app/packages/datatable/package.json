@@ -12,6 +12,7 @@
       
     },
     "peerDependencies": {
-      "@flxng/common": "^1.0.0"
+      "@flxng/common": "^1.0.0",
+      "@flxng/paginator": "^1.0.0"
     }
   }

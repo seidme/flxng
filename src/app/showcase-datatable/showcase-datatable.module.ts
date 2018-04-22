@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
- //import { DatatableModule as FlxngDatatableModule } from '@flxng/datatable';
-import { CommonModule as FlxngCommonModule } from '../packages/common';
-import { DatatableModule as FlxngDatatableModule } from '../packages/datatable';
+import { CommonModule as FlxngCommonModule } from '@flxng/common';
+import { DatatableModule as FlxngDatatableModule } from '@flxng/datatable';
 
 import { SharedModule } from '../shared/shared.module';
 

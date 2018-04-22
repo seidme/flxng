@@ -1,0 +1,17 @@
+{
+    "name": "@flxng/paginator",
+    "version": "1.0.0",
+    "description": "Paginator component for Angular",
+    "main": "./bundles/paginator.umd.js",
+    "module": "./esm5/paginator.js",
+    "es2015": "./esm2015/paginator.js",
+    "typings": "./paginator.d.ts",
+    "author": "flxng",
+    "license": "MIT",
+    "dependencies": {
+      
+    },
+    "peerDependencies": {
+      "@flxng/common": "^1.0.0"
+    }
+  }

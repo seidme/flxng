@@ -1,5 +1,5 @@
 // @import "@flxng/common/src/styles/utils.scss";
-@import "../../common/src/styles/utils.scss";
+@import "../../common/src/styles/utils.scss"; // https://stackoverflow.com/questions/41504726/angular-cli-sass
 
 :host {
     * {
@@ -268,90 +268,13 @@
                         position: relative;
                     }
                 }
-
-                // .dt-footer {
-                //     height: 2rem;
-                //     background-color: #e4e4e4;
-                // }
             }
         }
 
         .dt-paginator-container {
             flex: 0 0 auto;
+            position:relative;
             height: 4rem;
-
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            .dt-paginator {
-                flex: 1 0 30%;
-                margin-left: 1rem;
-
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-
-                button.dt-paginator-item {
-                    flex: 0 0 auto;
-                    height: 1.8rem;
-                    background: transparent;
-                    margin: 0 0.2rem 0 0.2rem;
-                    border: 0;
-                    cursor: pointer;
-
-                    i {
-                        color: #00acbf;
-                    }
-
-                    &.dt-page-link.current {
-                        background-color: #00acbf;
-                        color: white;
-                    }
-
-                    &.dt-navigate-btn {
-                        width: 5rem;
-                        text-align: center;
-                        border: 1px solid #48d2e1;
-
-                    }
-
-                    &:disabled {
-                        opacity: 0.5;
-                        cursor: default;
-                    }
-                }
-            }
-
-            .dt-paginator-settings {
-                flex: 0 1 70%;
-                margin-right: 1rem;
-
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-end;
-
-                .dt-paginator-settings-item {
-                    flex: 0 0 auto;
-                    height: 1.8rem;
-                    margin: 0 0.2rem 0 0.2rem;
-                    border: 0;
-                }
-
-                input[type=number].dt-paginator-settings-item {
-                    background-color: #ededed;
-                    width: 4rem;
-                    padding-left: 0.5rem;
-
-                    &:focus {
-                        border: 1px solid #48d2e1;
-                    }
-                }
-            }
-
         }
 
         .dt-foot {

@@ -10,8 +10,7 @@ import {
     forwardRef
 } from '@angular/core';
 
-//import { TemplateDirective, mapToIterable } from '@flxng/common';
-import { TemplateDirective, mapToIterable } from '../../../common';
+import { TemplateDirective, mapToIterable } from '@flxng/common';
 
  import { PaginatorMetaTemplates } from './paginator-meta-templates';
 
@@ -23,7 +22,9 @@ import { TemplateDirective, mapToIterable } from '../../../common';
 export class PaginatorMetaComponent implements OnInit, AfterContentInit {
 
     @Input() itemsPerPage: number = 5;
+    @Input() itemsPerPageOptions: number[] = [5, 10, 20, 50, 100];
     @Input() pageLinksSize: number = 5;
+
     @Input() templateRefs: any = {};
 
     @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
@@ -33,22 +34,13 @@ export class PaginatorMetaComponent implements OnInit, AfterContentInit {
 
 
     ngOnInit() {
-        if (!this.pageLinksSize || typeof this.pageLinksSize !== 'number' || this.pageLinksSize < 3)
-            throw new Error('`pageLinksSize` input parameter should be positive number greater then 2.');
 
-        if (!this.itemsPerPage || typeof this.pageLinksSize !== 'number' || this.pageLinksSize < 1)
-            throw new Error('`itemsPerPage` input parameter should be positive number.');
     }
 
 
     ngAfterContentInit() {
         this._collectTemplateRefs()
     }
-
-
-    // toggle(): void {
-    //     this._dtcRef.toggleColumnVisibility(this);
-    // }
 
 
     private _collectTemplateRefs(): void {

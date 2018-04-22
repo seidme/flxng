@@ -29,8 +29,8 @@ import {
 
 import { animate, style, trigger, transition } from '@angular/animations';
 
-//import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth } from '@flxng/common';
-import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, animateScroll, filterDuplicates, debounce } from '../../common';
+import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, animateScroll, filterDuplicates, debounce } from '@flxng/common'; // TODO common -> shared and conider splitting imports shared/utils..
+import { PaginatorComponent } from '@flxng/paginator';
 
 //import { DatatableComponent as ParentDatatableComponent } from './datatable.component';
 
@@ -76,7 +76,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     @ViewChild('dtContentInnerRef') dtContentInnerRef: ElementRef;
     @ViewChild('dtHeadRef') dtHeadRef: ElementRef;
     @ViewChild('dtBodyRef') dtBodyRef: ElementRef;
-    @ViewChild('itemsPerPageSelectElemRef') itemsPerPageSelectElemRef: ElementRef;
+
+    @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
     @ContentChild(PaginatorMetaComponent) paginatorMeta: PaginatorMetaComponent;
 
@@ -176,7 +177,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             this.checkAndAdjustBodyHeight();
         }
 
-        this.initShowHideScrollbarHandlers();
+        this.initScrollbarVisibilityHandlers();
 
 
         this.onColsMetaPositionChange.subscribe(_ => {
@@ -186,10 +187,6 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         this.onColsMetaPositionChange.emit(null);
 
-
-        if (this.paginatorMeta) {
-            this.listenItemsPerPageSelectEvents();
-        }
 
         let globalFilterInputElem = this.globalFilterInputRef 
             ? this.globalFilterInputRef
@@ -208,7 +205,6 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     ngDoCheck(): void {
-         // console.log('doCheck!');
         if (this.readyToProcessData) {
             this.checkAndProcessInputDataChanges();
         }
@@ -241,9 +237,9 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 this.gridData = [];
                 this.filteredData = [];
 
-                this.paginatorMeta
-                    ? this.initPagination()
-                    : this.renderData = [];
+                if (!this.paginatorMeta) {
+                    this.renderData = this.filteredData.slice();
+                }
             }
 
             return;
@@ -289,9 +285,9 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
             : this.filteredData = this.gridData.slice();
 
-        this.paginatorMeta
-            ? this.initPagination()
-            : this.renderData = this.filteredData.slice();
+        if (!this.paginatorMeta) {
+            this.renderData = this.filteredData.slice();
+        }
     }
 
 
@@ -513,131 +509,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    initPagination(): void {
-        this.pageLinks = [];
-
-        let pageCount = this.getPageCount();
-
-        for (let i = 1; i <= pageCount; ++i) {
-            this.pageLinks.push(i);
-        }
-
-        this.navigateToPage(1);
-    }
-
-
-    getPageCount(): number {
-        return Math.ceil(this.filteredData.length / this.metas.itemsPerPage.value) || 1;
-    }
-
-
-    navigateToPage(p: number, event?: any): void {
-        if (event && event.stopPropagation)
-            event.stopPropagation();
-
-        if (!this.pageLinks.find(pl => pl === p))
-            return;
-
-        this.currentPage = p;
-        this.setVisiblePageLinks();
-
-        let endIdx = this.metas.itemsPerPage.value * this.currentPage;
-        let startIdx = endIdx - this.metas.itemsPerPage.value;
-
-        this.renderData = this.filteredData.slice(startIdx, endIdx);
-    }
-
-
-    setVisiblePageLinks(): void {
-        if (this.pageLinks.length <= this.paginatorMeta.pageLinksSize) {
-            this.visiblePageLinks = this.pageLinks.slice();
-            return;
-        }
-
-        this.visiblePageLinks = [];
-        this.visiblePageLinks.push(this.currentPage);
-
-        let currentPageIdx = this.currentPage - 1;
-        let b = 1;
-
-        while (this.visiblePageLinks.length < this.paginatorMeta.pageLinksSize) {
-            if (this.pageLinks[currentPageIdx - b])
-                this.visiblePageLinks.push(this.pageLinks[currentPageIdx - b]);
-
-            b = b * -1;
-
-            if (b > 0) b++;
-        }
-
-        this.visiblePageLinks.sort((a: number, b: number) => a - b);
-
-
-        let lowestVisiblePl = this.visiblePageLinks[0];
-        let plsPriorLowestVisiblePlExist = this.pageLinks.indexOf(lowestVisiblePl) > 0;
-        if (plsPriorLowestVisiblePlExist)
-            // remove it so the dots can take place (and total number of visible page links is not greater then value of 'this.paginatorMeta.pageLinksSize')
-            this.visiblePageLinks.splice(0, 1);
-
-        let highestVisiblePl = this.visiblePageLinks[this.visiblePageLinks.length - 1];
-        let plsAfterHighestVisiblePlExist = this.pageLinks.indexOf(highestVisiblePl) < this.pageLinks.length - 1;
-        if (plsAfterHighestVisiblePlExist)
-            // remove it so the dots can take place (and total number of visible page links is not greater then value of 'this.paginatorMeta.pageLinksSize')
-            this.visiblePageLinks.pop();
-    }
-
-
-    shouldShowPaginatorDots(side: string): boolean {
-        if (side === 'left') {
-            let lowestVisiblePl = this.visiblePageLinks[0];
-            let plsPriorLowestVisiblePlExist = this.pageLinks.indexOf(lowestVisiblePl) > 0;
-            return plsPriorLowestVisiblePlExist;
-        }
-        else {
-            let highestVisiblePl = this.visiblePageLinks[this.visiblePageLinks.length - 1];
-            let plsAfterHighestVisiblePlExist = this.pageLinks.indexOf(highestVisiblePl) < this.pageLinks.length - 1;
-            return plsAfterHighestVisiblePlExist;
-        }
-    }
-
-
-    // subscribeToItemsPerPageInputEvents(): void {
-    //     this._ngZone.runOutsideAngular(() => {
-    //         let keyupEventObservable = Observable.fromEvent(this.itemsPerPageInputRef.nativeElement, 'keyup');
-    //         let clickEventObservable = Observable.fromEvent(this.itemsPerPageInputRef.nativeElement, 'click');
-
-    //         Observable.merge(keyupEventObservable, clickEventObservable)
-    //             .debounceTime(200)
-    //             .distinctUntilChanged()
-    //             .subscribe((e: any) => {
-    //                 let value = e.target.value;
-    //                 if (!value) return;
-
-    //                 if (value < PaginatorSettings.itemsPerPageMin) {
-    //                     // TOOO: rather a workaraound to update input field value. Need solution here.
-    //                     this.metas.itemsPerPage.value = 0;
-    //                     this._changeDetectorRef.detectChanges();
-    //                     this.metas.itemsPerPage.value = PaginatorSettings.itemsPerPageMin;
-    //                 }
-    //                 else if (value > PaginatorSettings.itemsPerPageMax) {
-    //                     this.metas.itemsPerPage.value = 0;
-    //                     this._changeDetectorRef.detectChanges();
-    //                     this.metas.itemsPerPage.value = PaginatorSettings.itemsPerPageMax;
-    //                 }
-    //                 else {
-    //                     this.metas.itemsPerPage.value = parseInt(value);
-    //                 }
-
-    //                 this.storeMetasMap(true);
-
-    //                 this.initPagination();
-
-    //                 this._changeDetectorRef.detectChanges();
-    //             });
-    //     });
-    // }
-
-
-    initShowHideScrollbarHandlers(): void {
+    initScrollbarVisibilityHandlers(): void {
         let mousemoveListener;
         let mouseleaveListener;
 
@@ -753,15 +625,6 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    listenItemsPerPageSelectEvents(): void {
-        this._renderer.listen(this.itemsPerPageSelectElemRef.nativeElement, 'change', (e) => {
-            this.metas.itemsPerPage.value = parseInt(e.target.value);
-            this.storeMetasMap(true);
-            this.initPagination();
-        });
-    }
-
-
     listenGlobalFilterInputEvents(filterInputElem: Element): void {
         this._ngZone.runOutsideAngular(() => {
             let onInput = debounce((e) => {
@@ -771,15 +634,30 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                     ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
                     : this.filteredData = this.gridData.slice();
 
-                this.paginatorMeta
-                    ? this.initPagination()
-                    : this.renderData = this.filteredData.slice();
+                if (!this.paginatorMeta) {
+                    this.renderData = this.filteredData.slice();
+                }
 
                 this._changeDetectorRef.detectChanges();
             }, 250, false);
 
             this._renderer.listen(filterInputElem, 'input', onInput);
         });
+    }
+
+
+    onPageChange(settings: any): void {
+        this.renderData = this.filteredData.slice(settings.startIndex, settings.endIndex);
+        
+        // TODO: if detectChanges isn't called explicitely here, ExpressionChangedAfterItHasBeenCheckedError is being thrown on component initialization (this.filteredData property's value shouldn't be set within the ngAfterViewInit method)
+        // also, changing pages stops working properly after interaction with global filter
+        this._changeDetectorRef.detectChanges();
+    }
+
+
+    onItemsPerPageValueChange(value: number): void {
+        this.metas.itemsPerPage.value = value;
+        this.storeMetasMap(true);
     }
 
 
@@ -914,9 +792,12 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 ? this.filteredData.sort((rowDataA: any, rowDataB: any) => rowDataA.dtIndex - rowDataB.dtIndex)
                 : this.filteredData = this.gridData.slice();
 
-            this.paginatorMeta // TODO: move to method, updateDataToRender? 
-                ? this.navigateToPage(1)
-                : this.renderData = this.filteredData.slice();
+            if (!this.paginatorMeta) {
+                this.renderData = this.filteredData.slice();
+            }
+            else {
+                this.paginator.init();
+            }
         }
     };
 

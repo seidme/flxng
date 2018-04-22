@@ -83,77 +83,15 @@
         </div>
     </div>
 
-    <div class="dt-paginator-container flx-no-select" *ngIf="paginatorMeta">
-        <div class="dt-paginator">
-            <button type="button" title="Previous" class="dt-paginator-item dt-navigate-btn" (click)="navigateToPage(currentPage - 1, $event)" [disabled]="currentPage === pageLinks[0]">
-                <span>Previous</span>
-            </button>
-
-            <ng-container *ngIf="shouldShowPaginatorDots('left')">
-                <button type="button" class="dt-paginator-item dt-page-link" (click)="navigateToPage(pageLinks[0], $event)">
-                    <span>{{pageLinks[0]}}</span>
-                </button>
-
-                <button type="button" class="dt-paginator-item" [disabled]="true">
-                    <strong>...</strong>
-                </button>
-            </ng-container>
-
-            <ng-container *ngFor="let pl of visiblePageLinks">
-                <button type="button"
-                        class="dt-paginator-item dt-page-link"
-                        [class.current]="pl === currentPage"
-                        (click)="navigateToPage(pl, $event)"
-                        [disabled]="pl === currentPage">
-                    <span>{{pl}}</span>
-                </button>
-            </ng-container>
-
-            <ng-container *ngIf="shouldShowPaginatorDots('right')">
-                <button type="button" class="dt-paginator-item" [disabled]="true">
-                    <strong>...</strong>
-                </button>
-
-                <button type="button" class="dt-paginator-item dt-page-link" (click)="navigateToPage(pageLinks[pageLinks.length - 1], $event)">
-                    <span>{{pageLinks[pageLinks.length - 1]}}</span>
-                </button>
-            </ng-container>
-
-            <button type="button" title="Next" class="dt-paginator-item dt-navigate-btn" (click)="navigateToPage(currentPage + 1, $event)" [disabled]="currentPage === pageLinks[pageLinks.length - 1]">
-                <span>Next</span>
-            </button>
-        </div>
-
-        <div class="dt-paginator-settings">
-            <!-- <input type="number"
-                    class="dt-paginator-settings-item"
-                    title="Records per page"
-                    #itemsPerPageInputRef
-                    min="{{PaginatorSettings.itemsPerPageMin}}"
-                    max="{{PaginatorSettings.itemsPerPageMax}}"
-                    [value]="metas.itemsPerPage.value"> -->
-
-            <select #itemsPerPageSelectElemRef>
-                <ng-container *ngFor="let option of [5, 10, 20, 50, 100]">
-                    <ng-container *ngIf="option === metas.itemsPerPage.value">
-                        <option [value]="option" selected="selected">{{option}}</option>
-                    </ng-container>  
-                    <ng-container *ngIf="option !== metas.itemsPerPage.value">
-                        <option [value]="option">{{option}}</option>
-                    </ng-container> 
-                </ng-container>   
-            </select>
-
-            <div class="dt-paginator-settings-item">
-                <span>records per page</span>
-            </div>
-        </div>
+    <div class="dt-paginator-container flx-no-select" *ngIf="paginatorMeta && readyToProcessData">
+        <flx-paginator [itemsCount]="filteredData.length" 
+                       [pageLinksSize]="paginatorMeta.pageLinksSize" 
+                       [itemsPerPage]="metas.itemsPerPage.value" 
+                       [itemsPerPageOptions]="paginatorMeta.itemsPerPageOptions"
+                       (onPageChange)="onPageChange($event)"
+                       (onItemsPerPageValueChange)="onItemsPerPageValueChange($event)"></flx-paginator>
     </div>
 
-
-    <!-- <div class="dt-paginator-container flx-no-select dt-footer" *ngIf="!paginatorMeta && this.level > 0">
-        Total: {{this.gridData.length}}
-    </div> -->
 
     <div class="dt-foot" #dtFoot *ngIf="templateRefs[GridTemplates.footer]">
         <flx-templateLoader [templateRef]="templateRefs[GridTemplates.footer]"

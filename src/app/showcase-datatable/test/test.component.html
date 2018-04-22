@@ -3,7 +3,7 @@
     <flx-datatable class=""
                 [data]="logs" 
                 [bodyStyle]="{'max-height': '500px'}"
-                [resizeMode]="'fit'" 
+                [resizeMode]="'expand'" 
                 [reorderable]="true" 
                 [saveSettings]="true" 
                 [settingsStorageKey]="'test-test'" 
@@ -67,7 +67,7 @@
     <ng-template flxTemplate="noResults">
     </ng-template>
 
-    <flx-paginator-meta [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta>
+    <flx-paginator-meta [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]" [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta>
 
   </flx-datatable>
 </div>

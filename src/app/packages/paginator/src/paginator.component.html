@@ -1,0 +1,56 @@
+<div class="dt-paginator">
+    <button type="button" title="Previous" class="dt-paginator-item dt-navigate-btn" (click)="navigateToPage(currentPage - 1, $event)" [disabled]="currentPage === pageLinks[0]">
+        <span>Previous</span>
+    </button>
+
+    <ng-container *ngIf="shouldShowPaginatorDots('left')">
+        <button type="button" class="dt-paginator-item dt-page-link" (click)="navigateToPage(pageLinks[0], $event)">
+            <span>{{pageLinks[0]}}</span>
+        </button>
+
+        <button type="button" class="dt-paginator-item" [disabled]="true">
+            <strong>...</strong>
+        </button>
+    </ng-container>
+
+    <ng-container *ngFor="let pl of visiblePageLinks">
+        <button type="button"
+                class="dt-paginator-item dt-page-link"
+                [class.current]="pl === currentPage"
+                (click)="navigateToPage(pl, $event)"
+                [disabled]="pl === currentPage">
+            <span>{{pl}}</span>
+        </button>
+    </ng-container>
+
+    <ng-container *ngIf="shouldShowPaginatorDots('right')">
+        <button type="button" class="dt-paginator-item" [disabled]="true">
+            <strong>...</strong>
+        </button>
+
+        <button type="button" class="dt-paginator-item dt-page-link" (click)="navigateToPage(pageLinks[pageLinks.length - 1], $event)">
+            <span>{{pageLinks[pageLinks.length - 1]}}</span>
+        </button>
+    </ng-container>
+
+    <button type="button" title="Next" class="dt-paginator-item dt-navigate-btn" (click)="navigateToPage(currentPage + 1, $event)" [disabled]="currentPage === pageLinks[pageLinks.length - 1]">
+        <span>Next</span>
+    </button>
+</div>
+
+<div class="dt-paginator-settings">
+    <select #itemsPerPageSelectElemRef>
+        <ng-container *ngFor="let option of itemsPerPageOptions">
+            <ng-container *ngIf="option === itemsPerPage">
+                <option [value]="option" selected="selected">{{option}}</option>
+            </ng-container>  
+            <ng-container *ngIf="option !== itemsPerPage">
+                <option [value]="option">{{option}}</option>
+            </ng-container> 
+        </ng-container>   
+    </select>
+
+    <div class="dt-paginator-settings-item">
+        <span>records per page</span>
+    </div>
+</div>

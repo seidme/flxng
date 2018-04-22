@@ -10,8 +10,7 @@ import {
     forwardRef
 } from '@angular/core';
 
-//import { TemplateDirective, mapToIterable } from '@flxng/common';
-import { TemplateDirective, mapToIterable } from '../../../common';
+import { TemplateDirective, mapToIterable } from '@flxng/common';
 
 import { DatatableComponent } from '../datatable.component';
 import { ColumnTemplates } from '../shared/constants';
