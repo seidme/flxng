@@ -12,14 +12,14 @@ import {
 
 import { TemplateDirective, mapToIterable } from '@flxng/common';
 
- import { PaginatorMetaTemplates } from './paginator-meta-templates';
+ import { PaginationTemplates } from './pagination-templates';
 
 
 @Component({
-    selector: 'flx-paginator-meta',
+    selector: 'flx-pagination',
     template: ``
 })
-export class PaginatorMetaComponent implements OnInit, AfterContentInit {
+export class PaginationComponent implements OnInit, AfterContentInit {
 
     @Input() itemsPerPage: number = 5;
     @Input() itemsPerPageOptions: number[] = [5, 10, 20, 50, 100];
@@ -45,8 +45,8 @@ export class PaginatorMetaComponent implements OnInit, AfterContentInit {
 
     private _collectTemplateRefs(): void {
         this.templateList.toArray().forEach((t: TemplateDirective) => {
-            if (!PaginatorMetaTemplates[t.type]) {
-                console.warn(`Unknown template type: ${t.type}. Possible value/s: ${mapToIterable(PaginatorMetaTemplates).join(', ')}.`);
+            if (!PaginationTemplates[t.type]) {
+                console.warn(`Unknown template type: ${t.type}. Possible value/s: ${mapToIterable(PaginationTemplates).join(', ')}.`);
                 return;
             }
 

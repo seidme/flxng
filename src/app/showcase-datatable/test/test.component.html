@@ -60,14 +60,14 @@
         <ng-container *ngFor="let col of cols">
           <flx-column [field]="col.field" [expander]="col.expander" [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty" [templateRefs]="col.templateRefs"></flx-column>
         </ng-container>
-        <!-- <flx-paginator-meta [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta> -->
+        <!-- <flx-pagination [itemsPerPage]="5" [pageLinksSize]="7"></flx-pagination> -->
       </flx-datatable>
     </ng-template>
 
     <ng-template flxTemplate="noResults">
     </ng-template>
 
-    <flx-paginator-meta [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]" [itemsPerPage]="5" [pageLinksSize]="7"></flx-paginator-meta>
+    <flx-pagination [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]" [itemsPerPage]="5" [pageLinksSize]="7"></flx-pagination>
 
   </flx-datatable>
 </div>

@@ -83,11 +83,11 @@
         </div>
     </div>
 
-    <div class="dt-paginator-container flx-no-select" *ngIf="paginatorMeta && readyToProcessData">
+    <div class="dt-paginator-container flx-no-select" *ngIf="pagination && readyToProcessData">
         <flx-paginator [itemsCount]="filteredData.length" 
-                       [pageLinksSize]="paginatorMeta.pageLinksSize" 
+                       [pageLinksSize]="pagination.pageLinksSize" 
                        [itemsPerPage]="metas.itemsPerPage.value" 
-                       [itemsPerPageOptions]="paginatorMeta.itemsPerPageOptions"
+                       [itemsPerPageOptions]="pagination.itemsPerPageOptions"
                        (onPageChange)="onPageChange($event)"
                        (onItemsPerPageValueChange)="onItemsPerPageValueChange($event)"></flx-paginator>
     </div>

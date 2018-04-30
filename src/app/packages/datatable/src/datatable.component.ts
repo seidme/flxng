@@ -35,7 +35,7 @@ import { PaginatorComponent } from '@flxng/paginator';
 //import { DatatableComponent as ParentDatatableComponent } from './datatable.component';
 
 import { ColumnComponent } from './column/column.component';
-import { PaginatorMetaComponent } from './paginator-meta/paginator-meta.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 import { ResizeModes, GridTemplates, ColumnTemplates, PaginatorSettings, ElementIds } from './shared/constants';
 
@@ -79,7 +79,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
-    @ContentChild(PaginatorMetaComponent) paginatorMeta: PaginatorMetaComponent;
+    @ContentChild(PaginationComponent) pagination: PaginationComponent;
 
     @ContentChildren(forwardRef(() => ColumnComponent)) columnList: QueryList<ColumnComponent>;
     @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
@@ -237,7 +237,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 this.gridData = [];
                 this.filteredData = [];
 
-                if (!this.paginatorMeta) {
+                if (!this.pagination) {
                     this.renderData = this.filteredData.slice();
                 }
             }
@@ -285,7 +285,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
             : this.filteredData = this.gridData.slice();
 
-        if (!this.paginatorMeta) {
+        if (!this.pagination) {
             this.renderData = this.filteredData.slice();
         }
     }
@@ -362,8 +362,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             }
             else {
                 // set default metas partially
-                this.metas.itemsPerPage.value = this.paginatorMeta 
-                ? this.paginatorMeta.itemsPerPage
+                this.metas.itemsPerPage.value = this.pagination 
+                ? this.pagination.itemsPerPage
                 : NaN;
             }
         }
@@ -455,8 +455,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     setDefaultMetas(): void {
         // Datatable metas -->
         this.metas.resizeMode.value = this.resizeMode;
-        this.metas.itemsPerPage.value = this.paginatorMeta 
-            ? this.paginatorMeta.itemsPerPage
+        this.metas.itemsPerPage.value = this.pagination 
+            ? this.pagination.itemsPerPage
             : NaN;
 
         // Cols Metas -->
@@ -634,7 +634,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                     ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
                     : this.filteredData = this.gridData.slice();
 
-                if (!this.paginatorMeta) {
+                if (!this.pagination) {
                     this.renderData = this.filteredData.slice();
                 }
 
@@ -792,7 +792,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 ? this.filteredData.sort((rowDataA: any, rowDataB: any) => rowDataA.dtIndex - rowDataB.dtIndex)
                 : this.filteredData = this.gridData.slice();
 
-            if (!this.paginatorMeta) {
+            if (!this.pagination) {
                 this.renderData = this.filteredData.slice();
             }
             else {

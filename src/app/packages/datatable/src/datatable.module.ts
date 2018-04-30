@@ -8,7 +8,7 @@ import { PaginatorModule as FlxngPaginatorModule } from '@flxng/paginator';
 
 import { DatatableComponent } from './datatable.component';
 import { ColumnComponent } from './column/column.component';
-import { PaginatorMetaComponent } from './paginator-meta/paginator-meta.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   imports: [
@@ -21,12 +21,12 @@ import { PaginatorMetaComponent } from './paginator-meta/paginator-meta.componen
   exports: [
     DatatableComponent,
     ColumnComponent,
-    PaginatorMetaComponent
+    PaginationComponent
   ],
   declarations: [
     DatatableComponent,
     ColumnComponent,
-    PaginatorMetaComponent
+    PaginationComponent
   ]
 })
 export class DatatableModule { }
