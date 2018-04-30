@@ -191,8 +191,8 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
                 expect(dtComp.templateRefs).toEqual({});
             });
 
-            it('`gridData` member should be initialized as empty array', () => {
-                expect(dtComp.gridData).toEqual([]);
+            it('`allData` member should be initialized as empty array', () => {
+                expect(dtComp.allData).toEqual([]);
             });
 
             it('`cols` member should not be initialized', () => {
@@ -464,13 +464,13 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
 
         describe('`checkAndProcessInputDataChanges` method >> ', () => {
 
-            it('`gridData` member should be initialized as empty array if input data is undefined or non-array type', () => {
+            it('`allData` member should be initialized as empty array if input data is undefined or non-array type', () => {
                 dtComp.data = undefined;
-                dtComp.gridData = [{}, {}];
+                dtComp.allData = [{}, {}];
 
                 dtComp.checkAndProcessInputDataChanges();
 
-                expect(dtComp.gridData).toEqual([]);
+                expect(dtComp.allData).toEqual([]);
             });
 
 
@@ -487,20 +487,20 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
 
         describe('`onInputDataChanges` method >> ', () => {
 
-            it('Input member `data` should be an array of objects, gapes should be replaced with empty objects when mapping to `gridData`', () => {
+            it('Input member `data` should be an array of objects, gapes should be replaced with empty objects when mapping to `allData`', () => {
                 dtComp.data = [{}, null, {}];
 
                 dtComp.onInputDataChanges();
 
-                expect(dtComp.gridData).toEqual([{ dtIndex: 0, dtExpanded: false }, { dtIndex: 1, dtExpanded: false }, { dtIndex: 2, dtExpanded: false }]);
+                expect(dtComp.allData).toEqual([{ dtIndex: 0, dtExpanded: false }, { dtIndex: 1, dtExpanded: false }, { dtIndex: 2, dtExpanded: false }]);
             });
 
-            it('`gridData` member should be re-initialized if input data changes (`data` member should be adequatelly copied-mapped)', () => {
+            it('`allData` member should be re-initialized if input data changes (`data` member should be adequatelly copied-mapped)', () => {
                 dtComp.data = [{}, { prop1: 'prop1' }, {}];
 
                 dtComp.onInputDataChanges();
 
-                expect(dtComp.gridData).toEqual(dtComp.data);
+                expect(dtComp.allData).toEqual(dtComp.data);
             });
 
 
@@ -805,7 +805,7 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
             it('should set sort order to ascending if column was in not-ordered state (user initiated sort)', () => {
                 dtComp.cols[1].metas.sortOrder.value = 0;
 
-                spyOn(dtComp.gridData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
+                spyOn(dtComp.allData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
 
                 dtComp.sortColumn(dtComp.cols[1], false);
 
@@ -815,7 +815,7 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
             it('should set sort order to ascending if previous sort order was descending for given column (user initiated sort)', () => {
                 dtComp.cols[1].metas.sortOrder.value = -1;
 
-                spyOn(dtComp.gridData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
+                spyOn(dtComp.allData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
 
                 dtComp.sortColumn(dtComp.cols[1], false);
 
@@ -825,7 +825,7 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
             it('should set sort order to descending if previous sort order was ascending for given column (user initiated sort)', () => {
                 dtComp.cols[1].metas.sortOrder.value = 1;
 
-                spyOn(dtComp.gridData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
+                spyOn(dtComp.allData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
 
                 dtComp.sortColumn(dtComp.cols[1], false);
 
@@ -837,7 +837,7 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
 
                 dtComp.cols[2].metas.sortOrder.value = 1;
 
-                spyOn(dtComp.gridData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
+                spyOn(dtComp.allData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
 
                 dtComp.sortColumn(sortCol, false);
 
@@ -848,7 +848,7 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
                 dtComp.saveSettings = true;
 
                 spyOn(dtComp, 'storeMetasMap');
-                spyOn(dtComp.gridData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
+                spyOn(dtComp.allData, 'sort').and.callFake(() => { }); // skip sorting, not needed for this test case
 
                 dtComp.sortColumn(dtComp.cols[1], false);
 
@@ -859,99 +859,99 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
                 let sortedtridData = [{ v: 'cg5', dtIndex: 0 }, { v: 'hg2', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 'hg2' }, { v: 'hh5' }, { v: 'cg5' }, { v: 'hg5' }];
+                dtComp.allData = [{ v: 'hg2' }, { v: 'hh5' }, { v: 'cg5' }, { v: 'hg5' }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by string value (descending order)', () => {
                 let sortedtridData = [{ v: 'hh5', dtIndex: 0 }, { v: 'hg5', dtIndex: 1 }, { v: 'hg2', dtIndex: 2 }, { v: 'cg5', dtIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: -1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 'hg2' }, { v: 'hh5' }, { v: 'cg5' }, { v: 'hg5' }];
+                dtComp.allData = [{ v: 'hg2' }, { v: 'hh5' }, { v: 'cg5' }, { v: 'hg5' }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by string value (case insensitivity test - all elements should keep their initial position (stable sort))', () => {
                 let sortedtridData = [{ v: 'p', position: 0, dtIndex: 0 }, { v: 'P', position: 1, dtIndex: 1 }, { v: 'p', position: 2, dtIndex: 2 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 'p', position: 0 }, { v: 'P', position: 1 }, { v: 'p', position: 2 }];
+                dtComp.allData = [{ v: 'p', position: 0 }, { v: 'P', position: 1 }, { v: 'p', position: 2 }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by string value (interloper test - interloper (empty string) should be moved to first position)', () => {
                 let sortedtridData = [{ v: '', dtIndex: 0 }, { v: 'cg5', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 'hh5' }, { v: '' }, { v: 'cg5' }, { v: 'hg5' }];
+                dtComp.allData = [{ v: 'hh5' }, { v: '' }, { v: 'cg5' }, { v: 'hg5' }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by string value (interloper test - interloper (null) should be moved to first position)', () => {
                 let sortedtridData = [{ v: null, dtIndex: 0 }, { v: 'cg5', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 'hh5' }, { v: null }, { v: 'cg5' }, { v: 'hg5' }];
+                dtComp.allData = [{ v: 'hh5' }, { v: null }, { v: 'cg5' }, { v: 'hg5' }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by string value (interloper test - interloper (undefined) should be moved to first position)', () => {
                 let sortedtridData = [{ v: undefined, dtIndex: 0 }, { v: 'cg5', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 'hh5' }, { v: undefined }, { v: 'cg5' }, { v: 'hg5' }];
+                dtComp.allData = [{ v: 'hh5' }, { v: undefined }, { v: 'cg5' }, { v: 'hg5' }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by numeric value (ascending order)', () => {
                 let sortedtridData = [{ v: 1, dtIndex: 0 }, { v: 5, dtIndex: 1 }, { v: 8, dtIndex: 2 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 5 }, { v: 8 }, { v: 1 }];
+                dtComp.allData = [{ v: 5 }, { v: 8 }, { v: 1 }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should sort an array of objects by numeric value (descending order)', () => {
                 let sortedtridData = [{ v: 8, dtIndex: 0 }, { v: 5, dtIndex: 1 }, { v: 1, dtIndex: 2 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: -1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: 5 }, { v: 8 }, { v: 1 }];
+                dtComp.allData = [{ v: 5 }, { v: 8 }, { v: 1 }];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
 
             it('should not reorder array elements if all compared values are same (falsy values except 0 are treated the same)', () => {
                 let sortedtridData = [{ v: '', position: 0, dtIndex: 0 }, { v: null, position: 1, dtIndex: 1 }, { v: undefined, position: 2, dtIndex: 2 }, { v: null, position: 3, dtIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
-                dtComp.gridData = [{ v: '', position: 0 }, { v: null, position: 1 }, { v: undefined, position: 2 }, { v: null, position: 3 },];
+                dtComp.allData = [{ v: '', position: 0 }, { v: null, position: 1 }, { v: undefined, position: 2 }, { v: null, position: 3 },];
 
                 dtComp.sortColumn(sortColumn, true);
 
-                expect(dtComp.gridData).toEqual(sortedtridData);
+                expect(dtComp.allData).toEqual(sortedtridData);
             });
         });
 

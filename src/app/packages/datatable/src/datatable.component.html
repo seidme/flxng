@@ -41,7 +41,7 @@
             </div>
 
             <div class="dt-body" #dtBodyRef [ngClass]="level === 0 ? 'dt-root': 'dt-nested'"  [class.in-focus]="isInFocus" [ngStyle]="bodyStyle" [flxObserveWidth]="readyToProcessData && metas.resizeMode.value !== ResizeModes.expand" (onWidthChange)="onBodyWidthChange($event)">
-                <div class="dt-body-inner" [style.width]="bodyWidth" *ngIf="gridData.length">
+                <div class="dt-body-inner" [style.width]="bodyWidth" *ngIf="allData.length">
                     <ng-container *ngFor="let rowData of renderData; let rowIndex = index; let firstRow = first; let lastRow = last;">
                         <div class="dt-row" [class.expanded]="rowData.dtExpanded">
                             <ng-container *ngFor="let col of cols; let colIndex = index">
@@ -75,7 +75,7 @@
                     </ng-container>
                 </div>
 
-                <div class="dt-body-no-results-template-container" *ngIf="!gridData.length && templateRefs[GridTemplates.noResults]">
+                <div class="dt-body-no-results-template-container" *ngIf="!allData.length && templateRefs[GridTemplates.noResults]">
                     <flx-templateLoader [templateRef]="templateRefs[GridTemplates.noResults]"
                                         [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
                 </div>

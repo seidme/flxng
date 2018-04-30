@@ -29,10 +29,12 @@ import {
 
 import { animate, style, trigger, transition } from '@angular/animations';
 
-import { StorageService, TemplateDirective, compareValues, calcPercentage, mapToIterable, resolveDeepValue, isValueValidForView, getScrollbarWidth, animateScroll, filterDuplicates, debounce } from '@flxng/common'; // TODO common -> shared and conider splitting imports shared/utils..
-import { PaginatorComponent } from '@flxng/paginator';
+import { StorageService } from '@flxng/common';
+import { TemplateDirective } from '@flxng/common/src/directives';
+import { getScrollbarWidth, animateScroll } from '@flxng/common/src/utils-dom';
+import { mapToIterable, compareValues, calcPercentage, resolveDeepValue, isValueValidForView, filterDuplicates, debounce} from '@flxng/common/src/utils';
 
-//import { DatatableComponent as ParentDatatableComponent } from './datatable.component';
+import { PaginatorComponent } from '@flxng/paginator';
 
 import { ColumnComponent } from './column/column.component';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -89,7 +91,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     onColsMetaPositionChange: EventEmitter<null>;
 
-    gridData: Array<any> = [];
+    allData: Array<any> = [];
     filteredData: Array<any> = [];
     renderData: Array<any> = [];
     cols: Array<ColumnComponent>;
@@ -233,8 +235,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     checkAndProcessInputDataChanges(): void {
         if (!this.data || this.data.constructor !== Array || !this.data.length) {
-            if (this.gridData.length) {
-                this.gridData = [];
+            if (this.allData.length) {
+                this.allData = [];
                 this.filteredData = [];
 
                 if (!this.pagination) {
@@ -245,7 +247,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             return;
         }
 
-        if (this.data.length !== this.gridData.length) {
+        if (this.data.length !== this.allData.length) {
             // this check is needed since iterableDiffer is able to detect changes over an array while it holds the same reference,
             // if array's reference changes, iterableDiffer won't detect any change, and it needs to be updated
 
@@ -265,7 +267,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     onInputDataChanges(): void {
-        this.gridData = this.data.map((rowData: any, i: number) => {
+        this.allData = this.data.map((rowData: any, i: number) => {
             rowData = rowData || {};
             rowData.dtIndex = i;
             rowData.dtExpanded = false;
@@ -283,7 +285,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         this.globalFilterValue
             ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
-            : this.filteredData = this.gridData.slice();
+            : this.filteredData = this.allData.slice();
 
         if (!this.pagination) {
             this.renderData = this.filteredData.slice();
@@ -632,7 +634,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 
                 this.globalFilterValue
                     ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
-                    : this.filteredData = this.gridData.slice();
+                    : this.filteredData = this.allData.slice();
 
                 if (!this.pagination) {
                     this.renderData = this.filteredData.slice();
@@ -664,7 +666,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     filterData(cols: Array<ColumnComponent>, value: string): void {
         value = value.toUpperCase();
 
-        this.filteredData = this.gridData.filter((rowData: any, i: number) => {
+        this.filteredData = this.allData.filter((rowData: any, i: number) => {
             return !!cols.find((col: ColumnComponent) => this.resolveFieldValue(rowData, col.field).toUpperCase().indexOf(value) > -1);
         });
     }
@@ -765,7 +767,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             }
         }
 
-        this.gridData.sort((a, b) => {
+        this.allData.sort((a, b) => {
             let columnToSortIndex = 0;
             let compareResult = 0;
 
@@ -780,7 +782,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             return compareResult;
         });
 
-        this.gridData.forEach((rowData: any, i: number) => {
+        this.allData.forEach((rowData: any, i: number) => {
             // set new order index
             rowData.dtIndex = i;
         });
@@ -788,9 +790,9 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
         if (!autoSorting) {
-            this.gridData.length !== this.filteredData.length
+            this.allData.length !== this.filteredData.length
                 ? this.filteredData.sort((rowDataA: any, rowDataB: any) => rowDataA.dtIndex - rowDataB.dtIndex)
-                : this.filteredData = this.gridData.slice();
+                : this.filteredData = this.allData.slice();
 
             if (!this.pagination) {
                 this.renderData = this.filteredData.slice();

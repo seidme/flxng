@@ -10,7 +10,8 @@ import {
     forwardRef
 } from '@angular/core';
 
-import { TemplateDirective, mapToIterable } from '@flxng/common';
+import { TemplateDirective } from '@flxng/common/src/directives';
+import { mapToIterable } from '@flxng/common/src/utils';
 
  import { PaginationTemplates } from './pagination-templates';
 
