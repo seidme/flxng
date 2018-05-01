@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-// import { TemplateLoaderComponent } from './components/template-loader.component';
+import { TemplateLoaderComponent } from './components/template-loader.component';
 
 import { VarDirective } from './directives';
 import { TemplateDirective } from './directives';
@@ -13,6 +13,7 @@ import { StorageService } from './services/storage.service';
 @NgModule({
   imports: [],
   exports: [
+    TemplateLoaderComponent,
     VarDirective,
     TemplateDirective,
     OutsideClickDirective,
@@ -20,6 +21,7 @@ import { StorageService } from './services/storage.service';
     ObserveWidthDirective
   ],
   declarations: [
+    TemplateLoaderComponent,
     VarDirective,
     TemplateDirective,
     OutsideClickDirective,

@@ -18,6 +18,7 @@ export class TemplateLoaderComponent {
 
     ngOnInit() {
         let view = this.viewContainer.createEmbeddedView(this.templateRef, this.templateCtx);
+        //view.setLocal('data', this.data);
     }
 
     /*
