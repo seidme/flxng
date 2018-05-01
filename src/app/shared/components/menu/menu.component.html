@@ -1,8 +1,7 @@
 <div #containerRef class="flx-menu-container" flxOutsideClick (onOutsideClick)="close();">
 
     <div #headRef class="flx-menu-head" *ngIf="templateRefs[templateTypes.menuHead] else defaultMenuHeadTemplateRef">
-        <flx-templateLoader [templateRef]="templateRefs[templateTypes.menuHead]"
-                            [templateCtx]="{ 'props': props, 'toggle': bindFnContext(toggle), 'open': bindFnContext(open), 'close': bindFnContext(close) }"></flx-templateLoader>
+        <ng-container *ngTemplateOutlet="templateRefs[templateTypes.menuHead]; context: { 'props': props, 'toggle': bindFnContext(toggle), 'open': bindFnContext(open), 'close': bindFnContext(close) }"></ng-container>
     </div>
 
     <ng-template #defaultMenuHeadTemplateRef>

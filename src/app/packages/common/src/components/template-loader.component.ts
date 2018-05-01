@@ -18,6 +18,12 @@ export class TemplateLoaderComponent {
 
     ngOnInit() {
         let view = this.viewContainer.createEmbeddedView(this.templateRef, this.templateCtx);
-        //view.setLocal('data', this.data);
     }
+
+    /*
+        Usage:
+
+        <flx-templateLoader [templateRef]="refToTemplate"
+                            [templateCtx]="{ '$implicit': someVar, 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+    */
 }

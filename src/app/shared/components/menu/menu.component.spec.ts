@@ -4,7 +4,6 @@ import { DebugElement, QueryList, Component, ViewChild, OnInit, TemplateRef, Eve
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MenuComponent } from './menu.component';
-import { TemplateLoaderComponent } from '../../../shared/components/template-loader/template-loader.component';
 
 
 @Component({
@@ -50,8 +49,7 @@ describe('MenuComponent (MenuHostComponent) >> ', () => {
             ],
             declarations: [
                 MenuHostComponent,
-                MenuComponent,
-                TemplateLoaderComponent
+                MenuComponent
             ],
             providers: []
         }).compileComponents();  // compile template and css

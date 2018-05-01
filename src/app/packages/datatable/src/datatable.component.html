@@ -1,8 +1,7 @@
 <!-- <div class="flx-datatable"> -->
 
     <div class="dt-options" *ngIf="templateRefs[GridTemplates.options]">
-        <flx-templateLoader [templateRef]="templateRefs[GridTemplates.options]"
-                            [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+        <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.options]; context: { 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
     </div>
 
 
@@ -17,8 +16,7 @@
                                 <div class="dt-cell-inner-cover" [class.active]="col.dragged"></div>
 
                                 <ng-container *ngIf="col.templateRefs[ColumnTemplates.headCell]">
-                                        <flx-templateLoader [templateRef]="col.templateRefs[ColumnTemplates.headCell]"
-                                                            [templateCtx]="{ 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+                                    <ng-container *ngTemplateOutlet="col.templateRefs[ColumnTemplates.headCell]; context: { 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
                                 </ng-container>
 
                                 <ng-container *ngIf="!col.templateRefs[ColumnTemplates.headCell]">
@@ -48,8 +46,7 @@
                                 <div class="dt-cell" [style.width]="col.metas.width.value" *ngIf="col.metas.visibility.value">
 
                                     <ng-container *ngIf="col.templateRefs[ColumnTemplates.bodyCell]">
-                                        <flx-templateLoader [templateRef]="col.templateRefs[ColumnTemplates.bodyCell]"
-                                                            [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowIndex, 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'toggleRow': bindFnContext(toggleRow) }"></flx-templateLoader>
+                                        <ng-container *ngTemplateOutlet="col.templateRefs[ColumnTemplates.bodyCell]; context: { 'rowData': rowData, 'rowIndex': rowIndex, 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'toggleRow': bindFnContext(toggleRow) }"></ng-container>
                                     </ng-container>
 
                                     <ng-container *ngIf="!col.templateRefs[ColumnTemplates.bodyCell]">
@@ -69,15 +66,13 @@
                         </div>
 
                         <div class="dt-row-expanded-content-container" *ngIf="rowData.dtExpanded" [@rowExpansion]>
-                            <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
-                                                [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                            <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.rowExpansion]; context: { 'rowData': rowData, 'rowIndex': rowIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></ng-container>
                         </div>
                     </ng-container>
                 </div>
 
                 <div class="dt-body-no-results-template-container" *ngIf="!allData.length && templateRefs[GridTemplates.noResults]">
-                    <flx-templateLoader [templateRef]="templateRefs[GridTemplates.noResults]"
-                                        [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+                    <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.noResults]; context: { 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
                 </div>
             </div>
         </div>
@@ -94,8 +89,7 @@
 
 
     <div class="dt-foot" #dtFoot *ngIf="templateRefs[GridTemplates.footer]">
-        <flx-templateLoader [templateRef]="templateRefs[GridTemplates.footer]"
-                            [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+        <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.footer]; context: { 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
     </div>
 
     <!-- <flx-contextMenu *ngIf="templateRefs[GridTemplates.headContextMenu] && dtHeadRef"

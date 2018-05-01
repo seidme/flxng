@@ -4,7 +4,6 @@ import { DebugElement, QueryList, Component, ViewChild, OnInit, TemplateRef } fr
 
 import { DatatableComponent } from './datatable.component';
 import { ColumnComponent } from './column/column.component';
-import { TemplateLoaderComponent } from '../../../shared/components/template-loader/template-loader.component';
 import { ContextMenuComponent } from '../../../shared/components/context-menu/context-menu.component';
 
 import { VarDirective } from '../../../shared/directives/var.directive';
@@ -101,7 +100,6 @@ describe('DatatableComponent (dtHostComponent) >> ', () => {
                 dtHostComponent,
                 DatatableComponent,
                 ColumnComponent,
-                TemplateLoaderComponent,
                 ContextMenuComponent,
                 VarDirective
             ],
