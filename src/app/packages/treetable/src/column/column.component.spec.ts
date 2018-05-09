@@ -2,14 +2,14 @@ import { async, TestBed, ComponentFixture, inject, ComponentFixtureAutoDetect } 
 import { By } from '@angular/platform-browser';
 import { DebugElement, QueryList, Component, ViewChild, OnInit, TemplateRef } from '@angular/core';
 
-import { DatatableComponent } from '../datatable.component';
+import { TreetableComponent } from '../treetable.component';
 import { ColumnComponent } from './column.component';
 import { TemplateDirective } from '../../../../shared/directives/template.directive';
 
 import { ColumnTemplates } from '../shared/constants';
 
 
-class DatatableComponentMock {
+class TreetableComponentMock {
     toggleColumnVisibility(col: ColumnComponent) { };
     sortColumn(col: ColumnComponent, autoSorting: boolean = false) { }
 }
@@ -24,7 +24,7 @@ describe('ColumnComponent >> ', () => {
                 ColumnComponent
             ],
             providers: [
-                { provide: DatatableComponent, useClass: DatatableComponentMock }
+                { provide: TreetableComponent, useClass: TreetableComponentMock }
             ]
         }).compileComponents();  // compile template and css
 

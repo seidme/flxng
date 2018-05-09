@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { PaginatorModule as FlxngPaginatorModule } from '@flxng/paginator';
 
-import { DatatableComponent } from './datatable.component';
+import { TreetableComponent } from './treetable.component';
 import { ColumnComponent } from './column/column.component';
 import { PaginationComponent } from './pagination/pagination.component';
 
@@ -19,14 +19,14 @@ import { PaginationComponent } from './pagination/pagination.component';
     FlxngPaginatorModule
   ],
   exports: [
-    DatatableComponent,
+    TreetableComponent,
     ColumnComponent,
     PaginationComponent
   ],
   declarations: [
-    DatatableComponent,
+    TreetableComponent,
     ColumnComponent,
     PaginationComponent
   ]
 })
-export class DatatableModule { }
+export class TreetableModule { }

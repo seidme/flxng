@@ -13,7 +13,7 @@ export interface Log {
 
 
 @Injectable()
-export class ShowcaseDatatableService {
+export class ShowcaseTreetableService {
 
     constructor(
         //private _ngZone: NgZone

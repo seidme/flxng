@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
-import { ShowcaseDatatableService, Log } from '../showcase-datatable.service';
+import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
 
 @Component({
   selector: '',
@@ -12,7 +12,7 @@ export class GetStartedComponent implements OnInit, AfterViewInit {
   logs: Log[];
 
   constructor(
-    private _service: ShowcaseDatatableService
+    private _service: ShowcaseTreetableService
   ) { }
 
   ngOnInit(): void {

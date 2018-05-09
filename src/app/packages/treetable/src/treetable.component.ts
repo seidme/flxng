@@ -44,9 +44,9 @@ import { ResizeModes, GridTemplates, ColumnTemplates, PaginatorSettings, Element
 declare var componentHandler: any;
 
 @Component({
-    selector: 'flx-datatable',
-    templateUrl: './datatable.component.html',
-    styleUrls: ['./datatable.component.scss'],
+    selector: 'flx-treetable',
+    templateUrl: './treetable.component.html',
+    styleUrls: ['./treetable.component.scss'],
     animations: [
         trigger('rowExpansion', [ // TODO: get rid of dependency on @angular/animations
             transition('void => *', [
@@ -60,7 +60,7 @@ declare var componentHandler: any;
         ])
     ]
 })
-export class DatatableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, AfterViewChecked, OnDestroy {
+export class TreetableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, AfterViewChecked, OnDestroy {
 
     @Input() data: Array<any>;
     @Input() includeHead: boolean = true;
@@ -71,13 +71,13 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     @Input() resizeMode: string = '';
     @Input() templateRefs: any = {};
     @Input() bodyStyle: any = {};
-    @Input() parentRef: DatatableComponent;
+    @Input() parentRef: TreetableComponent;
 
 
-    @ViewChild('dtContentRef') dtContentRef: ElementRef;
-    @ViewChild('dtContentInnerRef') dtContentInnerRef: ElementRef;
-    @ViewChild('dtHeadRef') dtHeadRef: ElementRef;
-    @ViewChild('dtBodyRef') dtBodyRef: ElementRef;
+    @ViewChild('contentRef') contentRef: ElementRef;
+    @ViewChild('contentInnerRef') contentInnerRef: ElementRef;
+    @ViewChild('headRef') headRef: ElementRef;
+    @ViewChild('bodyRef') bodyRef: ElementRef;
 
     @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
@@ -87,7 +87,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
 
 
-    self: DatatableComponent = this;
+    self: TreetableComponent = this;
 
     onColsMetaPositionChange: EventEmitter<null>;
 
@@ -141,7 +141,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         private _storageService: StorageService,
         //private _injector: Injector
         //private _viewContainerRef: ViewContainerRef,
-       // @SkipSelf() @Optional() @Inject(forwardRef(() => ParentDatatableComponent)) private _parentRef?: DatatableComponent
+       // @SkipSelf() @Optional() @Inject(forwardRef(() => ParentTreetableComponent)) private _parentRef?: TreetableComponent
     ) { }
 
 
@@ -219,7 +219,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     checkInputParamsValidity(): void {
-        if(this.parentRef && !(this.parentRef instanceof DatatableComponent))
+        if(this.parentRef && !(this.parentRef instanceof TreetableComponent))
             throw new Error('Invalid parameter: \'parentRef\'.');
 
         if (this.saveSettings && (!this.settingsStorageKey || typeof this.settingsStorageKey !== 'string'))
@@ -269,8 +269,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     onInputDataChanges(): void {
         this.allData = this.data.map((rowData: any, i: number) => {
             rowData = rowData || {};
-            rowData.dtIndex = i;
-            rowData.dtExpanded = false;
+            rowData.ttIndex = i;
+            rowData.ttExpanded = false;
 
             return rowData;
         });
@@ -455,7 +455,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     setDefaultMetas(): void {
-        // Datatable metas -->
+        // Treetable metas -->
         this.metas.resizeMode.value = this.resizeMode;
         this.metas.itemsPerPage.value = this.pagination 
             ? this.pagination.itemsPerPage
@@ -477,24 +477,24 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     reflectComputedStyleWidths(): void {
-        let dtContentInnerElem = this.dtContentInnerRef.nativeElement;
-        let dtContentInnerElemComputedWidth = parseFloat(getComputedStyle(dtContentInnerElem).width);
+        let contentInnerElem = this.contentInnerRef.nativeElement;
+        let contentInnerElemComputedWidth = parseFloat(getComputedStyle(contentInnerElem).width);
 
-        console.log('dtContentInnerElemComputedWidth', dtContentInnerElemComputedWidth);
+        console.log('contentInnerElemComputedWidth', contentInnerElemComputedWidth);
 
         let visibleCols = this.getVisibleCols();
 
-        let colDefaultWidthValue = dtContentInnerElemComputedWidth / visibleCols.length;
+        let colDefaultWidthValue = contentInnerElemComputedWidth / visibleCols.length;
         let colDefaultWidth = this.metas.resizeMode.value === this.ResizeModes.expand
             ? colDefaultWidthValue + 'px'
-            : calcPercentage(colDefaultWidthValue, dtContentInnerElemComputedWidth) + '%';
+            : calcPercentage(colDefaultWidthValue, contentInnerElemComputedWidth) + '%';
 
         visibleCols.forEach((col: ColumnComponent, i: number) => {
             col.metas.width.value = colDefaultWidth;
         });
 
         this.metas.width.value = this.metas.resizeMode.value === this.ResizeModes.expand
-            ? dtContentInnerElemComputedWidth + 'px'
+            ? contentInnerElemComputedWidth + 'px'
             : '100%';
     }
 
@@ -581,14 +581,14 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
     scrollRowElemIntoView(rowElem: any): void {
         this._ngZone.runOutsideAngular(() => {
             // TODO: breaks initial mouse wheel scrolling in Chrome (for nested tables)..
-            animateScroll(this.dtBodyRef.nativeElement, rowElem.offsetTop, 250);
-            //this.dtBodyRef.nativeElement.scrollTop = rowElem.offsetTop;
+            animateScroll(this.bodyRef.nativeElement, rowElem.offsetTop, 250);
+            //this.bodyRef.nativeElement.scrollTop = rowElem.offsetTop;
         });
     }
 
 
     getParentRowElement(): HTMLElement {
-        let parentExpandedContentContainerElem = this.findAncestor(this._elementRef.nativeElement, 'dt-row-expanded-content-container');
+        let parentExpandedContentContainerElem = this.findAncestor(this._elementRef.nativeElement, 'row-expanded-content-container');
         if(!parentExpandedContentContainerElem) {
             return null;
         }
@@ -596,7 +596,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         let parentTableRowNodes = Array.prototype.slice.call(parentExpandedContentContainerElem.parentElement.children);
         let parentExpandedContentContainerElemIndex = parentTableRowNodes.indexOf(parentExpandedContentContainerElem);
 
-        // 'dt-row-expanded-content-container' element always comes right after expanded row
+        // 'row-expanded-content-container' element always comes right after expanded row
         return parentTableRowNodes[parentExpandedContentContainerElemIndex - 1];
     }
 
@@ -684,7 +684,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     toggleRow(rowData: any): void {
-        rowData.dtExpanded = !rowData.dtExpanded;
+        rowData.ttExpanded = !rowData.ttExpanded;
     }
 
 
@@ -774,7 +774,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
             while(compareResult === 0 || typeof compareResult !== 'number' || isNaN(compareResult)) {
                 compareResult = columnsToSort[columnToSortIndex]
                     ? getCompareResult(columnsToSort[columnToSortIndex], a, b) * columnsToSort[columnToSortIndex].metas.sortOrder.value
-                    : a.dtIndex > b.dtIndex ? 1 : -1; // fix for Chromium's unstable sorting algorithm: http://stackoverflow.com/questions/3195941/sorting-an-array-of-objects-in-chrome
+                    : a.ttIndex > b.ttIndex ? 1 : -1; // fix for Chromium's unstable sorting algorithm: http://stackoverflow.com/questions/3195941/sorting-an-array-of-objects-in-chrome
 
                 columnToSortIndex++;
             }
@@ -784,14 +784,14 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         this.allData.forEach((rowData: any, i: number) => {
             // set new order index
-            rowData.dtIndex = i;
+            rowData.ttIndex = i;
         });
 
 
 
         if (!autoSorting) {
             this.allData.length !== this.filteredData.length
-                ? this.filteredData.sort((rowDataA: any, rowDataB: any) => rowDataA.dtIndex - rowDataB.dtIndex)
+                ? this.filteredData.sort((rowDataA: any, rowDataB: any) => rowDataA.ttIndex - rowDataB.ttIndex)
                 : this.filteredData = this.allData.slice();
 
             if (!this.pagination) {
@@ -830,8 +830,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 });
             }
             else {
-                let dtContentInnerElem = this.dtContentInnerRef.nativeElement;
-                let dtContentInnerElemWidth = parseFloat(getComputedStyle(dtContentInnerElem).width);
+                let contentInnerElem = this.contentInnerRef.nativeElement;
+                let contentInnerElemWidth = parseFloat(getComputedStyle(contentInnerElem).width);
                 let targetedColWidthPct = parseFloat(targetedCol.metas.width.value);
                 let targetedColDividedWithPct: number;
                 let affectedCols: Array<ColumnComponent>;
@@ -843,7 +843,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                     for (let i = 0; i < cols.length; ++i) {
                         let colWidthPct = parseFloat(cols[i].metas.width.value);
                         let colNewWidthPct = colWidthPct - targetedColDividedWithPct;
-                        let colNewWidthPx = (colNewWidthPct / 100) * dtContentInnerElemWidth;
+                        let colNewWidthPx = (colNewWidthPct / 100) * contentInnerElemWidth;
 
                         if (colNewWidthPx < this.colMinWidth) {
                             // re-set affected cols excluding this one
@@ -916,11 +916,11 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         let mouseInitialClientX = event.clientX;
         let documentElem = document.documentElement;
 
-        let headCellNodeList = this.dtHeadRef.nativeElement.querySelectorAll('.dt-cell');
+        let headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
         let visibleCols = this.getVisibleCols();
 
-        let dtContentInnerElem = this.dtContentInnerRef.nativeElement;
-        let dtContentInnerElemInitialWidth = parseFloat(getComputedStyle(dtContentInnerElem).width);
+        let contentInnerElem = this.contentInnerRef.nativeElement;
+        let contentInnerElemInitialWidth = parseFloat(getComputedStyle(contentInnerElem).width);
 
         let targetedColumn, targetedColumnIdx, targetedHeadCellElem, targetedHeadCellElemInitialWidth;
         let affectedColumn, affectedColumnIdx, affectedHeadCellElem, affectedHeadCellElemInitialWidth;
@@ -978,7 +978,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
 
                 if (this.metas.resizeMode.value === this.ResizeModes.expand) {
                     if (targetedHeadCellElemNewWidth >= this.colMinWidth) {
-                        this.metas.width.value = (dtContentInnerElemInitialWidth + pxDelta) + 'px';
+                        this.metas.width.value = (contentInnerElemInitialWidth + pxDelta) + 'px';
                         targetedColumn.metas.width.value = targetedHeadCellElemNewWidth + 'px';
 
                         this._changeDetectorRef.detectChanges();
@@ -988,8 +988,8 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                     let affectedHeadCellElemNewWidth = affectedHeadCellElemInitialWidth - pxDelta;
 
                     if (targetedHeadCellElemNewWidth >= this.colMinWidth && affectedHeadCellElemNewWidth >= this.colMinWidth) {
-                        targetedColumn.metas.width.value = calcPercentage(targetedHeadCellElemNewWidth, dtContentInnerElemInitialWidth) + '%';
-                        affectedColumn.metas.width.value = calcPercentage(affectedHeadCellElemNewWidth, dtContentInnerElemInitialWidth) + '%';
+                        targetedColumn.metas.width.value = calcPercentage(targetedHeadCellElemNewWidth, contentInnerElemInitialWidth) + '%';
+                        affectedColumn.metas.width.value = calcPercentage(affectedHeadCellElemNewWidth, contentInnerElemInitialWidth) + '%';
 
                         this._changeDetectorRef.detectChanges();
                     }
@@ -1012,7 +1012,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
         let draggedColIdx = this.cols.indexOf(draggedColumn);
         let draggedColVisibleIdx = visibleCols.indexOf(draggedCol);
 
-        let headCellNodeList = this.dtHeadRef.nativeElement.querySelectorAll('.dt-cell');
+        let headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
         let draggedCellElem = headCellNodeList[draggedColVisibleIdx];
         let draggedCellElemWidth = parseFloat(getComputedStyle(draggedCellElem).width);
         let draggedCellElemViewportOffset = draggedCellElem.getBoundingClientRect();
@@ -1054,7 +1054,7 @@ export class DatatableComponent implements OnInit, AfterContentInit, AfterViewIn
                 let affectedCol = this.getVisibleCols()[affectedColVisibleIdx];
                 let affectedColIdx = this.cols.indexOf(affectedCol);
 
-                headCellNodeList = this.dtHeadRef.nativeElement.querySelectorAll('.dt-cell');
+                headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
                 let affectedCellElem = headCellNodeList[affectedColVisibleIdx];
 
                 if (affectedCellElem && affectedCol && affectedCol.isReorderable()) {

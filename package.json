@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
     "@flxng/common": "file:./src/app/packages/common/flxng-common-1.0.0.tgz",
-    "@flxng/datatable": "file:./src/app/packages/datatable/flxng-datatable-1.0.0.tgz",
+    "@flxng/treetable": "file:./src/app/packages/treetable/flxng-treetable-1.0.0.tgz",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"

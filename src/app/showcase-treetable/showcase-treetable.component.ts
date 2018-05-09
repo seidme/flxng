@@ -4,4 +4,4 @@ import { Component, OnInit } from '@angular/core';
   selector: '',
   template: `<router-outlet></router-outlet>`
 })
-export class ShowcaseDatatableComponent { }
+export class ShowcaseTreetableComponent { }

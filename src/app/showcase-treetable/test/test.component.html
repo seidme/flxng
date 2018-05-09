@@ -1,6 +1,6 @@
 
   <div class="table-container">
-    <flx-datatable class=""
+    <flx-treetable class=""
                 [data]="logs" 
                 [bodyStyle]="{'max-height': '500px'}"
                 [resizeMode]="'expand'" 
@@ -8,12 +8,12 @@
                 [saveSettings]="true" 
                 [settingsStorageKey]="'test-test'" 
                 [globalFilterInputRef]="globalFilterInput" 
-                id="items-datatable">
+                id="items-treetable">
 
     <ng-template flxTemplate="options" let-cols="columns" let-colsMap="columnsMap">
       <div class="grid-options-container">
         <span class="global-filter">
-          <input type="text" id="flx-datatable-global-filter" placeholder="Filter..." value="">
+          <input type="text" id="flx-treetable-global-filter" placeholder="Filter..." value="">
         </span>
 
         <span>
@@ -56,12 +56,12 @@
     <flx-column field="message" header="MESSAGE"></flx-column>
 
     <ng-template flxTemplate="rowExpansion" #rowExpansionTemplateRef let-item="rowData" let-ri="rowIndex" let-cols="columns" let-colsMap="columnsMap" let-level="level" let-self="self">
-      <flx-datatable [data]="item.children" [includeHead]="false" [bodyStyle]="{'max-height': level > 1 ? '300px' : ''}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
+      <flx-treetable [data]="item.children" [includeHead]="false" [bodyStyle]="{'max-height': level > 1 ? '300px' : ''}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
         <ng-container *ngFor="let col of cols">
           <flx-column [field]="col.field" [expander]="col.expander" [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty" [templateRefs]="col.templateRefs"></flx-column>
         </ng-container>
         <!-- <flx-pagination [itemsPerPage]="5" [pageLinksSize]="7"></flx-pagination> -->
-      </flx-datatable>
+      </flx-treetable>
     </ng-template>
 
     <ng-template flxTemplate="noResults">
@@ -69,5 +69,5 @@
 
     <flx-pagination [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]" [itemsPerPage]="5" [pageLinksSize]="7"></flx-pagination>
 
-  </flx-datatable>
+  </flx-treetable>
 </div>

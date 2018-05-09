@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ShowcaseDatatableService, Log } from '../showcase-datatable.service';
+import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
 
 @Component({
   selector: '',
@@ -14,7 +14,7 @@ export class ScrollingComponent implements OnInit {
   content: any;
 
   constructor(
-    private _service: ShowcaseDatatableService
+    private _service: ShowcaseTreetableService
   ) { }
 
   ngOnInit(): void {
@@ -23,7 +23,7 @@ export class ScrollingComponent implements OnInit {
   }
 
   geeet() {
-    return this._service.getGhFileContent("https://raw.githubusercontent.com/primefaces/primeng/master/src/app/showcase/components/datatable/datatablesortdemo.ts").subscribe(
+    return this._service.getGhFileContent("https://raw.githubusercontent.com/primefaces/primeng/master/src/app/showcase/components/treetable/datatablesortdemo.ts").subscribe(
       c => {
         console.log(c);
         this.content = c;

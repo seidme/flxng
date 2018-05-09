@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
-import { DatatableModule as FlxngDatatableModule } from '@flxng/datatable';
+import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable';
 
 import { SharedModule } from '../shared/shared.module';
 
-import { showcaseDatatableRoutes } from './showcase-datatable-routes.const';
-import { ShowcaseDatatableService } from './showcase-datatable.service';
-import { ShowcaseDatatableComponent } from './showcase-datatable.component';
+import { showcaseTreetableRoutes } from './showcase-treetable-routes.const';
+import { ShowcaseTreetableService } from './showcase-treetable.service';
+import { ShowcaseTreetableComponent } from './showcase-treetable.component';
 import { OverviewComponent } from './overview/overview.component';
 import { TestComponent } from './test/test.component';
 import { GetStartedComponent } from './get-started/get-started.component';
@@ -18,20 +18,20 @@ import { ScrollingComponent } from './scrolling/scrolling.component';
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(showcaseDatatableRoutes),
+    RouterModule.forChild(showcaseTreetableRoutes),
     SharedModule,
     FlxngCommonModule,
-    FlxngDatatableModule
+    FlxngTreetableModule
   ],
   declarations: [
-    ShowcaseDatatableComponent,
+    ShowcaseTreetableComponent,
     OverviewComponent,
     TestComponent,
     GetStartedComponent,
     ScrollingComponent
   ],
   providers: [
-    ShowcaseDatatableService
+    ShowcaseTreetableService
   ]
 })
-export class ShowcaseDatatableModule { }
+export class ShowcaseTreetableModule { }

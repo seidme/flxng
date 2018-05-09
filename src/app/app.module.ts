@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
- import { ShowcaseDatatableModule } from './showcase-datatable/showcase-datatable.module';
+ import { ShowcaseTreetableModule } from './showcase-treetable/showcase-treetable.module';
 
 import { AppComponent } from './app.component';
 
@@ -17,7 +17,7 @@ import { routes } from './app-routes.const';
     HttpClientModule,
     BrowserModule,
     RouterModule.forRoot(routes, {useHash: true}),
-    ShowcaseDatatableModule
+    ShowcaseTreetableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

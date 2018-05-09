@@ -13,7 +13,7 @@ import {
 import { TemplateDirective } from '@flxng/common/src/directives';
 import { mapToIterable } from '@flxng/common/src/utils';
 
-import { DatatableComponent } from '../datatable.component';
+import { TreetableComponent } from '../treetable.component';
 import { ColumnTemplates } from '../shared/constants';
 
 
@@ -58,7 +58,7 @@ export class ColumnComponent implements OnInit, AfterContentInit {
     };
 
     constructor(
-        @Inject(forwardRef(() => DatatableComponent)) private _dtcRef: DatatableComponent
+        @Inject(forwardRef(() => TreetableComponent)) private _dtcRef: TreetableComponent
     ) { }
 
 

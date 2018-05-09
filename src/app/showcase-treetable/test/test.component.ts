@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { ShowcaseDatatableService, Log } from '../showcase-datatable.service';
+import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
 
 @Component({
   selector: "flx-test",
@@ -12,7 +12,7 @@ export class TestComponent implements OnInit {
     logs: Log[];
 
     constructor(
-        private _service: ShowcaseDatatableService
+        private _service: ShowcaseTreetableService
     ) { }
 
 

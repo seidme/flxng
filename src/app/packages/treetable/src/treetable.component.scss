@@ -7,7 +7,7 @@
         box-sizing: border-box;
     }
 
-    //.flx-datatable {
+    //.flx-treetable {
         display: flex;
         flex-direction: column;
         position:relative;
@@ -15,12 +15,12 @@
         width: 100%;
         height: 100%;
 
-        .dt-options {
+        .options {
             flex: 0 0 auto;
             position:relative;
         }
 
-        .dt-content {
+        .content {
             flex: 1 0 auto;
             overflow: hidden;
 
@@ -31,7 +31,7 @@
                 overflow-x: auto;
             }
 
-            .dt-content-inner {
+            .content-inner {
                 flex: 1 0 auto;
                 overflow: hidden;
                 //width: {{ngStyle}};
@@ -39,19 +39,19 @@
                 flex-direction: column;
                 overflow: visible;
 
-                .dt-head {
+                .head {
                     flex: 0 0 40px;
 
                     display: flex;
                     flex-direction: column;
 
-                    .dt-head-inner {
+                    .head-inner {
 
-                        .dt-row {
+                        .row {
                             display: flex;
                             flex-direction: row;
 
-                            .dt-cell {
+                            .cell {
                                 flex: 0 0 auto;
                                 //width: {{ngStyle}};
                                 height: 40px;
@@ -78,7 +78,7 @@
                                     cursor: move;
                                 }
 
-                                .dt-cell-inner-cover {
+                                .cell-inner-cover {
                                     display: none;
                                     position: absolute;
                                     top: 0;
@@ -94,7 +94,7 @@
                                     }
                                 }
 
-                                .dt-cell-inner {
+                                .cell-inner {
                                     display: flex;
                                     align-items: center;
                                     justify-content: center;
@@ -102,7 +102,7 @@
 
                                     height: inherit;
 
-                                    .dt-col-resizer {
+                                    .col-resizer {
                                         position: absolute;
                                         width: 0.3rem;
                                         height: 100%;
@@ -117,7 +117,7 @@
                                         }
                                     }
 
-                                    .dt-col-header {
+                                    .col-header {
                                         height: inherit;
                                         display: inline-flex;
                                         align-items: center;
@@ -134,7 +134,7 @@
                                         }
                                     }
 
-                                    .dt-col-sorter {
+                                    .col-sorter {
                                         position: relative;
                                         display: inline-flex;
                                         cursor: pointer;
@@ -164,7 +164,7 @@
                 }
 
 
-                .dt-body {
+                .body {
                     overflow-x: hidden;
                     overflow-y: hidden;
                     //overflow-y: overlay; // fixes issue with 'fit' resize mode when scrollbar appears (for webkit broesers only...)
@@ -178,37 +178,37 @@
 
 
 
-                    //&.dt-root {
+                    //&.root {
                         // default flex-basis to 7rem (needed for scrolling to work properly on all major browsers)
                     //    flex: 1 1 7rem;
                     //}
 
-                    //&.dt-nested {
+                    //&.nested {
                         flex: 1 1 auto;
                         //max-height: 200px; // TODO; ngStyle...
                     //}
 
-                    .dt-body-inner {
+                    .body-inner {
                         // width: {{ngStyle}};
                         // height: {{ngStyle}}; // TODO..
 
-                        .dt-row {
+                        .row {
                             display: flex;
                             flex-direction: row;
 
                             &.expanded {
-                                .dt-cell {
+                                .cell {
                                     background-color: #f5f7fe;
                                 }
                             }
 
                             &:hover {
-                                .dt-cell {
+                                .cell {
                                     background-color: #e9ecf5;
                                 }
                             }
 
-                            .dt-cell {
+                            .cell {
                                 flex: 0 0 auto;
                                 //width: {{ngStyle}};
                                 height: 40px;
@@ -226,9 +226,9 @@
                                     box-shadow: inset -1px 0px 0px 0px #e9ecf5;
                                 }
 
-                                .dt-cell-inner {
+                                .cell-inner {
                                     height: inherit;
-                                    display: flex; // TODO: does it need to be flex? Can these attrs be moved to dt-cell?
+                                    display: flex; // TODO: does it need to be flex? Can these attrs be moved to cell?
                                     align-items: center;
                                     font-size: 12px;
 
@@ -236,7 +236,7 @@
                                         margin-right: 1rem;
                                     }
 
-                                    > span.dt-field-value { // TODO: replace with flx-text or something..
+                                    > span.field-value { // TODO: replace with flx-text or something..
                                         opacity: 0.9;
                                         text-overflow: ellipsis;
                                         overflow: hidden;
@@ -246,14 +246,14 @@
                             }
                         }
 
-                        // .dt-row-expanded-content-container {
+                        // .row-expanded-content-container {
                         //     position: relative;
-                        //     .dt-content {
-                        //         .dt-content-inner {
-                        //             .dt-body {
-                        //                 .dt-body-inner {
-                        //                     .dt-row {
-                        //                         .dt-cell {
+                        //     .content {
+                        //         .content-inner {
+                        //             .body {
+                        //                 .body-inner {
+                        //                     .row {
+                        //                         .cell {
                         //                             background-color: #f5f6fa;
                         //                         }
                         //                     }
@@ -264,20 +264,20 @@
                         // }
                     }
 
-                    .dt-body-no-results-template-container {
+                    .body-no-results-template-container {
                         position: relative;
                     }
                 }
             }
         }
 
-        .dt-paginator-container {
+        .paginator-container {
             flex: 0 0 auto;
             position:relative;
             height: 4rem;
         }
 
-        .dt-foot {
+        .foot {
             flex: 0 0 auto;
             position:relative;
         }
