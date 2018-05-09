@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface Log {
     id: number | string,
@@ -22,8 +22,8 @@ export class ShowcaseDatatableService {
 
 
     getGhFileContent(url: string): any {
-        return this._http.get(url, { responseType: 'text' })
-        .catch((error: any) => Observable.throw(error));
+        // return this._http.get(url, { responseType: 'text' }) // TODO...
+        // .catchError((error: any) => Observable.throw(error));
     }
 
 
