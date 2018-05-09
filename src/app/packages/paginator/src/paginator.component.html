@@ -3,7 +3,7 @@
         <span>Previous</span>
     </button>
 
-    <ng-container *ngIf="shouldShowPaginatorDots('left')">
+    <ng-template [ngIf]="shouldShowPaginatorDots('left')">
         <button type="button" class="page-link" (click)="navigateToPage(pageLinks[0], $event)">
             <span>{{pageLinks[0]}}</span>
         </button>
@@ -11,9 +11,9 @@
         <button type="button" [disabled]="true">
             <strong>...</strong>
         </button>
-    </ng-container>
+    </ng-template>
 
-    <ng-container *ngFor="let pl of visiblePageLinks">
+    <ng-template ngFor let-pl [ngForOf]="visiblePageLinks">
         <button type="button"
                 class="page-link"
                 [class.current]="pl === currentPage"
@@ -21,9 +21,9 @@
                 [disabled]="pl === currentPage">
             <span>{{pl}}</span>
         </button>
-    </ng-container>
+    </ng-template>
 
-    <ng-container *ngIf="shouldShowPaginatorDots('right')">
+    <ng-template [ngIf]="shouldShowPaginatorDots('right')">
         <button type="button" [disabled]="true">
             <strong>...</strong>
         </button>
@@ -31,7 +31,7 @@
         <button type="button" class="page-link" (click)="navigateToPage(pageLinks[pageLinks.length - 1], $event)">
             <span>{{pageLinks[pageLinks.length - 1]}}</span>
         </button>
-    </ng-container>
+    </ng-template>
 
     <button type="button" title="Next" class="navigate-btn" (click)="navigateToPage(currentPage + 1, $event)" [disabled]="currentPage === pageLinks[pageLinks.length - 1]">
         <span>Next</span>
@@ -40,14 +40,14 @@
 
 <div class="flx-paginator-settings">
     <select #itemsPerPageSelectElemRef>
-        <ng-container *ngFor="let option of itemsPerPageOptions">
-            <ng-container *ngIf="option === itemsPerPage">
+        <ng-template ngFor let-option [ngForOf]="itemsPerPageOptions">
+            <ng-template [ngIf]="option === itemsPerPage">
                 <option [value]="option" selected="selected">{{option}}</option>
-            </ng-container>  
-            <ng-container *ngIf="option !== itemsPerPage">
+            </ng-template>  
+            <ng-template [ngIf]="option !== itemsPerPage">
                 <option [value]="option">{{option}}</option>
-            </ng-container> 
-        </ng-container>   
+            </ng-template> 
+        </ng-template>   
     </select>
 
     <span>records per page</span>

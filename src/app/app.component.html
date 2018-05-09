@@ -2,7 +2,7 @@
 <div class="flx-layout">
     <!-- <flx-bar-loader #barLoader></flx-bar-loader> -->
   
-    <div class="flx-layout-head">
+    <div class="flx-layout-head" *ngIf="true">
         <div class="flx-header">
             <div class="left right-shadow">
                 <span class="flx-text">@flxng</span>
@@ -23,18 +23,18 @@
   
     <div class="flx-layout-body">
         <div class="flx-layout-body-sidebar right-shadow">
-            <div class="flx-sidebar">
+            <div class="flx-sidebar" *ngIf="true">
                 <a routerLink="/treetable" [routerLinkActive]="['active']" class="flx-link root">
                     <span class="flx-text">Treetable</span>
                 </a>
                 <a routerLink="/treetable/get-started" [routerLinkActive]="['active']" class="flx-link">
                     <span class="flx-text">Get started</span>
                 </a>
-                <a routerLink="/treetable/templating" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Templating</span>
-                </a>
                 <a routerLink="/treetable/nesting" [routerLinkActive]="['active']" class="flx-link">
                     <span class="flx-text">Nesting (tree view)</span>
+                </a>
+                <a routerLink="/treetable/templating" [routerLinkActive]="['active']" class="flx-link">
+                    <span class="flx-text">Templating</span>
                 </a>
                 <a routerLink="/treetable/sorting" [routerLinkActive]="['active']" class="flx-link">
                     <span class="flx-text">Sorting</span>

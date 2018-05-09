@@ -490,7 +490,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
 
                 dtComp.onInputDataChanges();
 
-                expect(dtComp.allData).toEqual([{ dtIndex: 0, dtExpanded: false }, { dtIndex: 1, dtExpanded: false }, { dtIndex: 2, dtExpanded: false }]);
+                expect(dtComp.allData).toEqual([{ ttIndex: 0, ttExpanded: false }, { ttIndex: 1, ttExpanded: false }, { ttIndex: 2, ttExpanded: false }]);
             });
 
             it('`allData` member should be re-initialized if input data changes (`data` member should be adequatelly copied-mapped)', () => {
@@ -783,15 +783,15 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
 
                 dtComp.toggleRow(rowData);
 
-                expect(rowData.dtExpanded).toBe(true);
+                expect(rowData.ttExpanded).toBe(true);
             });
 
             it('should set row state to collapsed', () => {
-                let rowData: any = { dtExpanded: true };
+                let rowData: any = { ttExpanded: true };
 
                 dtComp.toggleRow(rowData);
 
-                expect(rowData.dtExpanded).toBe(false);
+                expect(rowData.ttExpanded).toBe(false);
             });
         });
 
@@ -854,7 +854,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by string value (ascending order)', () => {
-                let sortedtridData = [{ v: 'cg5', dtIndex: 0 }, { v: 'hg2', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
+                let sortedtridData = [{ v: 'cg5', ttIndex: 0 }, { v: 'hg2', ttIndex: 1 }, { v: 'hg5', ttIndex: 2 }, { v: 'hh5', ttIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 'hg2' }, { v: 'hh5' }, { v: 'cg5' }, { v: 'hg5' }];
@@ -865,7 +865,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by string value (descending order)', () => {
-                let sortedtridData = [{ v: 'hh5', dtIndex: 0 }, { v: 'hg5', dtIndex: 1 }, { v: 'hg2', dtIndex: 2 }, { v: 'cg5', dtIndex: 3 }];
+                let sortedtridData = [{ v: 'hh5', ttIndex: 0 }, { v: 'hg5', ttIndex: 1 }, { v: 'hg2', ttIndex: 2 }, { v: 'cg5', ttIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: -1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 'hg2' }, { v: 'hh5' }, { v: 'cg5' }, { v: 'hg5' }];
@@ -876,7 +876,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by string value (case insensitivity test - all elements should keep their initial position (stable sort))', () => {
-                let sortedtridData = [{ v: 'p', position: 0, dtIndex: 0 }, { v: 'P', position: 1, dtIndex: 1 }, { v: 'p', position: 2, dtIndex: 2 }];
+                let sortedtridData = [{ v: 'p', position: 0, ttIndex: 0 }, { v: 'P', position: 1, ttIndex: 1 }, { v: 'p', position: 2, ttIndex: 2 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 'p', position: 0 }, { v: 'P', position: 1 }, { v: 'p', position: 2 }];
@@ -887,7 +887,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by string value (interloper test - interloper (empty string) should be moved to first position)', () => {
-                let sortedtridData = [{ v: '', dtIndex: 0 }, { v: 'cg5', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
+                let sortedtridData = [{ v: '', ttIndex: 0 }, { v: 'cg5', ttIndex: 1 }, { v: 'hg5', ttIndex: 2 }, { v: 'hh5', ttIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 'hh5' }, { v: '' }, { v: 'cg5' }, { v: 'hg5' }];
@@ -898,7 +898,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by string value (interloper test - interloper (null) should be moved to first position)', () => {
-                let sortedtridData = [{ v: null, dtIndex: 0 }, { v: 'cg5', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
+                let sortedtridData = [{ v: null, ttIndex: 0 }, { v: 'cg5', ttIndex: 1 }, { v: 'hg5', ttIndex: 2 }, { v: 'hh5', ttIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 'hh5' }, { v: null }, { v: 'cg5' }, { v: 'hg5' }];
@@ -909,7 +909,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by string value (interloper test - interloper (undefined) should be moved to first position)', () => {
-                let sortedtridData = [{ v: undefined, dtIndex: 0 }, { v: 'cg5', dtIndex: 1 }, { v: 'hg5', dtIndex: 2 }, { v: 'hh5', dtIndex: 3 }];
+                let sortedtridData = [{ v: undefined, ttIndex: 0 }, { v: 'cg5', ttIndex: 1 }, { v: 'hg5', ttIndex: 2 }, { v: 'hh5', ttIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 'hh5' }, { v: undefined }, { v: 'cg5' }, { v: 'hg5' }];
@@ -920,7 +920,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by numeric value (ascending order)', () => {
-                let sortedtridData = [{ v: 1, dtIndex: 0 }, { v: 5, dtIndex: 1 }, { v: 8, dtIndex: 2 }];
+                let sortedtridData = [{ v: 1, ttIndex: 0 }, { v: 5, ttIndex: 1 }, { v: 8, ttIndex: 2 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 5 }, { v: 8 }, { v: 1 }];
@@ -931,7 +931,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should sort an array of objects by numeric value (descending order)', () => {
-                let sortedtridData = [{ v: 8, dtIndex: 0 }, { v: 5, dtIndex: 1 }, { v: 1, dtIndex: 2 }];
+                let sortedtridData = [{ v: 8, ttIndex: 0 }, { v: 5, ttIndex: 1 }, { v: 1, ttIndex: 2 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: -1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: 5 }, { v: 8 }, { v: 1 }];
@@ -942,7 +942,7 @@ describe('TreetableComponent (dtHostComponent) >> ', () => {
             });
 
             it('should not reorder array elements if all compared values are same (falsy values except 0 are treated the same)', () => {
-                let sortedtridData = [{ v: '', position: 0, dtIndex: 0 }, { v: null, position: 1, dtIndex: 1 }, { v: undefined, position: 2, dtIndex: 2 }, { v: null, position: 3, dtIndex: 3 }];
+                let sortedtridData = [{ v: '', position: 0, ttIndex: 0 }, { v: null, position: 1, ttIndex: 1 }, { v: undefined, position: 2, ttIndex: 2 }, { v: null, position: 3, ttIndex: 3 }];
                 let sortColumn = { field: 'v', metas: { sortOrder: { value: 1 } }, sortCollator: defaultSortCollator };
 
                 dtComp.allData = [{ v: '', position: 0 }, { v: null, position: 1 }, { v: undefined, position: 2 }, { v: null, position: 3 },];
