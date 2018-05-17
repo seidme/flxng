@@ -2,7 +2,7 @@
   <div class="table-container">
     <flx-treetable class=""
                 [data]="logs" 
-                [bodyStyle]="{'max-height': '500px'}"
+                [bodyStyle]="{'max-height': '600px'}"
                 [resizeMode]="'expand'" 
                 [reorderable]="true" 
                 [saveSettings]="true" 
@@ -56,7 +56,7 @@
     <flx-column field="message" header="MESSAGE"></flx-column>
 
     <ng-template flxTemplate="rowExpansion" #rowExpansionTemplateRef let-item="rowData" let-ri="rowIndex" let-cols="columns" let-colsMap="columnsMap" let-level="level" let-self="self">
-      <flx-treetable [data]="item.children" [includeHead]="false" [bodyStyle]="{'max-height': level > 1 ? '300px' : ''}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
+      <flx-treetable [data]="item.children" [includeHead]="false" [bodyStyle]="{'max-height': level > 1 ? '400px' : ''}" [parentRef]="self" [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}">
         <ng-container *ngFor="let col of cols">
           <flx-column [field]="col.field" [expander]="col.expander" [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty" [templateRefs]="col.templateRefs"></flx-column>
         </ng-container>

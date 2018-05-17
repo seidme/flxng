@@ -100,7 +100,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     level: number = 0;
     inheritsMetas: boolean = false;
     readyToProcessData: boolean = false;
-    isInFocus: boolean = false;
+    hasScrollFocus: boolean = false;
     iterableDiffer: any;
 
     pageLinks: Array<number> = [1];
@@ -154,7 +154,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         if (!this.parentRef) {
             this.includeHead = true;
-            this.isInFocus = true;
+            this.hasScrollFocus = true;
         }
     }
 
@@ -519,51 +519,53 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             mousemoveListener = this._renderer.listen(this._elementRef.nativeElement, 'mousemove', (e) => {
                 e.stopPropagation();
 
-                this.setInFocus();
+                this.checkAndSetScrollFocus();
             });
         });
 
         this._ngZone.runOutsideAngular(() => {
             mouseleaveListener = this._renderer.listen(this._elementRef.nativeElement, 'mouseleave', (e) => {
                 if(this.level !== 0) { // keep scrollbar on root table if mouse leaves
-                    this.setNotInFocus(false);
+                    this.setNotInScrollFocus(false);
                 }
             });
         });
     }
 
 
-    setInFocus(): void {
-        if(this.isInFocus) {
+    checkAndSetScrollFocus(): void {
+        if (!this.isBodyScrollableVertically() && this.parentRef) {
+            this.hasScrollFocus = false;
+            // find first scrollable instance up the tree (end with the root table)
+            this.parentRef.checkAndSetScrollFocus();
             return;
         }
 
-        if(!this.isBodyScrollableVertically() && this.parentRef) {
-            // find first scrollable instance up the tree (end with the root table)
-            this.parentRef.setInFocus();
+        if (this.hasScrollFocus) {
+            return;
+        }
+
+        this.hasScrollFocus = true;
+        
+        if (this.parentRef) {
+            this.parentRef.setNotInScrollFocus(true);
+
+            if(this.parentRowElement && this.parentRef.level !== 0 && this.parentRef.isBodyScrollableVertically()) {
+                this.parentRef.scrollRowElemIntoView(this.parentRowElement);
+            }
         }
         else {
-            this.isInFocus = true;
-            
-            if (this.parentRef) {
-                this.parentRef.setNotInFocus(true);
-    
-                if(this.parentRowElement && this.parentRef.level !== 0 && this.parentRef.isBodyScrollableVertically()) {
-                    this.parentRef.scrollRowElemIntoView(this.parentRowElement);
-                }
-            }
-            else {
-                this._changeDetectorRef.detectChanges();
-            }
+            this._changeDetectorRef.detectChanges();
         }
+        
     }
 
 
-    setNotInFocus(bubble: boolean): void {
-        this.isInFocus = false;
+    setNotInScrollFocus(bubble: boolean): void {
+        this.hasScrollFocus = false;
 
         if (bubble && this.parentRef) {
-            this.parentRef.setNotInFocus(true);
+            this.parentRef.setNotInScrollFocus(true);
         }
         else {
             this._changeDetectorRef.detectChanges();
@@ -613,7 +615,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         const parentRowElemHeight = parseFloat(getComputedStyle(this.parentRowElement).height);
         
         // child table's height can't be higher then parent's.. Increse parent's height or decrese child's
-        this.bodyStyle[attrKey] = parseInt(this.bodyStyle[attrKey]) - (this.level - 1) * parentRowElemHeight + 'px'; // TODO: max-height and height have to be in pixels..? Also, root's height has to be heigher..
+        this.bodyStyle[attrKey] = parseInt(this.bodyStyle[attrKey]) - (this.level - 1) * parentRowElemHeight + 'px'; // TODO: max-height and height have to be in pixels..? Also, root's height has to be heigher.. (needed checks within input params validity)
     }
 
 
@@ -623,7 +625,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     isBodyScrollableVertically(): boolean {
-        return this.isBodyHeightProvided() || !!(this.bodyStyle && this.bodyStyle['flex-basis']);
+        return this.bodyRef.nativeElement.scrollHeight > this.bodyRef.nativeElement.clientHeight;
+        //return this.isBodyHeightProvided() || !!(this.bodyStyle && this.bodyStyle['flex-basis']);
     }
 
 
@@ -910,7 +913,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     handleColResizing(event: any, colIndex: number, resizerSide: string): void {
         let colResizerElem = event.target;
-        if (colResizerElem.setCapture) colResizerElem.setCapture();
+        //if (colResizerElem.setCapture) colResizerElem.setCapture();
         this.appendDragCoverElem('col-resize');
 
         let mouseInitialClientX = event.clientX;
@@ -960,7 +963,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         let globalMouseupListener = this._renderer.listen(documentElem, 'mouseup', (e) => {
             if (globalMousemoveListener) globalMousemoveListener(); // unbind
             if (globalMouseupListener) globalMouseupListener(); // unbind
-            if (colResizerElem.releaseCapture) colResizerElem.releaseCapture();
+            //if (colResizerElem.releaseCapture) colResizerElem.releaseCapture();
             this.removeDragCoverElem();
 
             if (this.saveSettings)
@@ -1086,12 +1089,11 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     appendDragCoverElem(cursorStyle: string = ''): Element {
-        let docBodyElem = document.body;
         let wholeContentCoverElem = document.createElement('div');
         wholeContentCoverElem.className = 'flx-whole-content-cover';
         wholeContentCoverElem.style['cursor'] = cursorStyle;
 
-        docBodyElem.appendChild(wholeContentCoverElem);
+        document.body.appendChild(wholeContentCoverElem);
 
         return wholeContentCoverElem;
     }

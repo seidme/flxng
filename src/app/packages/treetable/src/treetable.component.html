@@ -44,7 +44,7 @@
             </div>
         </ng-template>
 
-        <div class="body" #bodyRef [ngClass]="level === 0 ? 'root': 'nested'"  [class.in-focus]="isInFocus" [ngStyle]="bodyStyle" [flxObserveWidth]="readyToProcessData && metas.resizeMode.value !== ResizeModes.expand" (onWidthChange)="onBodyWidthChange($event)">
+        <div class="body" #bodyRef [ngClass]="level === 0 ? 'root': 'nested'"  [class.in-focus]="hasScrollFocus" [ngStyle]="bodyStyle" [flxObserveWidth]="readyToProcessData && metas.resizeMode.value !== ResizeModes.expand" (onWidthChange)="onBodyWidthChange($event)">
             <ng-template [ngIf]="allData.length">
                 <div class="body-inner" [style.width]="bodyWidth">
                     <ng-template ngFor let-rowData [ngForOf]="renderData" let-rowIndex="index" let-firstRow="first" let-lastRow="last">

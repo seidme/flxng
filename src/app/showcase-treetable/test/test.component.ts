@@ -28,11 +28,20 @@ export class TestComponent implements OnInit {
     this.logs[1].children[2].children = this._service.getGenerateLogs(50);
     this.assignIds(this.logs[1].children[2].children, 2);
 
-    this.logs[1].children[2].children[3].children = this._service.getGenerateLogs(10);
+    this.logs[1].children[2].children[3].children = this._service.getGenerateLogs(5);
     this.assignIds(this.logs[1].children[2].children[3].children, 3);
 
-    this.logs[1].children[2].children[3].children[4].children = this._service.getGenerateLogs(10);
+    this.logs[1].children[2].children[3].children[4].children = this._service.getGenerateLogs(100);
     this.assignIds(this.logs[1].children[2].children[3].children[4].children, 4);
+
+    this.logs[1].children[2].children[3].children[4].children[5].children = this._service.getGenerateLogs(100);
+    this.assignIds(this.logs[1].children[2].children[3].children[4].children[5].children, 5);
+
+    this.logs[1].children[2].children[3].children[4].children[5].children[6].children = this._service.getGenerateLogs(10);
+    this.assignIds(this.logs[1].children[2].children[3].children[4].children[5].children[6].children, 6);
+
+    this.logs[1].children[2].children[3].children[4].children[5].children[6].children[7].children = this._service.getGenerateLogs(10);
+    this.assignIds(this.logs[1].children[2].children[3].children[4].children[5].children[6].children[7].children, 7);
   }
 
 

@@ -185,7 +185,7 @@
 
                     //&.nested {
                         flex: 1 1 auto;
-                        //max-height: 200px; // TODO; ngStyle...
+                        //max-height: {{ngStyle}};
                     //}
 
                     .body-inner {
