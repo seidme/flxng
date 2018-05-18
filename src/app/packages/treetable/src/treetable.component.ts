@@ -31,7 +31,7 @@ import { animate, style, trigger, transition } from '@angular/animations';
 
 import { StorageService } from '@flxng/common';
 import { TemplateDirective } from '@flxng/common/src/directives';
-import { getScrollbarWidth, animateScroll } from '@flxng/common/src/utils-dom';
+import { getScrollbarWidth, animateScroll, findAncestor } from '@flxng/common/src/utils-dom';
 import { mapToIterable, compareValues, calcPercentage, resolveDeepValue, isValueValidForView, filterDuplicates, debounce} from '@flxng/common/src/utils';
 
 import { PaginatorComponent } from '@flxng/paginator';
@@ -573,13 +573,6 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    findAncestor(el: HTMLElement, cls: string): HTMLElement {
-        // TODO: move to utils-dom
-        while ((el = el.parentElement) && !el.classList.contains(cls));
-        return el;
-    }
-
-
     scrollRowElemIntoView(rowElem: any): void {
         this._ngZone.runOutsideAngular(() => {
             // TODO: breaks initial mouse wheel scrolling in Chrome (for nested tables)..
@@ -590,7 +583,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     getParentRowElement(): HTMLElement {
-        let parentExpandedContentContainerElem = this.findAncestor(this._elementRef.nativeElement, 'row-expanded-content-container');
+        let parentExpandedContentContainerElem = findAncestor(this._elementRef.nativeElement, 'row-expanded-content-container');
         if(!parentExpandedContentContainerElem) {
             return null;
         }
