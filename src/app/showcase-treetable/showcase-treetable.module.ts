@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable';
@@ -15,9 +16,12 @@ import { TestComponent } from './test/test.component';
 import { GetStartedComponent } from './get-started/get-started.component';
 import { ScrollingComponent } from './scrolling/scrolling.component';
 
+import { PikerComponent } from "./piker/piker.component";
+
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild(showcaseTreetableRoutes),
     SharedModule,
     FlxngCommonModule,
@@ -28,7 +32,8 @@ import { ScrollingComponent } from './scrolling/scrolling.component';
     OverviewComponent,
     TestComponent,
     GetStartedComponent,
-    ScrollingComponent
+    ScrollingComponent,
+    PikerComponent
   ],
   providers: [
     ShowcaseTreetableService
