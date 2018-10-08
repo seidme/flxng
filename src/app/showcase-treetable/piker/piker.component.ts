@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
@@ -6,22 +6,22 @@ import {
   HttpParams,
   HttpResponse,
   HttpErrorResponse
-} from "@angular/common/http";
-import { Observable, throwError, BehaviorSubject } from "rxjs";
-import { map, catchError, retry, tap } from "rxjs/operators";
+} from '@angular/common/http';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { map, catchError, retry, tap } from 'rxjs/operators';
 
-import { ShowcaseTreetableService, Log } from "../showcase-treetable.service";
+import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
 
 @Component({
-  selector: "",
-  templateUrl: "./piker.component.html",
-  styleUrls: ["./piker.component.scss"]
+  selector: '',
+  templateUrl: './piker.component.html',
+  styleUrls: ['./piker.component.scss']
 })
 export class PikerComponent implements OnInit {
   logs: Log[];
 
   items: any[];
-  apiFilterValue: string = "";
+  apiFilterValue: string = '';
 
   content: any;
 
@@ -44,15 +44,15 @@ export class PikerComponent implements OnInit {
   //   }
 
   getFilterItems(filter: string): void {
-    const url = "http://localhost:50056/api/items";
+    const url = 'http://localhost:50056/api/items';
 
     let headers = new HttpHeaders();
-    headers = headers.append("Content-Type", "application/json");
-    headers = headers.append("Accept", "application/json");
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
 
     const opts: any = {
-      responseType: "json",
-      observe: "response",
+      responseType: 'json',
+      observe: 'response',
       headers: headers,
       params: {
         filter: filter
@@ -63,9 +63,11 @@ export class PikerComponent implements OnInit {
       .get(url, opts)
       .pipe(
         map((response: any) => {
-          return response.body.map(item =>
-            Object.assign(item, item.parsedDetails)
-          );
+          //   return response.body.map(item =>
+          //     Object.assign(item, item.parsedDetails)
+          //   );
+
+          return response.body;
         }),
         catchError(error => throwError(error))
       )
@@ -76,7 +78,7 @@ export class PikerComponent implements OnInit {
           this.items = items;
         },
         error => {
-          console.error("Error getting items:", error);
+          console.error('Error getting items:', error);
         }
       );
   }

@@ -1,0 +1,10 @@
+{
+    "editor.tabSize": 2,
+    "editor.rulers": [120],
+    "prettier.tabWidth": 2,
+    "prettier.singleQuote": true,
+    "html.format.wrapAttributes": "force-aligned",
+    "editor.autoIndent": true,
+    "editor.detectIndentation": false,
+  }
+  
