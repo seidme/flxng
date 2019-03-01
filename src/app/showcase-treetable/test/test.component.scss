@@ -19,8 +19,9 @@
         align-items: center;
         justify-content: space-between;
 
-        cp-menu {
-            margin-right: 3rem;
+        flx-menu {
+            //margin-right: 3rem;
+            z-index: 1;
         }
 
         .global-filter {

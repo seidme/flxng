@@ -190,11 +190,12 @@
 
                     .body-inner {
                         // width: {{ngStyle}};
-                        // height: {{ngStyle}}; // TODO..
+                        // height: {{ngStyle}};
 
                         .row {
                             display: flex;
                             flex-direction: row;
+                            //height: {{ngStyle}};
 
                             &.expanded {
                                 .cell {
@@ -209,12 +210,16 @@
                             }
 
                             .cell {
-                                flex: 0 0 auto;
+                                // flex: 0 0 auto;
+                                flex-grow: 0;
+                                flex-shrink: 0;
+                                flex-basis: auto;
                                 //width: {{ngStyle}};
-                                height: 40px;
+                                height: inherit;
+
                                 position: relative;
                                 overflow: visible;
-                                padding: 0 5px 0 10px;
+                                padding: 0 5px 0 10px; // TODO: remove!
                                 border-bottom: 1px solid #f5f4f4;
                                 border-right: 1px solid #f5f4f4; // TEmp----
 

@@ -6,5 +6,8 @@
     "html.format.wrapAttributes": "force-aligned",
     "editor.autoIndent": true,
     "editor.detectIndentation": false,
+    "prettier.disableLanguages": [
+      "html",
+      "typescript"
+    ]
   }
-  

@@ -9,7 +9,7 @@
 
 <div class="treetable-container">
     
-    <flx-treetable [data]="logs" [bodyStyle]="{ 'height': '200px' }">
+    <flx-treetable [data]="logs" [bodyStyle]="{ 'height': '200px' }" [rowStyle]="{'height': '30px'}">
 
         <flx-column field="id" header="ID"></flx-column>
         <flx-column field="createdDate" header="CREATED DATE"></flx-column>
@@ -30,7 +30,7 @@
 
 <div class="treetable-container" style="height: 350px">
         
-        <flx-treetable [data]="logs" [bodyStyle]="{ 'flex-basis': '100px' }">
+        <flx-treetable [data]="logs" [bodyStyle]="{ 'flex-basis': '100px' }" [rowStyle]="{'height': '30px'}">
             
             <flx-column field="id" header="ID"></flx-column>
             <flx-column field="createdDate" header="CREATED DATE"></flx-column>

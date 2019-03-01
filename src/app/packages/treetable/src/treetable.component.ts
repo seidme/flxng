@@ -27,7 +27,7 @@ import {
     ChangeDetectorRef
 } from '@angular/core';
 
-import { animate, style, trigger, transition } from '@angular/animations';
+import { animate, style, trigger, transition, AnimationEvent } from '@angular/animations';
 
 import { StorageService } from '@flxng/common';
 import { TemplateDirective } from '@flxng/common/src/directives';
@@ -35,6 +35,8 @@ import { getScrollbarWidth, animateScroll, findAncestor } from '@flxng/common/sr
 import { mapToIterable, compareValues, calcPercentage, resolveDeepValue, isValueValidForView, filterDuplicates, debounce} from '@flxng/common/src/utils';
 
 import { PaginatorComponent } from '@flxng/paginator';
+
+//import { TreetableComponent as ParentTreetableComponent } from './treetable.component';
 
 import { ColumnComponent } from './column/column.component';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -51,7 +53,7 @@ declare var componentHandler: any;
         trigger('rowExpansion', [ // TODO: get rid of dependency on @angular/animations
             transition('void => *', [
                 style({height: 0}),
-                animate('120ms ease-out', style({ height: '*' }))
+                animate('120ms ease-out', style({ height: '*' })) // look at toggleRow method if animation duration is changed
             ]),
             transition('* => void', [
                 style({height: '*'}),
@@ -65,12 +67,14 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     @Input() data: Array<any>;
     @Input() includeHead: boolean = true;
     @Input() reorderable: boolean = false;
+    @Input() virtualScroll: boolean = false;
     @Input() saveSettings: boolean = false;
     @Input() settingsStorageKey: string = '';
     @Input() globalFilterInputRef: ElementRef;
     @Input() resizeMode: string = '';
     @Input() templateRefs: any = {};
-    @Input() bodyStyle: any = {};
+    @Input() bodyStyle: { [key: string]: string } = {};
+    @Input() rowStyle: { [key: string]: string } = {};
     @Input() parentRef: TreetableComponent;
 
 
@@ -78,6 +82,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     @ViewChild('contentInnerRef') contentInnerRef: ElementRef;
     @ViewChild('headRef') headRef: ElementRef;
     @ViewChild('bodyRef') bodyRef: ElementRef;
+    @ViewChild('bodyInnerRef') bodyInnerRef: ElementRef;
 
     @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
@@ -103,13 +108,13 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     hasScrollFocus: boolean = false;
     iterableDiffer: any;
 
-    pageLinks: Array<number> = [1];
-    visiblePageLinks: Array<number> = [1];
-    currentPage: number = 1;
-
     globalFilterValue: string = '';
-    bodyWidth: string = '';
+    bodyInnerStyle: { [key: string]: string } = {};
     parentRowElement: any;
+    parentRowData: any;
+
+    // needed for virtual scroll only
+    maxVisibleRowsCount: number = 0;
 
     // storable/inheritable properties
     metas: any = {
@@ -141,7 +146,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         private _storageService: StorageService,
         //private _injector: Injector
         //private _viewContainerRef: ViewContainerRef,
-       // @SkipSelf() @Optional() @Inject(forwardRef(() => ParentTreetableComponent)) private _parentRef?: TreetableComponent
+        //@SkipSelf() @Optional() @Inject(forwardRef(() => ParentTreetableComponent)) private _parentRef?: TreetableComponent
     ) { }
 
 
@@ -156,12 +161,17 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             this.includeHead = true;
             this.hasScrollFocus = true;
         }
+
+        if(this.virtualScroll) {
+            const bodyHeight = parseInt(this.bodyStyle['height'] || this.bodyStyle['max-height']); // flex-basis?
+            const rowHeight =  parseInt(this.rowStyle['height']);
+
+            this.maxVisibleRowsCount = Math.ceil(bodyHeight / rowHeight);
+        }
     }
 
 
-    ngOnDestroy(): void {
-
-    }
+    ngOnDestroy(): void {}
 
 
     ngAfterContentInit() {
@@ -175,8 +185,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
         if(this.parentRef) {
             this.parentRowElement = this.getParentRowElement();
-
-            this.checkAndAdjustBodyHeight();
+            this.parentRowData = this.getParentRowData(this.parentRowElement);
+            this.checkAndAdjustBodyHeight(this.parentRowElement); // TODO: rather throw ex if height provided is higher then parent's
         }
 
         this.initScrollbarVisibilityHandlers();
@@ -197,6 +207,10 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         if (globalFilterInputElem) {
             this.globalFilterValue = globalFilterInputElem.value;
             this.listenGlobalFilterInputEvents(globalFilterInputElem);
+        }
+
+        if(this.virtualScroll) {
+            this.listenBodyScrollEvents();
         }
 
 
@@ -226,10 +240,24 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             throw new Error('Mandatory parameter is missing or invalid: \'settingsStorageKey\'.');
 
         if (this.bodyStyle && this.bodyStyle['max-height'] && (typeof this.bodyStyle['max-height'] !== 'string' || this.bodyStyle['max-height'].indexOf('px') === -1 || !parseInt(this.bodyStyle['max-height'])))
-            throw new Error('Invalid value for: \'max-height\'. Expecting positive number as string representing the value in px.');
+            throw new Error('Invalid value for: \'max-height\' (bodyStyle). Expecting positive number as string representing the value in px.');
 
         if (this.bodyStyle && this.bodyStyle['height'] && (typeof this.bodyStyle['height'] !== 'string' || this.bodyStyle['height'].indexOf('px') === -1 || !parseInt(this.bodyStyle['height'])))
-            throw new Error('Invalid value for: \'height\'. Expecting positive number as string representing the value in px.');
+            throw new Error('Invalid value for: \'height\' (bodyStyle). Expecting positive number as string representing the value in px.');
+
+        if (this.rowStyle && this.rowStyle['height'] && (typeof this.rowStyle['height'] !== 'string' || this.rowStyle['height'].indexOf('px') === -1 || !parseInt(this.rowStyle['height'])))
+            throw new Error('Invalid value for: \'height\' (rowStyle). Expecting positive number as string representing the value in px.');
+
+        if (this.virtualScroll && !this.rowStyle['height'])
+            throw new Error('Virtual scroll requires row\'s height to be provided. See: -docs-.');
+
+        if (this.virtualScroll && !this.isBodyHeightProvided())
+            throw new Error('Virtual scroll requires body\'s height to be provided. See: -docs-.');
+    }
+
+    ngOnChanges(changes): void {
+
+      //debugger;
     }
 
 
@@ -240,7 +268,13 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
                 this.filteredData = [];
 
                 if (!this.pagination) {
-                    this.renderData = this.filteredData.slice();
+                    if(this.virtualScroll) {
+                        this.initVirtualScroll();
+                    } else {
+                        this.renderData = this.filteredData.slice();
+                    }
+
+                    //this.renderData = this.filteredData.slice();
                 }
             }
 
@@ -248,8 +282,11 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         }
 
         if (this.data.length !== this.allData.length) {
-            // this check is needed since iterableDiffer is able to detect changes over an array while it holds the same reference,
-            // if array's reference changes, iterableDiffer won't detect any change, and it needs to be updated
+            // iterableDiffer is able to detect changes over an array while it holds the same reference, 
+            // or when reference changes but new array's length remains equal (wtf!?).
+            // This logic is needed to cover case where reference changed and new array's length is different from previous one's
+            // (iterableDiffer won't detect change in that case and it needs to be updated..)
+            // TODO: consider combining iterableDiffer with ngOnChanges to get rid of the fuzzy code here.
 
             this.onInputDataChanges();
 
@@ -270,7 +307,14 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         this.allData = this.data.map((rowData: any, i: number) => {
             rowData = rowData || {};
             rowData.ttIndex = i;
-            rowData.ttExpanded = false;
+
+            if(rowData.ttExpanded === undefined) {
+                rowData.ttExpanded = false;
+            }
+
+            if(rowData.ttExpandedContentHeight === undefined) {
+                rowData.ttExpandedContentHeight = '';
+            }
 
             return rowData;
         });
@@ -287,8 +331,20 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
             : this.filteredData = this.allData.slice();
 
+
         if (!this.pagination) {
-            this.renderData = this.filteredData.slice();
+            if(this.virtualScroll) {
+                this.initVirtualScroll();
+            } else {
+                this.renderData = this.filteredData.slice();
+            }
+
+            //this.renderData = this.filteredData.slice();
+        } else {
+          if(this.data.length === this.allData.length) {
+            // case where paginator doesn't internally detects itemsCount change, TODO: consider moving paginator.init() logic to this component
+            this.paginator.init();
+          }
         }
     }
 
@@ -371,10 +427,12 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         }
         else {
             let storedMetasMap = this.getStoredMetasMap(false);
-
             if(this.canApplyStoredMetas(storedMetasMap)) {
                 let storableGridMetaKeys = ['width', 'resizeMode', 'itemsPerPage'];
                 let storableColMetaKeys = ['width', 'position', 'visibility', 'sortOrder', 'sortIndex'];
+
+                // TODO: if canApplyStoredMetas returns true, but paginotr wasn't included at the time first metas are stored, 
+                // itemsPerPage meta will be null (and will be applied). Can apply stored metas check needs to be performed for each meta individually!?
 
                 this.applyStoredMetas(storedMetasMap, storableGridMetaKeys, storableColMetaKeys)
             }
@@ -561,10 +619,10 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    setNotInScrollFocus(bubble: boolean): void {
+    setNotInScrollFocus(shoudlBubble: boolean): void {
         this.hasScrollFocus = false;
 
-        if (bubble && this.parentRef) {
+        if (shoudlBubble && this.parentRef) {
             this.parentRef.setNotInScrollFocus(true);
         }
         else {
@@ -582,22 +640,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
-    getParentRowElement(): HTMLElement {
-        let parentExpandedContentContainerElem = findAncestor(this._elementRef.nativeElement, 'row-expanded-content-container');
-        if(!parentExpandedContentContainerElem) {
-            return null;
-        }
-
-        let parentTableRowNodes = Array.prototype.slice.call(parentExpandedContentContainerElem.parentElement.children);
-        let parentExpandedContentContainerElemIndex = parentTableRowNodes.indexOf(parentExpandedContentContainerElem);
-
-        // 'row-expanded-content-container' element always comes right after expanded row
-        return parentTableRowNodes[parentExpandedContentContainerElemIndex - 1];
-    }
-
-
-    checkAndAdjustBodyHeight(): void {
-        if(!this.parentRowElement || !this.isBodyHeightProvided()) {
+    checkAndAdjustBodyHeight(parentRowElement: Element): void {
+        if(!parentRowElement || !this.isBodyHeightProvided()) {
             return;
         }
 
@@ -605,7 +649,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             ? 'max-height' 
             : 'height';
 
-        const parentRowElemHeight = parseFloat(getComputedStyle(this.parentRowElement).height);
+        const parentRowElemHeight = parseFloat(getComputedStyle(parentRowElement).height);
         
         // child table's height can't be higher then parent's.. Increse parent's height or decrese child's
         this.bodyStyle[attrKey] = parseInt(this.bodyStyle[attrKey]) - (this.level - 1) * parentRowElemHeight + 'px'; // TODO: max-height and height have to be in pixels..? Also, root's height has to be heigher.. (needed checks within input params validity)
@@ -632,8 +676,15 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
                     ? this.filterData(this.getVisibleCols(), this.globalFilterValue)
                     : this.filteredData = this.allData.slice();
 
+
                 if (!this.pagination) {
-                    this.renderData = this.filteredData.slice();
+                    if(this.virtualScroll) {
+                        this.initVirtualScroll();
+                    } else {
+                        this.renderData = this.filteredData.slice();
+                    }
+
+                    //this.renderData = this.filteredData.slice();
                 }
 
                 this._changeDetectorRef.detectChanges();
@@ -647,7 +698,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     onPageChange(settings: any): void {
         this.renderData = this.filteredData.slice(settings.startIndex, settings.endIndex);
         
-        // TODO: if detectChanges isn't called explicitely here, ExpressionChangedAfterItHasBeenCheckedError is being thrown on component initialization (this.filteredData property's value shouldn't be set within the ngAfterViewInit method)
+        // TODO: if detectChanges isn't called explicitely here, ExpressionChangedAfterItHasBeenCheckedError is being 
+        // thrown on component initialization (this.filteredData property's value shouldn't be set within the ngAfterViewInit method)
         // also, changing pages stops working properly after interaction with global filter
         this._changeDetectorRef.detectChanges();
     }
@@ -668,19 +720,168 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
 
+    initVirtualScroll(): void {
+        this.bodyInnerStyle['height'] = (this.filteredData.length * parseFloat(this.rowStyle['height'])) + 'px';
+        this.renderData = this.filteredData.slice();
+        this.updateDataToRenderForVirtualScroll(null, 0);
+    }
+
+
+    getFinalNumberOfRowsPriorViewPort(bodyScrollTop: number): number {
+        let inspectingRowIndex = 0;
+        let numberOfRowsPriorViewPort = bodyScrollTop / parseFloat(this.rowStyle['height']); // assuming no expanded rows
+
+        while(inspectingRowIndex < numberOfRowsPriorViewPort) {
+            const inspectingRowData = this.filteredData[inspectingRowIndex];
+            if(inspectingRowData.ttExpanded) {
+                const numberOfRowsToSubtract =  parseFloat(inspectingRowData.ttExpandedContentHeight) / parseFloat(this.rowStyle['height']);
+                const newNumberOfRowsPriorViewPort = numberOfRowsPriorViewPort - numberOfRowsToSubtract;
+
+                  if (inspectingRowIndex >= newNumberOfRowsPriorViewPort) {
+                    // loop ends here
+                    numberOfRowsPriorViewPort = inspectingRowIndex;
+                  } else {
+                    numberOfRowsPriorViewPort = newNumberOfRowsPriorViewPort;
+                  }
+             }
+
+            inspectingRowIndex++;
+        }
+
+        return  numberOfRowsPriorViewPort;
+    }
+
+
+    updateDataToRenderForVirtualScroll(event: any, bodyScrollTop: number): void {
+        const NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE = this.maxVisibleRowsCount; // number of rendered rows that are not within the viewport (before or after)
+
+        const finalNumberOfRowsPriorViewPort = !this.hasExpandableContent()
+            ? Math.floor(bodyScrollTop / parseFloat(this.rowStyle['height']))
+            : Math.floor(this.getFinalNumberOfRowsPriorViewPort(bodyScrollTop));
+
+        console.log('finalNumberOfRowsPriorViewPort: ', finalNumberOfRowsPriorViewPort);
+
+        let numberOfRowsToSkipRendering = finalNumberOfRowsPriorViewPort > NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE
+            ? finalNumberOfRowsPriorViewPort - NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE
+            : 0;
+
+
+        let bodyInnerPaddingTop = 0;
+        if(!this.hasExpandableContent()) {
+          bodyInnerPaddingTop = numberOfRowsToSkipRendering * parseFloat(this.rowStyle['height']);
+        } else {
+            for(let i = 0; i < numberOfRowsToSkipRendering; ++i) {
+                if(this.filteredData[i].ttExpanded) {
+                    bodyInnerPaddingTop += parseFloat(this.rowStyle['height']) + parseFloat(this.filteredData[i].ttExpandedContentHeight)
+                } else {
+                    bodyInnerPaddingTop += parseFloat(this.rowStyle['height']);
+                }
+            }
+        }
+
+        const numberOfRowsToRender = 
+            NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE +   // before
+            this.maxVisibleRowsCount +              // viewport
+            NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE;    // after
+
+        this.bodyInnerStyle['padding-top'] = bodyInnerPaddingTop + 'px';
+        this.renderData = this.filteredData.slice(numberOfRowsToSkipRendering, numberOfRowsToSkipRendering + numberOfRowsToRender);
+    }
+
+
+    listenBodyScrollEvents(): void {
+      this._ngZone.runOutsideAngular(() => {
+        this._renderer.listen(this.bodyRef.nativeElement, 'scroll', (event) => {
+          this.updateDataToRenderForVirtualScroll(event, this.bodyRef.nativeElement.scrollTop);
+          this._changeDetectorRef.detectChanges();
+        });
+      });
+    }
+
+
+    hasExpandableContent(): boolean {
+        return !!(this.expanderCol && this.templateRefs[this.GridTemplates.rowExpansion]);
+    }
+
+
     isRowExpandable(rowData: any): boolean {
-        if (!this.expanderCol || !this.templateRefs[this.GridTemplates.rowExpansion])
+        if (!this.hasExpandableContent())
             return false;
 
-        let rowExpandableIndicatorPropertyValue = rowData[this.expanderCol.rowExpandableIndicatorProperty];
-        return rowExpandableIndicatorPropertyValue && rowExpandableIndicatorPropertyValue.constructor === Array
+        const rowExpandableIndicatorPropertyValue = rowData[this.expanderCol.rowExpandableIndicatorProperty];
+        return rowExpandableIndicatorPropertyValue && Array.isArray(rowExpandableIndicatorPropertyValue)
             ? !!rowExpandableIndicatorPropertyValue.length
             : !!rowExpandableIndicatorPropertyValue;
     }
 
 
-    toggleRow(rowData: any): void {
+    toggleRow(rowData: any, rowIndex: number, event: any): void {
         rowData.ttExpanded = !rowData.ttExpanded;
+
+        setTimeout(() => {
+            if(rowData.ttExpanded) {
+                const rowElem = findAncestor(event.target, 'row');
+                const rowExpandedContentContainerElem = this.getRowExpandedContentContainerElem(rowElem);
+                rowData.ttExpandedContentHeight = getComputedStyle(rowExpandedContentContainerElem).height;
+                //console.log(this.level, rowData.ttExpandedContentHeight, rowExpandedContentContainerElem);
+                // this.bodyInnerStyle['height'] should be updated each time row is expanded/collapsed (to show appropriate scrollbar height)
+                //this.bodyInnerStyle['height'] = (parseFloat(this.bodyInnerStyle['height']) + parseFloat(rowData.ttExpandedContentHeight)) + 'px';
+            } else {
+                rowData.ttExpandedContentHeight = '';
+            }
+
+            this.updateParentRowExpandedContentHeight();
+        }, 200);
+    }
+
+
+    onRowExpansionAnimationDone(event: AnimationEvent, rowData: any, rowIndex: number): void {}
+
+
+    getParentRowElement(): Element {
+      const parentExpandedContentContainerElem = findAncestor(this._elementRef.nativeElement, 'row-expanded-content-container');
+      if(!parentExpandedContentContainerElem) {
+          return null;
+      }
+
+      const parentTableRowNodes = Array.prototype.slice.call(parentExpandedContentContainerElem.parentElement.children);
+      const parentExpandedContentContainerElemIndex = parentTableRowNodes.indexOf(parentExpandedContentContainerElem);
+
+      // 'row-expanded-content-container' element always comes right after expanded row element
+      return parentTableRowNodes[parentExpandedContentContainerElemIndex - 1];
+  }
+
+
+    getParentRowData(parentRowElement: Element): any {
+        if(!this.parentRef || !parentRowElement) {
+            return null;
+        }
+
+        const parentTableRowNodes = parentRowElement.parentElement.querySelectorAll('.row');
+        const parentRowElementIndex = [].slice.call(parentTableRowNodes).indexOf(parentRowElement);
+
+        return this.parentRef.renderData[parentRowElementIndex];
+    }
+
+    getRowExpandedContentContainerElem(rowElem: Element): Element {
+      const rowElemIdx = [].slice.call(rowElem.parentElement.children).indexOf(rowElem);
+      // 'row-expanded-content-container' element always comes right after expanded row element
+      const rowExpandedContentContainerElem = rowElem.parentElement.children[rowElemIdx + 1];
+      return rowExpandedContentContainerElem;
+    }
+
+
+    updateParentRowExpandedContentHeight(): void {
+      if(!this.parentRef) {
+          return;
+      }
+
+      const parentExpandedContentContainerElem = findAncestor(this._elementRef.nativeElement, 'row-expanded-content-container');
+      this.parentRowData.ttExpandedContentHeight = getComputedStyle(parentExpandedContentContainerElem).height;
+
+      console.log(this.parentRef.level, this.parentRowData.ttExpandedContentHeight, parentExpandedContentContainerElem);
+
+      this.parentRef.updateParentRowExpandedContentHeight();
     }
 
 
@@ -791,7 +992,13 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
                 : this.filteredData = this.allData.slice();
 
             if (!this.pagination) {
-                this.renderData = this.filteredData.slice();
+                if(this.virtualScroll) {
+                    this.initVirtualScroll();
+                } else {
+                    this.renderData = this.filteredData.slice();
+                }
+
+                //this.renderData = this.filteredData.slice();
             }
             else {
                 this.paginator.init();
@@ -1100,7 +1307,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
 
     onBodyWidthChange(width: string) {
-        this.bodyWidth = width;
+        this.bodyInnerStyle['width'] = width;
         this._changeDetectorRef.detectChanges();
     }
 
