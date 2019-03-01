@@ -19,7 +19,7 @@ export class TestComponent implements OnInit {
   ngOnInit() {
     //this.logs = [];
 
-    this.logs = this._service.getGenerateLogs(500);
+    this.logs = this._service.getGenerateLogs(50);
     this.assignIds(this.logs, 0);
 
     this.logs[1].children = this._service.getGenerateLogs(10);

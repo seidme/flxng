@@ -51,11 +51,12 @@ declare var componentHandler: any;
     styleUrls: ['./treetable.component.scss'],
     animations: [
         trigger('rowExpansion', [ // TODO: get rid of dependency on @angular/animations
-            transition('void => *', [
+            transition('void => rowExpansion', [
                 style({height: 0}),
-                animate('120ms ease-out', style({ height: '*' })) // look at toggleRow method if animation duration is changed
+                // look at toggleRow method if animation duration is changed
+                animate('120ms ease-out', style({ height: '*' }))
             ]),
-            transition('* => void', [
+            transition('rowExpansion => void', [
                 style({height: '*'}),
                 animate('120ms ease-out', style({ height: '0' }))
             ])
