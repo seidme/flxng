@@ -4,64 +4,142 @@
                  [bodyStyle]="{'max-height': '500px'}"
                  [rowStyle]="{'height': '30px'}"
                  [virtualScroll]="false"
-                 [resizeMode]="'expand'"
+                 [resizeMode]="'fit'"
                  [reorderable]="true"
                  [saveSettings]="true"
                  [settingsStorageKey]="'test-test-piker'"
-                 [globalFilterInputRef]="globalFilterInput"
+                 [globalFilterInputRef]=""
                  id="items-treetable">
 
     <ng-template flxTemplate="options"
                  let-cols="columns"
                  let-colsMap="columnsMap">
       <div class="grid-options-container">
-        <span class="global-filter">
-          <input type="text"
-                 id="flx-treetable-global-filter"
-                 placeholder="local filter..."
-                 value="">
-        </span>
 
-        <br>
-        <span>
-          <input type="text"
-                 placeholder="api filter..."
-                 [(ngModel)]="apiFilterValue">
+        <div class="grid-options-row api-filters">
           <button type="button"
-                  (click)="getFilterItems(apiFilterValue)">Search Items</button>
-        </span>
+                  (click)="applyPredefinedFilters()">Apply pre-defined filters</button>
 
-        <br>
-        <span>
-          <flx-menu #colsSelectorMenu
-                    header="cols selector">
-            <div class="menu-body">
-              <ul class="flx-selectable-list">
-                <ng-container *ngFor="let col of cols">
-                  <li class="flx-selectable-list-item"
-                      (click)="col.toggle()"
-                      *ngIf="!col.expander">
-                    <span title="{{col.header}}">{{col.header}}</span>
-                    <i class="material-icons"><span *ngIf="col.isVisible()">check</span></i>
-                  </li>
-                </ng-container>
-              </ul>
+          <div class="api-filter"
+               *ngFor="let filter of filters;">
+            <flx-menu #fieldSelectorMenu
+                      [header]="colsMap[filter.fieldId] ? colsMap[filter.fieldId].header : 'field'">
+              <div class="menu-body">
+                <ul class="flx-selectable-list">
+                  <ng-container *ngFor="let col of cols">
+                    <li class="flx-selectable-list-item"
+                        (click)="filter.fieldId = col.field; fieldSelectorMenu.close();">
+                      <span title="{{col.header}}">{{col.header}}</span>
+                      <i class="material-icons"><span *ngIf="filter.fieldId === col.field">check</span></i>
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </flx-menu>
+
+            <flx-menu #operatorSelectorMenu
+                      [header]="filter.operatorId ? getOperator(filter.operatorId)?.name : 'operator'">
+              <div class="menu-body">
+                <ul class="flx-selectable-list">
+                  <ng-container *ngFor="let operator of operators">
+                    <li class="flx-selectable-list-item"
+                        (click)="filter.operatorId = operator.id; fieldSelectorMenu.close();">
+                      <span title="{{operator.name}}">{{operator.name}}</span>
+                      <i class="material-icons"><span *ngIf="filter.operatorId === operator.id">check</span></i>
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </flx-menu>
+
+            <div>
+              <!-- <input type="text"
+                     [(ngModel)]="filter.value"
+                     placeholder="value.."> -->
+
+              <textarea name=""
+                        id=""
+                        [(ngModel)]="filter.value"
+                        placeholder="{{filter.operatorId ? getOperator(filter.operatorId)?.placeholder : 'Enter filter value'}}"
+                        cols="100"
+                        rows="2"></textarea>
             </div>
-          </flx-menu>
-        </span>
+
+            <!-- <div>
+              <input type="checkbox"
+                     [(ngModel)]="filter.caseSensitive">
+              <span>Case sensitive</span>
+            </div> -->
+          </div>
+
+          <button type="button"
+                  class="add-new-filter"
+                  (click)="addNewFilter($event)">+</button>
+          <br>
+
+          <button type="submit"
+                  class=""
+                  (click)="searchItems($event)">Search</button>
+
+          <br>
+          <br>
+          <br>
+          <br>
+
+          <ng-container *ngIf="false">
+            <input type="text"
+              [(ngModel)]="suggestionsInput">
+              
+            <button type="button"
+              class=""
+              (click)="test($event)">Get suggestions</button>
+          </ng-container>
+        </div>
+
+        <div class="grid-options-row">
+          <span class="global-filter">
+            <input type="text"
+                   id="flx-treetable-global-filter"
+                   placeholder="local filter..."
+                   value="">
+          </span>
+          <span class="cols-selector">
+            <flx-menu #colsSelectorMenu
+                      header="cols selector"
+                      bodyAlignment=""
+                      headAlignment="right">
+              <div class="menu-body">
+                <ul class="flx-selectable-list">
+                  <ng-container *ngFor="let col of cols">
+                    <li class="flx-selectable-list-item"
+                        (click)="col.toggle()"
+                        *ngIf="!col.expander">
+                      <span title="{{col.header}}">{{col.header}}</span>
+                      <i class="material-icons"><span *ngIf="col.isVisible()">check</span></i>
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </flx-menu>
+          </span>
+        </div>
       </div>
     </ng-template>
 
-    <flx-column [field]="'id'"
-                [header]="'id'"></flx-column>
-    <flx-column [field]="'identifier'"
-                [header]="'identifier'"></flx-column>
+    <!-- <flx-column [field]="'id'"
+                [header]="'id'"></flx-column> -->
+    <!-- <flx-column [field]="'identifier'"
+                [header]="'identifier'"></flx-column> -->
     <flx-column [field]="'0'"
                 [header]="'title'"></flx-column>
     <flx-column [field]="'2'"
                 [header]="'location'"></flx-column>
     <flx-column [field]="'3'"
                 [header]="'address'"></flx-column>
+    <flx-column [field]="'4'"
+                [header]="'squareMeters'"></flx-column>
+    <flx-column [field]="'1'"
+                [header]="'price'"></flx-column>
     <flx-column [field]="'10'"
                 [header]="'pricePerSquareMeter'"></flx-column>
     <flx-column [field]="'6'"
@@ -69,10 +147,26 @@
     <flx-column [field]="'dateCreated'"
                 [header]="'dateCreated'"></flx-column>
     <flx-column [field]="'detailsUrl'"
-                [header]="'detailsUrl'"></flx-column>
+                [header]="'detailsUrl'">
+      <ng-template flxTemplate="bodyCell"
+                   let-item="rowData"
+                   let-ri="rowIndex"
+                   let-col="column"
+                   let-ci="columnIndex"
+                   let-cols="columns"
+                   let-colsMap="columnsMap">
+        <div class="data-cell-content">
+          <span title="{{item[col.field]}}">
+            <a href="{{item[col.field]}}"
+               target="_blank"
+               class="flx-link">{{item[col.field]}}</a>
+          </span>
+        </div>
+      </ng-template>
+    </flx-column>
 
     <flx-pagination [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]"
-                    [itemsPerPage]="5"
+                    [itemsPerPage]="100"
                     [pageLinksSize]="7"></flx-pagination>
 
   </flx-treetable>
