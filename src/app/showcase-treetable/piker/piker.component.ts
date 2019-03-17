@@ -72,10 +72,35 @@ export class PikerComponent implements OnInit {
     private _service: PikerService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.isLocalhost = window.location.hostname === 'localhost';
 
+    this.getTotalItemsCount();
+  }
+
+  async getTotalItemsCount() {
     this.totalItemsCount = await this._service.getTotalItemsCount(1);
+  }
+
+  async iteratePages() {
+    try {
+      const response = await this._service.iteratePages(1, 0);
+      console.log('Iterating started..');
+    } catch (e) {
+      console.error('Error:', e);
+    }
+  }
+
+  async testPredictions() {
+    try {
+      const predictions = await this._service.testPredictions(this.suggestionsInput);
+      console.log('PREDICTIONS::::::::::::::::');
+      predictions.forEach(p => {
+        console.log(p.description);
+      });
+    } catch (e) {
+      console.error('Error:', e);
+    }
   }
 
   async searchItems() {
@@ -131,18 +156,5 @@ export class PikerComponent implements OnInit {
         caseSensitive: true
       }
     ];
-  }
-
-
-  async testPredictions() {
-    try {
-      const predictions = await this._service.testPredictions(this.suggestionsInput);
-      console.log('PREDICTIONS::::::::::::::::');
-      predictions.forEach(p => {
-        console.log(p.description);
-      });
-    } catch (e) {
-      console.error('Error:', e);
-    }
   }
 }

@@ -22,7 +22,7 @@ export class PikerService {
     if (this.isLocalhost) {
       reqUrl = 'https://localhost:5001' + `/api/sources/${sourceId}/items/count`;
     } else {
-      reqUrl = '/api/sources/1/items/count';
+      reqUrl = `/api/sources/${sourceId}/items/count`;
     }
 
     let headers = new HttpHeaders();
@@ -77,6 +77,38 @@ export class PikerService {
         map((response: any) => {
           return response.body as any[];
         }),
+        catchError(error => throwError(error))
+      )
+      .toPromise();
+  }
+
+  iteratePages(sourceId: number, limit: number = 0): Promise<null> {
+    const origin = window.location.protocol + '//' + window.location.host;
+
+    let reqUrl: string;
+    if (this.isLocalhost) {
+      reqUrl = 'https://localhost:5001' + `/api/sources/${sourceId}/iterate-pages`;
+    } else {
+      reqUrl = `/api/sources/${sourceId}/iterate-pages`;
+    }
+
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {
+        limit: limit
+      }
+    };
+
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => null), // no content
         catchError(error => throwError(error))
       )
       .toPromise();

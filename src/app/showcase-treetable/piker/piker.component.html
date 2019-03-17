@@ -92,12 +92,15 @@
           <br>
 
           <ng-container *ngIf="isLocalhost">
+            <button (click)="iteratePages($event)">Iterate pages</button>
+            <br>
+
             <input type="text"
-              [(ngModel)]="suggestionsInput">
-              
+                   [(ngModel)]="suggestionsInput">
+
             <button type="button"
-              class=""
-              (click)="testPredictions($event)">Get suggestions</button>
+                    class=""
+                    (click)="testPredictions($event)">Get suggestions</button>
           </ng-container>
         </div>
 
