@@ -10,7 +10,7 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, retry, tap } from 'rxjs/operators';
 
-import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
+import { PikerService } from './piker.service';
 
 declare var window: any;
 
@@ -24,7 +24,9 @@ export class PikerComponent implements OnInit {
 
   filters: Array<{ [key: string]: any }> = [];
 
+  totalItemsCount = 0;
   suggestionsInput = '';
+  isLocalhost = false;
 
   readonly operators: Array<{ [key: string]: any }> = [
     {
@@ -67,57 +69,25 @@ export class PikerComponent implements OnInit {
 
   constructor(
     private _http: HttpClient,
-    private _service: ShowcaseTreetableService
-  ) {}
+    private _service: PikerService
+  ) { }
 
-  ngOnInit(): void {}
+  async ngOnInit() {
+    this.isLocalhost = window.location.hostname === 'localhost';
 
-  searchItems(): void {
-    // console.log('search items..:', this.filters);
-    const origin = window.location.protocol + '//' + window.location.host;
+    this.totalItemsCount = await this._service.getTotalItemsCount(1);
+  }
 
-    let reqUrl: string;
-    if (window.location.hostname === 'localhost') {
-      reqUrl = 'https://localhost:5001' + '/api/items';
-    } else {
-      reqUrl = '/api/items';
+  async searchItems() {
+    try {
+      const items = await this._service.searchItems(this.filters);
+      console.log('response items: ', items);
+
+      this.items = items.map(item => Object.assign(item, item.parsedDetails));
+
+    } catch (e) {
+      console.error('Error getting items:', e);
     }
-
-    const reqBody = this.filters;
-
-    let headers = new HttpHeaders();
-    //headers = headers.append('Content-Type', 'application/json');
-    headers = headers.append('Accept', 'application/json');
-
-    const reqOpts: any = {
-      responseType: 'json',
-      observe: 'response',
-      headers: headers,
-      params: {}
-    };
-
-    this._http
-      .post(reqUrl, reqBody, reqOpts)
-      .pipe(
-        map((response: any) => {
-          return response.body.map(item =>
-            Object.assign(item, item.parsedDetails)
-          );
-
-          //return response.body;
-        }),
-        catchError(error => throwError(error))
-      )
-      .toPromise()
-      .then(
-        (items: any[]) => {
-          console.log('response items: ', items);
-          this.items = items;
-        },
-        error => {
-          console.error('Error getting items:', error);
-        }
-      );
   }
 
   getOperator(operatorId: string): { [key: string]: any } {
@@ -163,86 +133,16 @@ export class PikerComponent implements OnInit {
     ];
   }
 
-  // test(): void {
-  //   let reqUrl = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
 
-  //   let headers = new HttpHeaders();
-  //   //headers = headers.append('Content-Type', 'application/json');
-  //   headers = headers.append('Accept', 'application/json');
-
-  //   const reqOpts: any = {
-  //     responseType: 'json',
-  //     observe: 'response',
-  //     headers: headers,
-  //     params: {
-  //       input: 'vrazova',
-  //       inputype: 'textquery',
-  //       fields: 'formatted_address,id,name,place_id',
-  //       key: 'AIzaSyBzZ-dfeaSbZZ7HbJ2KT7cTkm5VN_QarUw'
-  //     }
-  //   };
-
-  //   this._http
-  //     .get(reqUrl, reqOpts)
-  //     .pipe(
-  //       map((response: any) => {
-  //         return response;
-  //       }),
-  //       catchError(error => throwError(error))
-  //     )
-  //     .toPromise()
-  //     .then(
-  //       (response: any) => {
-  //         console.log('response: ', response);
-  //       },
-  //       error => {
-  //         console.error('Error:', error);
-  //       }
-  //     );
-  // }
-
-  test(): void {
-    const origin = window.location.protocol + '//' + window.location.host;
-
-    let reqUrl: string;
-    if (window.location.hostname === 'localhost') {
-      reqUrl = 'https://localhost:5001' + '/api/items/test/' + this.suggestionsInput;
-    } else {
-      reqUrl = '/api/items/test/' + this.suggestionsInput;
+  async testPredictions() {
+    try {
+      const predictions = await this._service.testPredictions(this.suggestionsInput);
+      console.log('PREDICTIONS::::::::::::::::');
+      predictions.forEach(p => {
+        console.log(p.description);
+      });
+    } catch (e) {
+      console.error('Error:', e);
     }
-
-    let headers = new HttpHeaders();
-    //headers = headers.append('Content-Type', 'application/json');
-    headers = headers.append('Accept', 'application/json');
-
-    const reqOpts: any = {
-      responseType: 'json',
-      observe: 'response',
-      headers: headers,
-      params: {}
-    };
-
-    this._http
-      .get(reqUrl, reqOpts)
-      .pipe(
-        map((response: any) => {
-          return response.body;
-        }),
-        catchError(error => throwError(error))
-      )
-      .toPromise()
-      .then(
-        (responseBody: any) => {
-          // console.log('predictions: ', responseBody && responseBody.predictions);
-
-          console.log('PREDICTIONS::::::::::::::::');
-          responseBody.predictions.forEach(p => {
-            console.log(p.description);
-          });
-        },
-        error => {
-          console.error('Error:', error);
-        }
-      );
   }
 }

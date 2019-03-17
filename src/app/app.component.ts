@@ -8,17 +8,20 @@ import { Router, ActivatedRoute, RoutesRecognized, NavigationEnd } from '@angula
 })
 export class AppComponent implements OnInit {
 
-  currentUrl: string = '';
-  
+  currentUrl = '';
+  isLocalhost = false;
+
   constructor(
-    private _router: Router, 
+    private _router: Router,
     private _activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // this._activatedRoute.data.subscribe((data: any) => {
     //   console.log(data);
     // });
+
+    this.isLocalhost = window.location.hostname === 'localhost';
 
     this._router.events.subscribe(event => {
       /* Event classes: NavigationStart, RoutesRecognized, NavigationEnd, NavigationCancel and NavigationError */
@@ -26,6 +29,6 @@ export class AppComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.urlAfterRedirects;
       }
-  });
+    });
   }
 }

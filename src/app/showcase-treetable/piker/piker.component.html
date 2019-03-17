@@ -17,6 +17,11 @@
       <div class="grid-options-container">
 
         <div class="grid-options-row api-filters">
+          <div class="total-items-count">
+            Total items: {{totalItemsCount}}
+          </div>
+          <br>
+
           <button type="button"
                   (click)="applyPredefinedFilters()">Apply pre-defined filters</button>
 
@@ -86,13 +91,13 @@
           <br>
           <br>
 
-          <ng-container *ngIf="false">
+          <ng-container *ngIf="isLocalhost">
             <input type="text"
               [(ngModel)]="suggestionsInput">
               
             <button type="button"
               class=""
-              (click)="test($event)">Get suggestions</button>
+              (click)="testPredictions($event)">Get suggestions</button>
           </ng-container>
         </div>
 

@@ -17,6 +17,7 @@ import { GetStartedComponent } from './get-started/get-started.component';
 import { ScrollingComponent } from './scrolling/scrolling.component';
 
 import { PikerComponent } from "./piker/piker.component";
+import { PikerService } from './piker/piker.service';
 
 @NgModule({
   imports: [
@@ -28,14 +29,15 @@ import { PikerComponent } from "./piker/piker.component";
     FlxngTreetableModule
   ],
   declarations: [
+    PikerComponent,
     ShowcaseTreetableComponent,
     OverviewComponent,
     TestComponent,
     GetStartedComponent,
-    ScrollingComponent,
-    PikerComponent
+    ScrollingComponent
   ],
   providers: [
+    PikerService,
     ShowcaseTreetableService
   ]
 })
