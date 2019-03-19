@@ -144,7 +144,7 @@ export class PikerComponent implements OnInit {
       //   caseSensitive: true
       // },
       {
-        fieldId: '3', // address
+        fieldId: '11', // formattedAddress
         operatorId: 'CONTAINS',
         value: 'Tit || Hamze || Vraz',
         caseSensitive: false
@@ -152,7 +152,7 @@ export class PikerComponent implements OnInit {
       {
         fieldId: '0', // title
         operatorId: 'NOT_CONTAINS',
-        value: 'IZDAVANJE && najam',
+        value: 'izdavanje && izdajem && iznajm && kupujem && trazim && stan na dan && duzi period',
         caseSensitive: true
       }
     ];
