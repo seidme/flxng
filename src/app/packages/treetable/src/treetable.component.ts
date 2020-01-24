@@ -635,7 +635,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     scrollRowElemIntoView(rowElem: any): void {
         this._ngZone.runOutsideAngular(() => {
             // TODO: breaks initial mouse wheel scrolling in Chrome (for nested tables)..
-            animateScroll(this.bodyRef.nativeElement, rowElem.offsetTop, 250);
+            animateScroll(this.bodyRef.nativeElement, rowElem.offsetTop, {duration: 250});
             //this.bodyRef.nativeElement.scrollTop = rowElem.offsetTop;
         });
     }

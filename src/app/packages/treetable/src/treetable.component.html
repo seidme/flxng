@@ -74,20 +74,18 @@
                             </ng-template>
                         </div>
 
-                        <ng-template [ngIf]="rowData.ttExpanded">
-                            <ng-template [ngIf]="virtualScroll">
-                                <!-- virtual scroll doesn't work properly with animations (there is no way to add animations conditionally, need better solution here) -->
-                                <div class="row-expanded-content-container">
-                                    <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
-                                                        [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
-                                </div>
-                            </ng-template>
-                            <ng-template [ngIf]="!virtualScroll">
-                                <div class="row-expanded-content-container" [@rowExpansion]="'rowExpansion'" (@rowExpansion.done)="onRowExpansionAnimationDone($event, rowData, rowIndex)">
-                                    <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
-                                                        [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
-                                </div>
-                            </ng-template>
+                        <ng-template [ngIf]="rowData.ttExpanded && virtualScroll">
+                            <!-- virtual scroll doesn't work properly with animations (there is no way to add animations conditionally, need better solution here) -->
+                            <div class="row-expanded-content-container">
+                                <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
+                                                    [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                            </div>
+                        </ng-template>
+                        <ng-template [ngIf]="rowData.ttExpanded && !virtualScroll">
+                            <div class="row-expanded-content-container" [@rowExpansion]="'rowExpansion'" (@rowExpansion.done)="onRowExpansionAnimationDone($event, rowData, rowIndex)">
+                                <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
+                                                    [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                            </div>
                         </ng-template>
                     </ng-template>
                 </div>
