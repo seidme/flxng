@@ -41,9 +41,9 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
     @Output() onPageChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() onItemsPerPageValueChange: EventEmitter<number> = new EventEmitter<number>();
 
-    @ViewChild('itemsPerPageSelectElemRef') itemsPerPageSelectElemRef: ElementRef;
+    @ViewChild('itemsPerPageSelectElemRef', {static: true}) itemsPerPageSelectElemRef: ElementRef;
 
-    @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
+    @ContentChildren(TemplateDirective, ) templateList: QueryList<TemplateDirective>;
 
 
     pageLinks: number[] = [1];

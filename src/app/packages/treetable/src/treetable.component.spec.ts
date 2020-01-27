@@ -55,7 +55,7 @@ class StorageServiceMock {
 })
 class dtHostComponent implements OnInit {
 
-    @ViewChild(TreetableComponent) dtCompRef: TreetableComponent;
+    @ViewChild(TreetableComponent, {static: true}) dtCompRef: TreetableComponent;
 
     testData: Array<any>;
 

@@ -63,31 +63,31 @@ declare var componentHandler: any;
         ])
     ]
 })
-export class TreetableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, AfterViewChecked, OnDestroy {
-
+export class TreetableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, OnDestroy {
+  
     @Input() data: Array<any>;
-    @Input() includeHead: boolean = true;
-    @Input() reorderable: boolean = false;
-    @Input() virtualScroll: boolean = false;
-    @Input() saveSettings: boolean = false;
-    @Input() settingsStorageKey: string = '';
+    @Input() includeHead = true;
+    @Input() reorderable = false;
+    @Input() virtualScroll = false;
+    @Input() saveSettings = false;
+    @Input() settingsStorageKey = '';
     @Input() globalFilterInputRef: ElementRef;
-    @Input() resizeMode: string = '';
+    @Input() resizeMode = '';
     @Input() templateRefs: any = {};
     @Input() bodyStyle: { [key: string]: string } = {};
     @Input() rowStyle: { [key: string]: string } = {};
     @Input() parentRef: TreetableComponent;
 
 
-    @ViewChild('contentRef') contentRef: ElementRef;
-    @ViewChild('contentInnerRef') contentInnerRef: ElementRef;
-    @ViewChild('headRef') headRef: ElementRef;
-    @ViewChild('bodyRef') bodyRef: ElementRef;
-    @ViewChild('bodyInnerRef') bodyInnerRef: ElementRef;
+    @ViewChild('contentRef', {static: true}) contentRef: ElementRef;
+    @ViewChild('contentInnerRef', {static: true}) contentInnerRef: ElementRef;
+    @ViewChild('headRef', {static: true}) headRef: ElementRef;
+    @ViewChild('bodyRef', {static: true}) bodyRef: ElementRef;
+    @ViewChild('bodyInnerRef', {static: true}) bodyInnerRef: ElementRef;
 
-    @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
+    @ViewChild(PaginatorComponent, {static: true}) paginator: PaginatorComponent;
 
-    @ContentChild(PaginationComponent) pagination: PaginationComponent;
+    @ContentChild(PaginationComponent, {static: true}) pagination: PaginationComponent;
 
     @ContentChildren(forwardRef(() => ColumnComponent)) columnList: QueryList<ColumnComponent>;
     @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
@@ -103,19 +103,19 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     cols: Array<ColumnComponent>;
     colsMap: { [key: string]: ColumnComponent };
     expanderCol: ColumnComponent;
-    level: number = 0;
-    inheritsMetas: boolean = false;
-    readyToProcessData: boolean = false;
-    hasScrollFocus: boolean = false;
+    level = 0;
+    inheritsMetas = false;
+    readyToProcessData = false;
+    hasScrollFocus = false;
     iterableDiffer: any;
 
-    globalFilterValue: string = '';
+    globalFilterValue = '';
     bodyInnerStyle: { [key: string]: string } = {};
     parentRowElement: any;
     parentRowData: any;
 
     // needed for virtual scroll only
-    maxVisibleRowsCount: number = 0;
+    maxVisibleRowsCount = 0;
 
     // storable/inheritable properties
     metas: any = {
@@ -131,12 +131,12 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     };
 
     // constants
-    readonly ElementIds: any = ElementIds;
-    readonly ResizeModes: any = ResizeModes;
-    readonly GridTemplates: any = GridTemplates;
-    readonly ColumnTemplates: any = ColumnTemplates;
-    readonly PaginatorSettings: any = PaginatorSettings;
-    readonly colMinWidth: number = 60; // px
+    readonly ElementIds = ElementIds;
+    readonly ResizeModes = ResizeModes;
+    readonly GridTemplates = GridTemplates;
+    readonly ColumnTemplates = ColumnTemplates;
+    readonly PaginatorSettings = PaginatorSettings;
+    readonly colMinWidth = 60; // px
 
     constructor(
         private _ngZone: NgZone,

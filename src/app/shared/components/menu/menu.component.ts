@@ -51,9 +51,9 @@ export class MenuComponent implements OnInit, AfterContentInit {
 
     @Output() onToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    @ViewChild('containerRef') containerRef: ElementRef;
-    @ViewChild('headRef') headRef: ElementRef;
-    @ViewChild('bodyRef') bodyRef: ElementRef;
+    @ViewChild('containerRef', {static: true}) containerRef: ElementRef;
+    @ViewChild('headRef', {static: true}) headRef: ElementRef;
+    @ViewChild('bodyRef', {static: true}) bodyRef: ElementRef;
 
     @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
 

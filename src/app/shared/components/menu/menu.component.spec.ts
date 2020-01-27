@@ -24,7 +24,7 @@ import { MenuComponent } from './menu.component';
 })
 class MenuHostComponent {
 
-    @ViewChild(MenuComponent) menuCompRef: MenuComponent;
+    @ViewChild(MenuComponent, {static: true}) menuCompRef: MenuComponent;
 
     menuOpened: boolean = false;
 
