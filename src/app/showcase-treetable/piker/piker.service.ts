@@ -161,7 +161,7 @@ export class PikerService {
   //       input: 'vrazova',
   //       inputype: 'textquery',
   //       fields: 'formatted_address,id,name,place_id',
-  //       key: 'AIzaSyBzZ-dfeaSbZZ7HbJ2KT7cTkm5VN_QarUw'
+  //       key: '<GOOGLE API KEY HERE>'
   //     }
   //   };
 
