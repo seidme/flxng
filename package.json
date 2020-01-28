@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-prod-limit-ram": "node --max_old_space_size=256 ./node_modules/@angular/cli/bin/ng build --prod"
   },
   "private": true,
   "dependencies": {
@@ -50,5 +51,14 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
+  },
+  "prettier":{
+    "printWidth": 120,
+    "tabWidth": 2,
+    "proseWrap": "never",
+    "singleQuote": true,
+    "disableLanguages": [
+      "html"
+    ]
   }
 }
