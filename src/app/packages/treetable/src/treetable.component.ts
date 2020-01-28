@@ -82,7 +82,6 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   @Input() bodyStyle: { [key: string]: string } = {};
   @Input() rowStyle: { [key: string]: string } = {};
   @Input() parentRef: TreetableComponent;
-  
 
   @ViewChild('contentRef', { static: true }) contentRef: ElementRef;
   @ViewChild('contentInnerRef', { static: true }) contentInnerRef: ElementRef;
