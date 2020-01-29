@@ -19,34 +19,34 @@ export class TestComponent implements OnInit {
   ngOnInit() {
     //this.logs = [];
 
-    this.logs = this._service.getGenerateLogs(50);
+    this.logs = this._service.generateLogs(50);
     this.assignIds(this.logs, 0);
 
-    this.logs[1].children = this._service.getGenerateLogs(10);
+    this.logs[1].children = this._service.generateLogs(10);
     this.assignIds(this.logs[1].children, 1);
-    this.logs[5].children = this._service.getGenerateLogs(10);
+    this.logs[5].children = this._service.generateLogs(10);
     this.assignIds(this.logs[5].children, 1);
-    this.logs[40].children = this._service.getGenerateLogs(10);
+    this.logs[40].children = this._service.generateLogs(10);
     this.assignIds(this.logs[40].children, 1);
-    // this.logs[500].children = this._service.getGenerateLogs(10);
+    // this.logs[500].children = this._service.generateLogs(10);
     // this.assignIds(this.logs[500].children, 1);
 
-    this.logs[1].children[2].children = this._service.getGenerateLogs(50);
+    this.logs[1].children[2].children = this._service.generateLogs(50);
     this.assignIds(this.logs[1].children[2].children, 2);
 
-    this.logs[1].children[2].children[3].children = this._service.getGenerateLogs(5000);
+    this.logs[1].children[2].children[3].children = this._service.generateLogs(5000);
     this.assignIds(this.logs[1].children[2].children[3].children, 3);
 
-    this.logs[1].children[2].children[3].children[4].children = this._service.getGenerateLogs(100);
+    this.logs[1].children[2].children[3].children[4].children = this._service.generateLogs(100);
     this.assignIds(this.logs[1].children[2].children[3].children[4].children, 4);
 
-    this.logs[1].children[2].children[3].children[4].children[5].children = this._service.getGenerateLogs(100);
+    this.logs[1].children[2].children[3].children[4].children[5].children = this._service.generateLogs(100);
     this.assignIds(this.logs[1].children[2].children[3].children[4].children[5].children, 5);
 
-    this.logs[1].children[2].children[3].children[4].children[5].children[6].children = this._service.getGenerateLogs(10);
+    this.logs[1].children[2].children[3].children[4].children[5].children[6].children = this._service.generateLogs(10);
     this.assignIds(this.logs[1].children[2].children[3].children[4].children[5].children[6].children, 6);
 
-    this.logs[1].children[2].children[3].children[4].children[5].children[6].children[7].children = this._service.getGenerateLogs(10);
+    this.logs[1].children[2].children[3].children[4].children[5].children[6].children[7].children = this._service.generateLogs(10);
     this.assignIds(this.logs[1].children[2].children[3].children[4].children[5].children[6].children[7].children, 7);
   }
 
@@ -57,7 +57,7 @@ export class TestComponent implements OnInit {
 
 
   puuush(): void {
-    Array.prototype.push.apply(this.logs, this._service.getGenerateLogs(40));
+    Array.prototype.push.apply(this.logs, this._service.generateLogs(40));
     this.assignIds(this.logs, 0);
   }
 

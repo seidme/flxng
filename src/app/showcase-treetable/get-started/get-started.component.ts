@@ -8,19 +8,15 @@ import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
   styleUrls: ['./get-started.component.scss']
 })
 export class GetStartedComponent implements OnInit, AfterViewInit {
-
   logs: Log[];
 
-  constructor(
-    private _service: ShowcaseTreetableService
-  ) { }
+  constructor(private _service: ShowcaseTreetableService) {}
 
   ngOnInit(): void {
-    this.logs = this._service.getGenerateLogs(5);
+    this.logs = this._service.generateLogs(5);
   }
 
   ngAfterViewInit(): void {
-    //this.logs = this._service.getGenerateLogs(200);
+    //this.logs = this._service.generateLogs(200);
   }
-
 }

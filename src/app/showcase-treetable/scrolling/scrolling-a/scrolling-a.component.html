@@ -1,0 +1,17 @@
+<div class="container">
+
+  <flx-treetable [data]="logs"
+                 [bodyStyle]="{ 'height': '200px' }"
+                 [rowStyle]="{'height': '30px'}">
+
+    <flx-column field="id"
+                header="ID"></flx-column>
+    <flx-column field="createdDate"
+                header="CREATED DATE"></flx-column>
+    <flx-column field="status"
+                header="STATUS"></flx-column>
+    <flx-column field="message"
+                header="MESSAGE"></flx-column>
+
+  </flx-treetable>
+</div>

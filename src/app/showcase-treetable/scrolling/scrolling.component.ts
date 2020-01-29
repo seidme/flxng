@@ -8,29 +8,25 @@ import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
   styleUrls: ['./scrolling.component.scss']
 })
 export class ScrollingComponent implements OnInit {
+  content: string;
 
-  logs: Log[];
+  constructor(private _service: ShowcaseTreetableService) {}
 
-  content: any;
-
-  constructor(
-    private _service: ShowcaseTreetableService
-  ) { }
-
-  ngOnInit(): void {
-    this.logs = this._service.getGenerateLogs(10);
-    //this.logs = [];
-  }
+  ngOnInit(): void {}
 
   geeet() {
-    return this._service.getGhFileContent("https://raw.githubusercontent.com/primefaces/primeng/master/src/app/showcase/components/treetable/datatablesortdemo.ts").subscribe(
-      c => {
-        console.log(c);
-        this.content = c;
-      },
-      error => {
-        console.log('error: ', error);
-      });
+    return this._service
+      .getGhFileContent(
+        'https://raw.githubusercontent.com/seidme/flxng/development/src/app/showcase-treetable/scrolling/scrolling-a/scrolling-a.component.html'
+      )
+      .subscribe(
+        c => {
+          console.log(c);
+          this.content = c;
+        },
+        error => {
+          console.log('error: ', error);
+        }
+      );
   }
-
 }

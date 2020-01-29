@@ -1,54 +1,37 @@
-
 <h2>Vertical scrolling</h2>
 
 <p>
-    Treetable's height, by default, is dynamic - determined by the content. Data scrolling can be enabled by providing the <code>bodyStyle</code> object containing the <code>height</code> attribute 
-    (or <code>max-height</code> if body needs to shirnk in absence of records):
-    <br>
+  Treetable's height, by default, is dynamic - determined by the content. Data scrolling can be enabled by providing the
+  <code>bodyStyle</code> object containing the <code>height</code> attribute
+  (or <code>max-height</code> if body needs to shirnk in absence of records):
+  <br>
 </p>
 
-<div class="treetable-container">
-    
-    <flx-treetable [data]="logs" [bodyStyle]="{ 'height': '200px' }" [rowStyle]="{'height': '30px'}">
+<flx-scrolling-a></flx-scrolling-a>
 
-        <flx-column field="id" header="ID"></flx-column>
-        <flx-column field="createdDate" header="CREATED DATE"></flx-column>
-        <flx-column field="status" header="STATUS"></flx-column>
-        <flx-column field="message" header="MESSAGE"></flx-column>
-
-      </flx-treetable>
-</div>
-
-<button type="button" (click)="geeet()">geeet</button>
-<pre><code>{{content}}</code></pre>
+<button type="button"
+        (click)="geeet()">geeet</button>
+<pre class="prettyprint lang-html"><code>{{content}}</code></pre>
 
 <br>
-<p>
-    If defined, treetable will populate parent element's height (even though no data is present). To make the treetable's body scrollable, in this case, <code>flex-basis</code> attribute value needs to be provided:
-    <br>
+<p style="color: red;">
+  If defined, treetable will populate parent element's height (even though no data is present). To make the treetable's
+  body scrollable, in this case, <code>flex-basis</code> attribute value needs to be provided:
+  <br>
 </p>
 
-<div class="treetable-container" style="height: 350px">
-        
-        <flx-treetable [data]="logs" [bodyStyle]="{ 'flex-basis': '100px' }" [rowStyle]="{'height': '30px'}">
-            
-            <flx-column field="id" header="ID"></flx-column>
-            <flx-column field="createdDate" header="CREATED DATE"></flx-column>
-            <flx-column field="status" header="STATUS"></flx-column>
-            <flx-column field="message" header="MESSAGE"></flx-column>
-          
-          </flx-treetable>
-    </div>
+<flx-scrolling-b></flx-scrolling-b>
 
-<button type="button" (click)="geeet()">geeet</button>
-<pre><code>{{content}}</code></pre>
+<button type="button"
+        (click)="geeet()">geeet</button>
+<pre class="prettyprint lang-js"><code>{{content}}</code></pre>
 
 
 <br>
 <h2>Nested tables scrolling (tree view)</h2>
 <p>
-    examples and docs for scrolling nested tables using max-height attribute..
-    <br>
+  examples and docs for scrolling nested tables using max-height attribute..
+  <br>
 </p>
 
 
@@ -56,6 +39,7 @@
 <br>
 <h2>Horizontal scrolling</h2>
 <p>
-    Horizontal scrolling is enabled with <a routerLink="/treetable/column-resizing" class="flx-link">'expand' resize mode</a>.
-    <br>
+  Horizontal scrolling is enabled with <a routerLink="/treetable/column-resizing"
+     class="flx-link">'expand' resize mode</a>.
+  <br>
 </p>

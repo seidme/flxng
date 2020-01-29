@@ -4,43 +4,35 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface Log {
-    id: number | string,
-    createdDate: string,
-    status: number,
-    message: string,
-    children?: Log[]
+  id: string | number;
+  createdDate: string;
+  status: number;
+  message: string;
+  children?: Log[];
 }
-
 
 @Injectable()
 export class ShowcaseTreetableService {
+  constructor(
+    private _http: HttpClient
+  ) {}
 
-    constructor(
-        //private _ngZone: NgZone
-        private _http: HttpClient
-    ) { }
+  getGhFileContent(url: string): Observable<string> {
+    return this._http.get(url, { responseType: 'text' });
+  }
 
+  generateLogs(qty: number): Log[] {
+    let logs: Log[] = [];
 
-    getGhFileContent(url: string): any {
-        // return this._http.get(url, { responseType: 'text' }) // TODO...
-        // .catchError((error: any) => Observable.throw(error));
+    for (let i = 1; i <= qty; ++i) {
+      logs.push({
+        id: i,
+        createdDate: new Date(new Date().getTime() - i).toISOString(),
+        status: i % 2 === 0 ? 200 : 400,
+        message: i % 4 === 0 ? 'A' : 'B'
+      });
     }
 
-
-    getGenerateLogs(qty: number): any {
-        let logs: Log[] = [];
-
-        for(let i = 1; i <= qty; ++i) {
-            logs.push({
-                id: i,
-                createdDate: new Date(new Date().getTime() - i).toISOString(),
-                status: i % 2 === 0 ? 200 : 400,
-                message: i % 4 === 0 ? 'A' : 'B'
-            });
-        }
-
-        return logs;
-    }
-
- 
+    return logs;
+  }
 }

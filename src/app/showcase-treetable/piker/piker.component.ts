@@ -110,6 +110,12 @@ export class PikerComponent implements OnInit {
 
       this.items = items.map(item => Object.assign(item, item.parsedDetails));
 
+      // this.items = this.items.filter(i => {
+      //   var address = i.parsedDetails['11']; // formatted address
+      //   var threeCharWord = address.split(' ').find(w => w.length === 3);
+      //   return !!threeCharWord;
+      // });
+
     } catch (e) {
       console.error('Error getting items:', e);
     }

@@ -7,16 +7,16 @@ import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable';
 
 import { SharedModule } from '../shared/shared.module';
+import { ScrollingModule } from './scrolling/scrolling.module';
 
 import { showcaseTreetableRoutes } from './showcase-treetable-routes.const';
 import { ShowcaseTreetableService } from './showcase-treetable.service';
 import { ShowcaseTreetableComponent } from './showcase-treetable.component';
+
 import { OverviewComponent } from './overview/overview.component';
 import { TestComponent } from './test/test.component';
 import { GetStartedComponent } from './get-started/get-started.component';
-import { ScrollingComponent } from './scrolling/scrolling.component';
-
-import { PikerComponent } from "./piker/piker.component";
+import { PikerComponent } from './piker/piker.component';
 import { PikerService } from './piker/piker.service';
 
 @NgModule({
@@ -26,19 +26,10 @@ import { PikerService } from './piker/piker.service';
     RouterModule.forChild(showcaseTreetableRoutes),
     SharedModule,
     FlxngCommonModule,
-    FlxngTreetableModule
+    FlxngTreetableModule,
+    ScrollingModule
   ],
-  declarations: [
-    PikerComponent,
-    ShowcaseTreetableComponent,
-    OverviewComponent,
-    TestComponent,
-    GetStartedComponent,
-    ScrollingComponent
-  ],
-  providers: [
-    PikerService,
-    ShowcaseTreetableService
-  ]
+  declarations: [PikerComponent, ShowcaseTreetableComponent, OverviewComponent, TestComponent, GetStartedComponent],
+  providers: [PikerService, ShowcaseTreetableService]
 })
-export class ShowcaseTreetableModule { }
+export class ShowcaseTreetableModule {}
