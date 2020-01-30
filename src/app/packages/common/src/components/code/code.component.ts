@@ -74,18 +74,18 @@ export class CodeComponent implements OnInit {
   }
 
   async fetchCode(): Promise<void> {
-    this.fetchingCode  = true;
+    this.fetchingCode = true;
     try {
       const fileUrl = `https://raw.githubusercontent.com/seidme/flxng/development/src/app/showcase-treetable/${this.composeComponentPath()}`;
       const code = await this._http.get(fileUrl, { responseType: 'text' }).toPromise();
-      this.fetchingCode  = false;
+      this.fetchingCode = false;
 
       this.selectedLanguage === Language.Html ? (this.htmlCode = code) : (this.typescriptCode = code);
 
       this._changeDetectorRef.detectChanges();
       this.highlightCode();
     } catch (e) {
-      this.fetchingCode  = false;
+      this.fetchingCode = false;
       console.log('error: ', e);
     }
   }
@@ -101,10 +101,18 @@ export class CodeComponent implements OnInit {
   }
 
   copyCode(): void {
-    const codeElem = this._elementRef.nativeElement.querySelector(`code.language-${this.selectedLanguage}`);
-    codeElem.focus();
-    codeElem.select();
+    // const codeElem = this._elementRef.nativeElement.querySelector(`code.language-${this.selectedLanguage}`);
+    // codeElem.focus();
+    // codeElem.select();
+    // document.execCommand('copy');
 
-    document.execCommand('copy');
+    // Page needs to be served over HTTPS in order the following to work!
+    const codeForSelectedLanguage = this.selectedLanguage === Language.Html ? this.htmlCode : this.typescriptCode;
+    navigator.clipboard.writeText(codeForSelectedLanguage).then(
+      () => {},
+      e => {
+        console.error(e);
+      }
+    );
   }
 }
