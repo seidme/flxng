@@ -13,9 +13,7 @@ export interface Log {
 
 @Injectable()
 export class ShowcaseTreetableService {
-  constructor(
-    private _http: HttpClient
-  ) {}
+  constructor(private _http: HttpClient) {}
 
   getGhFileContent(url: string): Observable<string> {
     return this._http.get(url, { responseType: 'text' });

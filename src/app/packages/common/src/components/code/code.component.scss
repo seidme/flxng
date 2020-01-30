@@ -1,0 +1,36 @@
+:host {
+  .container {
+    padding-top: 1rem;
+
+    &.expanded {
+      //background: #1e1e1e;
+    }
+
+    .opener {
+      margin: 1rem;
+    }
+
+    .content {
+      background: #1e1e1e;
+      padding: 0.2rem;
+
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .languages {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+
+          button {
+            &.selected {
+              background: #bcbcbc;
+            }
+          }
+        }
+      }
+    }
+  }
+}

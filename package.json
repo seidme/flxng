@@ -52,7 +52,7 @@
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
   },
-  "prettier":{
+  "prettier": {
     "printWidth": 120,
     "tabWidth": 2,
     "proseWrap": "never",

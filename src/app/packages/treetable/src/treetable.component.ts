@@ -62,7 +62,7 @@ declare var componentHandler: any;
       // TODO: get rid of dependency on @angular/animations
       transition('void => rowExpansion', [
         style({ height: 0 }),
-        // look at toggleRow method if animation duration is changed
+        // update toggleRow method if animation duration is changed
         animate('120ms ease-out', style({ height: '*' }))
       ]),
       transition('rowExpansion => void', [style({ height: '*' }), animate('120ms ease-out', style({ height: '0' }))])

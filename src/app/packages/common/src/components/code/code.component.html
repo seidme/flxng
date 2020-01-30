@@ -1,0 +1,33 @@
+<div class="container"
+     [class.expanded]="expanded">
+  <div class="opener">
+    <button type="button"
+            (click)="toggle($event)">{{expanded ? 'Collapse' : 'View code'}}</button>
+  </div>
+
+  <div class="content"
+       [@expansion]="'expansion'"
+       *ngIf="expanded && (htmlCode || typescriptCode)">
+    <div class="controls">
+      <div class="languages">
+        <button type="button"
+                [class.selected]="selectedLanguage === Language.Html"
+                (click)="switchLanguage(Language.Html)">HTML</button>
+        &nbsp;
+        <button type="button"
+                [class.selected]="selectedLanguage === Language.Typescript"
+                (click)="switchLanguage(Language.Typescript)"> TS </button>
+      </div>
+
+      <div>
+        <button type="button"
+                (click)="copyCode($event)"> Copy </button>
+      </div>
+    </div>
+
+    <pre
+         *ngIf="selectedLanguage === Language.Html && !fetchingCode"><code class="language-{{selectedLanguage}}">{{htmlCode}}</code></pre>
+    <pre
+         *ngIf="selectedLanguage === Language.Typescript && !fetchingCode"><code class="language-{{selectedLanguage}}">{{typescriptCode}}</code></pre>
+  </div>
+</div>
