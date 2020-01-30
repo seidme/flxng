@@ -11,8 +11,12 @@
     }
 
     .content {
-      background: #1e1e1e;
+      background: #dbdbdb;
       padding: 0.2rem;
+
+      pre {
+        margin: 0;
+      }
 
       .controls {
         display: flex;

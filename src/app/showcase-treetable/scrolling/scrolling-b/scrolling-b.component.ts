@@ -12,6 +12,6 @@ export class ScrollingBComponent implements OnInit {
   constructor(private _service: ShowcaseTreetableService) {}
 
   ngOnInit() {
-    this.logs = this._service.generateLogs(10);
+    this.logs = this._service.generateLogs(2);
   }
 }
