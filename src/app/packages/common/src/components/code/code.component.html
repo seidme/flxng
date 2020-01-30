@@ -2,7 +2,7 @@
      [class.expanded]="expanded">
   <div class="opener">
     <button type="button"
-            (click)="toggle($event)">{{expanded ? 'Collapse' : 'View code'}}</button>
+            (click)="toggle()">{{expanded ? 'Collapse' : 'View code'}}</button>
   </div>
 
   <div class="content"
@@ -21,7 +21,7 @@
 
       <div>
         <button type="button"
-                (click)="copyCode($event)"> Copy </button>
+                (click)="copyCode()"> Copy </button>
       </div>
     </div>
 
