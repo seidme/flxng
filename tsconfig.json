@@ -17,8 +17,15 @@
     ],
     "baseUrl": "src",
     "paths": {
-        "@flxng/*": ["app/packages/*"]
-        // "@flxng/common/*": ["app/packages/common/src/*"]
-      }
+      "@flxng/*": [
+        "app/packages/*"
+      ],
+      "code-show": [
+        "dist/code-show"
+      ],
+      "code-show/*": [
+        "dist/code-show/*"
+      ]
+    }
   }
 }
