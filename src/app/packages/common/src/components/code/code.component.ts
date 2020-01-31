@@ -111,7 +111,8 @@ export class CodeComponent implements OnInit {
     navigator.clipboard.writeText(codeForSelectedLanguage).then(
       () => {},
       e => {
-        console.error(e);
+        console.log(e);
+        console.error('Works only if page is served over HTTPS!');
       }
     );
   }
