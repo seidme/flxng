@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TemplateLoaderComponent } from './components/template-loader.component';
-import { CodeComponent } from './components/code/code.component';
 
 import { VarDirective } from './directives';
 import { TemplateDirective } from './directives';
@@ -18,7 +17,6 @@ import { StorageService } from './services/storage.service';
   imports: [AngularCommonModule, BrowserModule, BrowserAnimationsModule],
   exports: [
     TemplateLoaderComponent,
-    CodeComponent,
     VarDirective,
     TemplateDirective,
     OutsideClickDirective,
@@ -27,7 +25,6 @@ import { StorageService } from './services/storage.service';
   ],
   declarations: [
     TemplateLoaderComponent,
-    CodeComponent,
     VarDirective,
     TemplateDirective,
     OutsideClickDirective,

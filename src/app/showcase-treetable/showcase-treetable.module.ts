@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
-import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable';
+import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable'; // remove these imoprts once all packages are moved to projects
 
 import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from './scrolling/scrolling.module';

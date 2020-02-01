@@ -51,8 +51,6 @@ import { PaginationComponent } from './pagination/pagination.component';
 
 import { ResizeModes, GridTemplates, ColumnTemplates, PaginatorSettings, ElementIds } from './shared/constants';
 
-declare var componentHandler: any;
-
 @Component({
   selector: 'flx-treetable',
   templateUrl: './treetable.component.html',

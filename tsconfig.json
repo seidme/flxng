@@ -1,13 +1,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -15,17 +19,35 @@
       "es2017",
       "dom"
     ],
-    "baseUrl": "src",
     "paths": {
-      "@flxng/*": [
-        "app/packages/*"
+      "@flxng/common": [
+        "app/packages/common"
       ],
-      "code-show": [
-        "dist/code-show"
+      "@flxng/common/*": [
+        "app/packages/common/*"
       ],
-      "code-show/*": [
-        "dist/code-show/*"
+      "@flxng/paginator": [
+        "app/packages/paginator"
+      ],
+      "@flxng/paginator/*": [
+        "app/packages/paginator/*"
+      ],
+      "@flxng/treetable": [
+        "app/packages/treetable"
+      ],
+      "@flxng/treetable/*": [
+        "app/packages/treetable/*"
+      ],
+      "@flxng/code-show": [
+        "../projects/code-show/src/lib"
+      ],
+      "@flxng/code-show/*": [
+        "../projects/code-show/src/lib/*"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": false,
+    "strictInjectionParameters": true
   }
 }
