@@ -12,6 +12,7 @@ import { ScrollingComponent } from './scrolling.component';
 import { ScrollingAComponent } from './scrolling-a/scrolling-a.component';
 import { ScrollingBComponent } from './scrolling-b/scrolling-b.component';
 
+
 @NgModule({
   imports: [CommonModule, FormsModule, SharedModule, FlxngCommonModule, FlxngTreetableModule, FlxngCodeShowModule],
   declarations: [ScrollingComponent, ScrollingAComponent, ScrollingBComponent],
