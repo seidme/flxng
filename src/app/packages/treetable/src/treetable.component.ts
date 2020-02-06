@@ -57,7 +57,6 @@ import { ResizeModes, GridTemplates, ColumnTemplates, PaginatorSettings, Element
   styleUrls: ['./treetable.component.scss'],
   animations: [
     trigger('rowExpansion', [
-      // TODO: get rid of dependency on @angular/animations
       transition('void => rowExpansion', [
         style({ height: 0 }),
         // update toggleRow method if animation duration is changed
@@ -83,13 +82,13 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   @ViewChild('contentRef', { static: true }) contentRef: ElementRef;
   @ViewChild('contentInnerRef', { static: true }) contentInnerRef: ElementRef;
-  @ViewChild('headRef', { static: true }) headRef: ElementRef;
+  @ViewChild('headRef', { static: false }) headRef: ElementRef;
   @ViewChild('bodyRef', { static: true }) bodyRef: ElementRef;
   @ViewChild('bodyInnerRef', { static: true }) bodyInnerRef: ElementRef;
 
-  @ViewChild(PaginatorComponent, { static: true }) paginator: PaginatorComponent;
+  @ViewChild(PaginatorComponent, { static: false }) paginator: PaginatorComponent;
 
-  @ContentChild(PaginationComponent, { static: true }) pagination: PaginationComponent;
+  @ContentChild(PaginationComponent, { static: false }) pagination: PaginationComponent;
 
   @ContentChildren(forwardRef(() => ColumnComponent)) columnList: QueryList<ColumnComponent>;
   @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
@@ -145,9 +144,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     private _elementRef: ElementRef,
     private _iterableDiffers: IterableDiffers,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _storageService: StorageService
-  ) //private _injector: Injector
-  //private _viewContainerRef: ViewContainerRef,
+    private _storageService: StorageService //private _injector: Injector
+  ) //private _viewContainerRef: ViewContainerRef,
   //@SkipSelf() @Optional() @Inject(forwardRef(() => ParentTreetableComponent)) private _parentRef?: TreetableComponent
   {}
 
@@ -224,56 +222,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   ngAfterViewChecked(): void {}
 
-  checkInputParamsValidity(): void {
-    if (this.parentRef && !(this.parentRef instanceof TreetableComponent))
-      throw new Error("Invalid parameter: 'parentRef'.");
-
-    if (this.saveSettings && (!this.settingsStorageKey || typeof this.settingsStorageKey !== 'string'))
-      throw new Error("Mandatory parameter is missing or invalid: 'settingsStorageKey'.");
-
-    if (
-      this.bodyStyle &&
-      this.bodyStyle['max-height'] &&
-      (typeof this.bodyStyle['max-height'] !== 'string' ||
-        this.bodyStyle['max-height'].indexOf('px') === -1 ||
-        !parseInt(this.bodyStyle['max-height']))
-    )
-      throw new Error(
-        "Invalid value for: 'max-height' (bodyStyle). Expecting positive number as string representing the value in px."
-      );
-
-    if (
-      this.bodyStyle &&
-      this.bodyStyle['height'] &&
-      (typeof this.bodyStyle['height'] !== 'string' ||
-        this.bodyStyle['height'].indexOf('px') === -1 ||
-        !parseInt(this.bodyStyle['height']))
-    )
-      throw new Error(
-        "Invalid value for: 'height' (bodyStyle). Expecting positive number as string representing the value in px."
-      );
-
-    if (
-      this.rowStyle &&
-      this.rowStyle['height'] &&
-      (typeof this.rowStyle['height'] !== 'string' ||
-        this.rowStyle['height'].indexOf('px') === -1 ||
-        !parseInt(this.rowStyle['height']))
-    )
-      throw new Error(
-        "Invalid value for: 'height' (rowStyle). Expecting positive number as string representing the value in px."
-      );
-
-    if (this.virtualScroll && !this.rowStyle['height'])
-      throw new Error("Virtual scroll requires row's height to be provided. See: -docs-.");
-
-    if (this.virtualScroll && !this.isBodyHeightProvided())
-      throw new Error("Virtual scroll requires body's height to be provided. See: -docs-.");
-  }
-
-  ngOnChanges(changes): void {
-    //debugger;
-  }
+  ngOnChanges(changes): void {}
 
   checkAndProcessInputDataChanges(): void {
     if (!this.data || this.data.constructor !== Array || !this.data.length) {
@@ -353,7 +302,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     } else {
       if (this.data.length === this.allData.length) {
         // case where paginator doesn't internally detects itemsCount change, TODO: consider moving paginator.init() logic to this component
-        this.paginator.init();
+        // this.pagination;
+        // this.paginator.init();
       }
     }
   }
@@ -814,7 +764,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }, 200);
   }
 
-  onRowExpansionAnimationDone(event: AnimationEvent, rowData: any, rowIndex: number): void {}
+  onRowExpansionAnimationDone(event: AnimationEvent, rowData: any): void {}
 
   getParentRowElement(): Element {
     const parentExpandedContentContainerElem = findAncestor(
@@ -1305,5 +1255,52 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     return async
       ? this._storageService.removeAsync(this.settingsStorageKey)
       : this._storageService.remove(this.settingsStorageKey);
+  }
+
+  checkInputParamsValidity(): void {
+    if (this.parentRef && !(this.parentRef instanceof TreetableComponent))
+      throw new Error("Invalid parameter: 'parentRef'.");
+
+    if (this.saveSettings && (!this.settingsStorageKey || typeof this.settingsStorageKey !== 'string'))
+      throw new Error("Mandatory parameter is missing or invalid: 'settingsStorageKey'.");
+
+    if (
+      this.bodyStyle &&
+      this.bodyStyle['max-height'] &&
+      (typeof this.bodyStyle['max-height'] !== 'string' ||
+        this.bodyStyle['max-height'].indexOf('px') === -1 ||
+        !parseInt(this.bodyStyle['max-height']))
+    )
+      throw new Error(
+        "Invalid value for: 'max-height' (bodyStyle). Expecting positive number as string representing the value in px."
+      );
+
+    if (
+      this.bodyStyle &&
+      this.bodyStyle['height'] &&
+      (typeof this.bodyStyle['height'] !== 'string' ||
+        this.bodyStyle['height'].indexOf('px') === -1 ||
+        !parseInt(this.bodyStyle['height']))
+    )
+      throw new Error(
+        "Invalid value for: 'height' (bodyStyle). Expecting positive number as string representing the value in px."
+      );
+
+    if (
+      this.rowStyle &&
+      this.rowStyle['height'] &&
+      (typeof this.rowStyle['height'] !== 'string' ||
+        this.rowStyle['height'].indexOf('px') === -1 ||
+        !parseInt(this.rowStyle['height']))
+    )
+      throw new Error(
+        "Invalid value for: 'height' (rowStyle). Expecting positive number as string representing the value in px."
+      );
+
+    if (this.virtualScroll && !this.rowStyle['height'])
+      throw new Error("Virtual scroll requires row's height to be provided. See: -docs-.");
+
+    if (this.virtualScroll && !this.isBodyHeightProvided())
+      throw new Error("Virtual scroll requires body's height to be provided. See: -docs-.");
   }
 }

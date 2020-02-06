@@ -1,0 +1,119 @@
+<div class="container">
+  <flx-treetable [data]="logs"
+                 [bodyStyle]="{'max-height': '400px'}"
+                 [rowStyle]="{'height': '30px'}"
+                 [virtualScroll]="false"
+                 [resizeMode]="'fit'"
+                 [reorderable]="true"
+                 [saveSettings]="true"
+                 [settingsStorageKey]="'treetable-overview-a-settings'"
+                 [globalFilterInputRef]=""
+                 id="overview-a-treetable">
+
+    <flx-column field="id"
+                header="ID"
+                [expander]="true"
+                [rowExpandableIndicatorProperty]="'children'"></flx-column>
+    <flx-column field="status"
+                header="STATUS"></flx-column>
+    <flx-column field="createdDate"
+                header="CREATED DATE">
+      <ng-template flxTemplate="headCell"
+                   let-col="column"
+                   let-colsMap="columnsMap">
+        <div class="custom-head-cell-content">
+          <input (mousedown)="$event.stopPropagation();"
+                 type="checkbox"
+                 placeholder="Filter..."
+                 (change)="onShowOnlyErrorLogs($event)"><span>Show only error logs</span>
+        </div>
+      </ng-template>
+    </flx-column>
+    <flx-column field="message"
+                header="MESSAGE">
+      <ng-template flxTemplate="bodyCell"
+                   let-col="column"
+                   let-colIndex="columnIndex"
+                   let-colsMap="columnsMap"
+                   let-rowIndex="rowIndex"
+                   let-rowData="rowData"
+                   let-level="level"
+                   let-self="self">
+        <div *ngIf="rowIndex === 2 && level === 0">
+          <img src="assets/images/mario.jpg"
+               alt=""
+               height="25"
+               width="25">
+        </div>
+        <div *ngIf="rowIndex !== 2 || level !== 0">
+          {{rowData.message}}
+        </div>
+      </ng-template>
+    </flx-column>
+
+    <ng-template flxTemplate="rowExpansion"
+                 #rowExpansionTemplateRef
+                 let-item="rowData"
+                 let-ri="rowIndex"
+                 let-cols="columns"
+                 let-colsMap="columnsMap"
+                 let-level="level"
+                 let-self="self">
+      <flx-treetable [data]="item.children"
+                     [includeHead]="false"
+                     [parentRef]="self"
+                     [templateRefs]="{rowExpansion: self.templateRefs.rowExpansion}"
+                     [virtualScroll]="false"
+                     [rowStyle]="{'height': '30px'}">
+        <ng-container *ngFor="let col of cols">
+          <flx-column [field]="col.field"
+                      [expander]="col.expander"
+                      [rowExpandableIndicatorProperty]="col.rowExpandableIndicatorProperty"
+                      [templateRefs]="col.templateRefs"></flx-column>
+        </ng-container>
+        <!-- <flx-pagination [itemsPerPage]="5" [pageLinksSize]="7"></flx-pagination> -->
+      </flx-treetable>
+    </ng-template>
+
+    <ng-template flxTemplate="noResults">
+    </ng-template>
+
+    <flx-pagination [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]"
+                    [itemsPerPage]="10"
+                    [pageLinksSize]="7"></flx-pagination>
+
+    <!-- template for treetable options (global filter and columns selector) -->
+    <ng-template flxTemplate="options"
+                 let-cols="columns"
+                 let-colsMap="columnsMap">
+      <div class="">
+        <span class="global-filter">
+          <input type="text"
+                 id="flx-treetable-global-filter"
+                 placeholder="Filter..."
+                 value="">
+        </span>
+
+        <span>
+          <flx-menu #colsSelectorMenu
+                    header="Columns selector">
+            <div class="menu-body">
+              <ul class="flx-selectable-list">
+                <ng-container *ngFor="let col of cols">
+                  <li class="flx-selectable-list-item"
+                      (click)="col.toggle()"
+                      *ngIf="!col.expander">
+                    <span title="{{col.header}}">{{col.header}}</span>
+                    <i class="material-icons"><span *ngIf="col.isVisible()">check</span></i>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+          </flx-menu>
+        </span>
+
+      </div>
+    </ng-template>
+
+  </flx-treetable>
+</div>
