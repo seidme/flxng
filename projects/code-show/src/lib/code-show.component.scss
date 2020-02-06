@@ -19,6 +19,10 @@
         margin: 0;
       }
 
+      code {
+        max-height: 30rem;
+      }
+
       .controls {
         display: flex;
         justify-content: space-between;
