@@ -15,7 +15,6 @@ export interface Log {
 })
 export class OverviewAComponent implements OnInit {
   logs: Log[];
-  iconPath = require('assets/images/mario.jpg');
 
   constructor() {}
 
