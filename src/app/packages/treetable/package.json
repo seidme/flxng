@@ -1,6 +1,6 @@
 {
     "name": "@flxng/treetable",
-    "version": "1.0.0",
+    "version": "1.1.8",
     "description": "Treetable component for Angular",
     "main": "./bundles/treetable.umd.js",
     "module": "./esm5/treetable.js",
