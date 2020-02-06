@@ -10,6 +10,7 @@ Name | Description | Demo and Docs | Version
 [@flxng/treetable](https://github.com/seidme/flxng/tree/development/src/app/packages/treetable) | Treetable component. | https://flxng.codeeve.com/#/treetable | 1.1.8
 [@flxng/paginator](https://github.com/seidme/flxng/tree/development/src/app/packages/paginator) | Paginator component. | / | 1.1.8
 [@flxng/loader](https://github.com/seidme/flxng/tree/development/src/app/packages/loader) | Loader component. | / | 1.1.2
+[@flxng/code-show](https://github.com/seidme/flxng/tree/development/projects/code-show) | Code-show component. | / | 1.0.2
 
 
 ## Blog
