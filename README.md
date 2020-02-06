@@ -12,7 +12,7 @@ Name | Description | Demo and Docs | Version
 [@flxng/loader](https://github.com/seidme/flxng/tree/development/src/app/packages/loader) | Loader component. | / | 1.1.2
 
 
-## Visit my blog
+## Blog
 https://codeeve.com/
 
 
