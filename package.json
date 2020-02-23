@@ -56,14 +56,5 @@
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
-  },
-  "prettier": {
-    "printWidth": 120,
-    "tabWidth": 2,
-    "proseWrap": "never",
-    "singleQuote": true,
-    "disableLanguages": [
-      "html"
-    ]
   }
 }
