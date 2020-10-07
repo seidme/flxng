@@ -1,19 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-circle-timer',
-  template: `
-    <p>
-      circle-timer works!
-    </p>
-  `,
-  styles: []
+  selector: 'flx-circle-timer',
+  templateUrl: './code-show.component.html',
+  styleUrls: ['./code-show.component.scss']
 })
 export class CircleTimerComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

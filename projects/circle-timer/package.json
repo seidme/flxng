@@ -1,6 +1,22 @@
 {
-  "name": "circle-timer",
-  "version": "0.0.1",
+  "name": "@flxng/circle-timer",
+  "version": "1.0.1",
+  "description": "Circle Timer (countdown) component for Angular.",
+  "author": "seidme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seidme/flxng"
+  },
+  "homepage": "",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "circle timer",
+    "circle countdown",
+    "component"
+  ],
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14"

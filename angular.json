@@ -158,7 +158,7 @@
       "projectType": "library",
       "root": "projects/circle-timer",
       "sourceRoot": "projects/circle-timer/src",
-      "prefix": "lib",
+      "prefix": "flx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",

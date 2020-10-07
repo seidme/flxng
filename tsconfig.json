@@ -44,11 +44,11 @@
       "@flxng/code-show/*": [
         "../projects/code-show/src/lib/*"
       ],
-      "circle-timer": [
-        "dist/circle-timer"
+      "@flxng/circle-timer": [
+        "../projects/circle-timer/src/lib"
       ],
-      "circle-timer/*": [
-        "dist/circle-timer/*"
+      "@flxng/circle-timer/*": [
+        "../projects/circle-timer/src/lib/*"
       ]
     }
   },
