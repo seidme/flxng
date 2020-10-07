@@ -153,6 +153,41 @@
           }
         }
       }
+    },
+    "circle-timer": {
+      "projectType": "library",
+      "root": "projects/circle-timer",
+      "sourceRoot": "projects/circle-timer/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/circle-timer/tsconfig.lib.json",
+            "project": "projects/circle-timer/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/circle-timer/src/test.ts",
+            "tsConfig": "projects/circle-timer/tsconfig.spec.json",
+            "karmaConfig": "projects/circle-timer/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/circle-timer/tsconfig.lib.json",
+              "projects/circle-timer/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "flxng",

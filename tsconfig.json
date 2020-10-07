@@ -43,6 +43,12 @@
       ],
       "@flxng/code-show/*": [
         "../projects/code-show/src/lib/*"
+      ],
+      "circle-timer": [
+        "dist/circle-timer"
+      ],
+      "circle-timer/*": [
+        "dist/circle-timer/*"
       ]
     }
   },
