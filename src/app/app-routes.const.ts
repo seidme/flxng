@@ -3,12 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: '/treetable',
+        redirectTo: '/packages',
         pathMatch: 'full'
     },
     {
         path: '**',
-        redirectTo: '/treetable',
+        redirectTo: '/packages',
         pathMatch: 'full'
     }
 ];

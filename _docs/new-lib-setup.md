@@ -68,7 +68,7 @@ This way we will mimick imports from the lib while developing, all by having aut
 
 - Go to `package.json` (for my-lib) and add missing peer dependencies (if any new added during development).
 
-- Go to my-library module and import Angular Common module and other Angular modules used in the lib code. (NOT NEEDED!!!!!!!!!!!!!!!!!!!!)
+- Go to my-library module and import Angular Common module and other Angular modules used in the lib code. (NOT NEEDED!?)
 
 
 ### Publishing
