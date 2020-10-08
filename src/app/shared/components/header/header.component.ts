@@ -8,17 +8,14 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class HeaderComponent implements OnInit {
   @Output() hamburgerToggle = new EventEmitter<boolean>();
 
-  hamburgerToggled = false;
+  hamburgerOpen = false;
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  onHamburgerToggle(open: boolean): void {
+  toggleHamburger(open: boolean): void {
+    this.hamburgerOpen = open;
     this.hamburgerToggle.emit(open);
-  }
-
-  setHamburgerState(toggled: boolean): void {
-    this.hamburgerToggled = toggled;
   }
 }

@@ -23,7 +23,7 @@
   <div class="app-layout-body">
     <div class="app-layout-body-sidebar flx-right-shadow">
       <app-sidebar #sidebar
-                   (sidebarVisibilityAutoChange)="header.setHamburgerState($event)">
+                   (sidebarVisibilityAutoChange)="header.toggleHamburger($event)">
         <app-navigation></app-navigation>
       </app-sidebar>
     </div>

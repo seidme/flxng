@@ -6,7 +6,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./hamburger.component.scss'],
 })
 export class HamburgerComponent implements OnInit {
-  @Input() toggled = false;
+  @Input() open = false;
   @Output() onToggle = new EventEmitter<boolean>();
 
   constructor() {}
@@ -14,7 +14,7 @@ export class HamburgerComponent implements OnInit {
   ngOnInit(): void {}
 
   toggle(): void {
-    this.toggled = !this.toggled;
-    this.onToggle.emit(this.toggled);
+    this.open = !this.open;
+    this.onToggle.emit(this.open);
   }
 }

@@ -1,8 +1,8 @@
 <div class="container">
   <div class="left flx-right-shadow">
     <ng-content select="[headerContentLeft]"></ng-content>
-    <app-hamburger [toggled]="hamburgerToggled"
-                   (onToggle)="onHamburgerToggle($event)"></app-hamburger>
+    <app-hamburger [open]="hamburgerOpen"
+                   (onToggle)="toggleHamburger($event)"></app-hamburger>
   </div>
 
   <div class="right">
