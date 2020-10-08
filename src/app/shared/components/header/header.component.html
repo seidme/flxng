@@ -2,6 +2,7 @@
   <div class="left flx-right-shadow">
     <ng-content select="[headerContentLeft]"></ng-content>
     <app-hamburger [open]="hamburgerOpen"
+                   [size]="'medium'"
                    (onToggle)="toggleHamburger($event)"></app-hamburger>
   </div>
 

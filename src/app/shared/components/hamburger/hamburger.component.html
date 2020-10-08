@@ -1,7 +1,8 @@
 <div class="hamburger"
+     [ngClass]="{'large': size === HamburgerSize.Large}"
      (click)="toggle()">
 
-    <span [ngClass]="{'open': open}"></span>
-    <span [ngClass]="{'open': open}"></span>
-    <span [ngClass]="{'open': open}"></span>
+  <span [ngClass]="{'open': open, 'large': size === HamburgerSize.Large}"></span>
+  <span [ngClass]="{'open': open, 'large': size === HamburgerSize.Large}"></span>
+  <span [ngClass]="{'open': open, 'large': size === HamburgerSize.Large}"></span>
 </div>
