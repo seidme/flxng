@@ -1,6 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
+import { ChevronComponent } from '../chevron/chevron.component';
+
 @Component({
   selector: 'app-expandable',
   templateUrl: './expandable.component.html',
@@ -13,12 +15,13 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
   ],
 })
 export class ExpandableComponent implements OnInit {
-  @ViewChild('chevron') chevron: ElementRef;
+  @ViewChild('chevron') chevron: ChevronComponent;
 
   @Output() onToggle = new EventEmitter<boolean>();
 
   @Input() expanded = false;
-  @Input() expanderVisible = true;
+  @Input() standalone = false;
+  @Input() togglerVisible = true;
 
   constructor() {}
 
@@ -27,5 +30,22 @@ export class ExpandableComponent implements OnInit {
   toggle(): void {
     this.expanded = !this.expanded;
     this.onToggle.emit(this.expanded);
+    if (this.chevron) {
+      this.chevron.toggle();
+    }
+  }
+
+  expand(): void {
+    this.expanded = true;
+    if (this.chevron) {
+      this.chevron.open();
+    }
+  }
+
+  collapse(): void {
+    this.expanded = false;
+    if (this.chevron) {
+      this.chevron.close();
+    }
   }
 }

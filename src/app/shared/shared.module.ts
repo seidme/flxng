@@ -10,6 +10,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SvgComponent } from './components/svg/svg.component';
 import { ExpandableComponent } from './components/expandable/expandable.component';
 import { ChevronComponent } from './components/chevron/chevron.component';
+import { AccordionComponent } from './components/accordion/accordion.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ChevronComponent } from './components/chevron/chevron.component';
     SidebarComponent,
     SvgComponent,
     ExpandableComponent,
-    ChevronComponent
+    ChevronComponent,
+    AccordionComponent
 ],
   declarations: [
     MenuComponent,
@@ -32,7 +34,8 @@ import { ChevronComponent } from './components/chevron/chevron.component';
     SidebarComponent,
     SvgComponent,
     ExpandableComponent,
-    ChevronComponent
+    ChevronComponent,
+    AccordionComponent
   ],
   providers: [
   ]

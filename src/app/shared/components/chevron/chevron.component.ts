@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EventManager } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-chevron',
@@ -9,7 +8,8 @@ import { EventManager } from '@angular/platform-browser';
 export class ChevronComponent implements OnInit {
   @Output() onToggle = new EventEmitter<boolean>();
 
-  @Input() open = false;
+  @Input() opened = false;
+  @Input() standalone = true;
   // @Input() cssColor = '';
 
   constructor() {}
@@ -17,7 +17,15 @@ export class ChevronComponent implements OnInit {
   ngOnInit() {}
 
   toggle(): void {
-    this.open = !this.open;
-    this.onToggle.emit(this.open);
+    this.opened = !this.opened;
+    this.onToggle.emit(this.opened);
+  }
+
+  open(): void {
+    this.opened = true;
+  }
+
+  close(): void {
+    this.opened = false;
   }
 }
