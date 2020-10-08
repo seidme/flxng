@@ -1,0 +1,8 @@
+<div class="container flx-right-shadow"
+     [ngClass]="{'mobile-view' : mobileView, 'sidebar-visible' : sidebarVisible, 'fixed-sidebar-visible': fixedSidebarVisible}">
+
+  <ng-content></ng-content>
+</div>
+
+<div class="overlay"
+     [ngClass]="{'fixed-sidebar-visible': fixedSidebarVisible}"></div>

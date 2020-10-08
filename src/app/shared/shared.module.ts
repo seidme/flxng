@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 
 import { MenuComponent } from './components/menu/menu.component';
+import { HamburgerComponent } from './components/hamburger/hamburger.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SvgComponent } from './components/svg/svg.component';
 
 @NgModule({
   imports: [
@@ -11,10 +15,18 @@ import { MenuComponent } from './components/menu/menu.component';
     FlxngCommonModule
   ],
   exports: [
-    MenuComponent
+    MenuComponent,
+    HamburgerComponent,
+    HeaderComponent,
+    SidebarComponent,
+    SvgComponent
 ],
   declarations: [
-    MenuComponent
+    MenuComponent,
+    HamburgerComponent,
+    HeaderComponent,
+    SidebarComponent,
+    SvgComponent
   ],
   providers: [
   ]

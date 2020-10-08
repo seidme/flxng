@@ -8,7 +8,7 @@ import { Router, ActivatedRoute, RoutesRecognized, NavigationEnd } from '@angula
 })
 export class AppComponent implements OnInit {
   currentUrl = '';
-  showHeaderAndSidebar = false;
+  // showHeaderAndSidebar = false;
 
   constructor(private _router: Router, private _activatedRoute: ActivatedRoute) {}
 
@@ -17,8 +17,8 @@ export class AppComponent implements OnInit {
     //   console.log(data);
     // });
 
-    this.showHeaderAndSidebar =
-      window.location.hostname === 'localhost' || window.location.hostname === 'flxng.codeeve.com';
+    // this.showHeaderAndSidebar =
+    //   window.location.hostname === 'localhost' || window.location.hostname === 'flxng.codeeve.com';
 
     this._router.events.subscribe(event => {
       /* Event classes: NavigationStart, RoutesRecognized, NavigationEnd, NavigationCancel and NavigationError */
