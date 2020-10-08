@@ -8,6 +8,8 @@ import { HamburgerComponent } from './components/hamburger/hamburger.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SvgComponent } from './components/svg/svg.component';
+import { ExpandableComponent } from './components/expandable/expandable.component';
+import { ChevronComponent } from './components/chevron/chevron.component';
 
 @NgModule({
   imports: [
@@ -19,14 +21,18 @@ import { SvgComponent } from './components/svg/svg.component';
     HamburgerComponent,
     HeaderComponent,
     SidebarComponent,
-    SvgComponent
+    SvgComponent,
+    ExpandableComponent,
+    ChevronComponent
 ],
   declarations: [
     MenuComponent,
     HamburgerComponent,
     HeaderComponent,
     SidebarComponent,
-    SvgComponent
+    SvgComponent,
+    ExpandableComponent,
+    ChevronComponent
   ],
   providers: [
   ]

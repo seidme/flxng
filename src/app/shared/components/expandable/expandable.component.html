@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="header"
+       (click)="chevron?.toggle(); toggle()">
+    <app-chevron #chevron
+                 class="expander"
+                 (click)="$event.stopPropagation(); toggle()"
+                 *ngIf="expanderVisible"></app-chevron>
+
+    <ng-content select="[header]"></ng-content>
+  </div>
+  <div class="content"
+       *ngIf="expanded"
+       [@expansion]="'expansion'">
+    <ng-content select="[content]"></ng-content>
+  </div>
+</div>
