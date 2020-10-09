@@ -10,7 +10,8 @@ import { CircleTimerComponent } from '@flxng/circle-timer';
 export class OverviewCComponent implements OnInit, AfterViewInit {
   @ViewChild('timer', { static: true }) timer: CircleTimerComponent;
 
-  startDate = Date.now() - (10 * 60 * 60 * 1000); // minus 10 hours
+  startDate = Date.now() - 10 * 60 * 60 * 1000; // current time minus 10 hours
+  duration = 2 * 24 * 60 * 60 * 1000; // 2 days
 
   constructor() {}
 

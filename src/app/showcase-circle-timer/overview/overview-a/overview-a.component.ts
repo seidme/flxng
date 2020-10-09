@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./overview-a.component.scss'],
 })
 export class OverviewAComponent implements OnInit {
+  duration = 10 * 1000; // 10 seconds
+
   constructor() {}
 
   ngOnInit() {}
