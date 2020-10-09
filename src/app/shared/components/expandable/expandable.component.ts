@@ -15,7 +15,7 @@ import { ChevronComponent } from '../chevron/chevron.component';
   ],
 })
 export class ExpandableComponent implements OnInit {
-  @ViewChild('chevron') chevron: ChevronComponent;
+  @ViewChild('chevron', { static: true }) chevron: ChevronComponent;
 
   @Output() onToggle = new EventEmitter<boolean>();
 
