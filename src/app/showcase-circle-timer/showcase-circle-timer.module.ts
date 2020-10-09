@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
+import { CircleTimerModule as FlxngCircleTimerModule } from '@flxng/circle-timer';
 
 import { SharedModule } from '../shared/shared.module';
 import { GetStartedModule } from './get-started/get-started.module';
@@ -19,6 +20,7 @@ import { showcaseCircleTimerRoutes } from './showcase-circle-timer-routes.const'
     FormsModule,
     RouterModule.forChild(showcaseCircleTimerRoutes),
     FlxngCommonModule,
+    FlxngCircleTimerModule,
     SharedModule,
     OverviewModule,
     GetStartedModule,

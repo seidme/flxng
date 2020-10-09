@@ -1,0 +1,13 @@
+<flx-circle-timer #timer
+                  color="#40337f"
+                  [startDate]="startDate"
+                  [duration]="2 * 24 * 60 * 60 * 1000"
+                  (onComplete)="onTimerComplete($event)"></flx-circle-timer>
+
+<div class="controls">
+  <button type="button"
+          [disabled]="timer.isTicking()"
+          (click)="timer.start()">Start</button>
+  <button type="button"
+          (click)="timer.init()">Reset</button>
+</div>

@@ -9,7 +9,7 @@ export interface Log {
 }
 
 @Component({
-  selector: 'flx-overview-a',
+  selector: 'app-overview-a',
   templateUrl: './overview-a.component.html',
   styleUrls: ['./overview-a.component.scss']
 })

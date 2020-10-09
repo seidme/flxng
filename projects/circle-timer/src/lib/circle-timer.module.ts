@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { CircleTimerComponent } from './circle-timer.component';
 
-
-
 @NgModule({
+  imports: [CommonModule],
   declarations: [CircleTimerComponent],
-  imports: [
-  ],
-  exports: [CircleTimerComponent]
+  exports: [CircleTimerComponent],
 })
-export class CircleTimerModule { }
+export class CircleTimerModule {}

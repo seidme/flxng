@@ -12,9 +12,7 @@ export const showcaseTreetableRoutes: Routes = [
   {
     path: 'treetable',
     component: ShowcaseTreetableComponent,
-    data: {
-      //showSidebar: true
-    },
+    data: {},
     children: [
       { path: '', component: OverviewComponent },
       { path: 'test', component: TestComponent },
