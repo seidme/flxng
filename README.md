@@ -11,7 +11,7 @@ Name | Description | Demo and Docs | Version
 [@flxng/paginator](https://github.com/seidme/flxng/tree/development/src/app/packages/paginator) | Paginator component. | / | 1.1.8
 [@flxng/loader](https://github.com/seidme/flxng/tree/development/src/app/packages/loader) | Loader component. | / | 1.1.2
 [@flxng/code-show](https://github.com/seidme/flxng/tree/development/projects/code-show) | Code-show component. | / | 1.0.2
-[@flxng/code-show](https://github.com/seidme/flxng/tree/development/projects/circle-timer) | Circle Timer component. | https://flxng.codeeve.com/#/circle-timer | 1.1.4
+[@flxng/circle-timer](https://github.com/seidme/flxng/tree/development/projects/circle-timer) | Circle Timer component. | https://flxng.codeeve.com/#/circle-timer | 1.1.4
 
 
 ## Blog
