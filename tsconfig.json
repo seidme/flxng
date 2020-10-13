@@ -49,6 +49,12 @@
       ],
       "@flxng/circle-timer/*": [
         "../projects/circle-timer/src/lib/*"
+      ],
+      "loader": [
+        "dist/loader"
+      ],
+      "loader/*": [
+        "dist/loader/*"
       ]
     }
   },
