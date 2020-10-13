@@ -50,11 +50,11 @@
       "@flxng/circle-timer/*": [
         "../projects/circle-timer/src/lib/*"
       ],
-      "loader": [
-        "dist/loader"
+      "@flxng/loader": [
+        "../projects/loader/src/lib"
       ],
-      "loader/*": [
-        "dist/loader/*"
+      "@flxng/loader/*": [
+        "../projects/loader/src/lib/*"
       ]
     }
   },

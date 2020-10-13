@@ -13,6 +13,23 @@
 
     <app-expandable>
       <div header>
+        <a routerLink="/loader"
+           [routerLinkActive]="['active']"
+           class="flx-link root">
+          <span class="flx-text">Loader</span>
+        </a>
+      </div>
+      <div content>
+        <a routerLink="/loader/get-started"
+           [routerLinkActive]="['active']"
+           class="flx-link">
+          <span class="flx-text">Get started</span>
+        </a>
+      </div>
+    </app-expandable>
+
+    <app-expandable>
+      <div header>
         <a routerLink="/circle-timer"
            [routerLinkActive]="['active']"
            class="flx-link root">

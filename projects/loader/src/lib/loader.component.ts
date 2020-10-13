@@ -1,19 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-loader',
-  template: `
-    <p>
-      loader works!
-    </p>
-  `,
-  styles: []
+  selector: 'flx-loader',
+  templateUrl: './loader.component.html',
+  styleUrls: ['./loader.component.scss'],
 })
 export class LoaderComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

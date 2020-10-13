@@ -193,7 +193,7 @@
       "projectType": "library",
       "root": "projects/loader",
       "sourceRoot": "projects/loader/src",
-      "prefix": "lib",
+      "prefix": "flx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
