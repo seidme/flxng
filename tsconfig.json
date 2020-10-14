@@ -55,6 +55,12 @@
       ],
       "@flxng/loader/*": [
         "../projects/loader/src/lib/*"
+      ],
+      "paginator": [
+        "dist/paginator"
+      ],
+      "paginator/*": [
+        "dist/paginator/*"
       ]
     }
   },
