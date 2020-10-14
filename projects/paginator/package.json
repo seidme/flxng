@@ -1,8 +1,25 @@
 {
-  "name": "paginator",
-  "version": "0.0.1",
+  "name": "@flxng/paginator",
+  "version": "1.1.8",
+  "description": "Paginator component for Angular",
+  "author": "seidme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seidme/flxng"
+  },
+  "homepage": "",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "paginator",
+    "pagination",
+    "component"
+  ],
   "peerDependencies": {
     "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/core": "^8.2.14",
+    "@flxng/common": "^1.0.0"
   }
 }

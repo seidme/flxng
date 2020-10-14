@@ -1,0 +1,73 @@
+<div class="flx-paginator">
+  <button type="button"
+          title="Previous"
+          class="navigate-btn"
+          (click)="navigateToPage(currentPage - 1, $event)"
+          [disabled]="currentPage === pageLinks[0]">
+    <span>Previous</span>
+  </button>
+
+  <ng-template [ngIf]="shouldShowPaginatorDots('left')">
+    <button type="button"
+            class="page-link"
+            (click)="navigateToPage(pageLinks[0], $event)">
+      <span>{{pageLinks[0]}}</span>
+    </button>
+
+    <button type="button"
+            [disabled]="true">
+      <strong>...</strong>
+    </button>
+  </ng-template>
+
+  <ng-template ngFor
+               let-pl
+               [ngForOf]="visiblePageLinks">
+    <button type="button"
+            class="page-link"
+            [class.current]="pl === currentPage"
+            (click)="navigateToPage(pl, $event)"
+            [disabled]="pl === currentPage">
+      <span>{{pl}}</span>
+    </button>
+  </ng-template>
+
+  <ng-template [ngIf]="shouldShowPaginatorDots('right')">
+    <button type="button"
+            [disabled]="true">
+      <strong>...</strong>
+    </button>
+
+    <button type="button"
+            class="page-link"
+            (click)="navigateToPage(pageLinks[pageLinks.length - 1], $event)">
+      <span>{{pageLinks[pageLinks.length - 1]}}</span>
+    </button>
+  </ng-template>
+
+  <button type="button"
+          title="Next"
+          class="navigate-btn"
+          (click)="navigateToPage(currentPage + 1, $event)"
+          [disabled]="currentPage === pageLinks[pageLinks.length - 1]">
+    <span>Next</span>
+  </button>
+</div>
+
+<div class="flx-paginator-settings">
+  <select #itemsPerPageSelectElemRef>
+    <ng-template ngFor
+                 let-option
+                 [ngForOf]="itemsPerPageOptions">
+      <ng-template [ngIf]="option === itemsPerPage">
+        <option [value]="option"
+                selected="selected">{{option}}</option>
+      </ng-template>
+      <ng-template [ngIf]="option !== itemsPerPage">
+        <option [value]="option">{{option}}</option>
+      </ng-template>
+    </ng-template>
+  </select>
+
+  <span>records per page</span>
+</div>

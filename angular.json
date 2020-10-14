@@ -228,7 +228,7 @@
       "projectType": "library",
       "root": "projects/paginator",
       "sourceRoot": "projects/paginator/src",
-      "prefix": "lib",
+      "prefix": "flx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",

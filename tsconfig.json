@@ -26,12 +26,6 @@
       "@flxng/common/*": [
         "app/packages/common/*"
       ],
-      "@flxng/paginator": [
-        "app/packages/paginator"
-      ],
-      "@flxng/paginator/*": [
-        "app/packages/paginator/*"
-      ],
       "@flxng/treetable": [
         "app/packages/treetable"
       ],
@@ -56,11 +50,11 @@
       "@flxng/loader/*": [
         "../projects/loader/src/lib/*"
       ],
-      "paginator": [
-        "dist/paginator"
+      "@flxng/paginator": [
+        "../projects/paginator/src/lib"
       ],
-      "paginator/*": [
-        "dist/paginator/*"
+      "@flxng/paginator/*": [
+        "../projects/paginator/src/lib/*"
       ]
     }
   },
