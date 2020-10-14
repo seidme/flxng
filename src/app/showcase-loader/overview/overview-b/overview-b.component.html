@@ -1,0 +1,15 @@
+<div class="box"
+     flxLoader
+     *ngFor="let loadable of loadables">
+  <span *ngIf="!loadable.loaded">Some content to be loaded {{loadable.id}}</span>
+  <span *ngIf="loadable.loaded">{{loadable.id}} Loaded!</span>
+</div>
+
+<div class="controls">
+  <button type="button"
+          [disabled]="allLoaded() || anyLoading()"
+          (click)="load()">Load</button>
+  <button type="button"
+          [disabled]="!allLoaded()"
+          (click)="reset()">Reset</button>
+</div>

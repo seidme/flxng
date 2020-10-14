@@ -1,3 +1,7 @@
+button {
+  cursor: pointer;
+}
+
 .flx-box-shadow {
   //box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px -2px rgba(0, 0, 0, 0.2),
@@ -56,6 +60,7 @@
   padding: 7px 10px;
   color: white;
   cursor: pointer;
+  outline: none;
 
   &.flx-button-primary {
     background-color: #59abe5;

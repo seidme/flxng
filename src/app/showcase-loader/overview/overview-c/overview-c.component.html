@@ -1,0 +1,14 @@
+<div class="box"
+     [flxLoader]="loading">
+  <span *ngIf="!loaded">Some content to be loaded</span>
+  <span *ngIf="loaded">Loaded!</span>
+</div>
+
+<div class="controls">
+  <button type="button"
+          [disabled]="loaded || loader.isVisible()"
+          (click)="load()">Load</button>
+  <button type="button"
+          [disabled]="!loaded"
+          (click)="reset()">Reset</button>
+</div>

@@ -7,6 +7,7 @@ import { SharedModule } from './shared/shared.module';
 import { ShowcaseModule } from './showcase/showcase.module';
 import { ShowcaseTreetableModule } from './showcase-treetable/showcase-treetable.module';
 import { ShowcaseCircleTimerModule } from './showcase-circle-timer/showcase-circle-timer.module';
+import { ShowcaseLoaderModule } from './showcase-loader/showcase-loader.module';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -22,6 +23,7 @@ import { routes } from './app-routes.const';
     ShowcaseModule,
     ShowcaseTreetableModule,
     ShowcaseCircleTimerModule,
+    ShowcaseLoaderModule,
   ],
   declarations: [AppComponent, NavigationComponent],
   providers: [],
