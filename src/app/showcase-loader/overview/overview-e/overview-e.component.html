@@ -1,6 +1,7 @@
 <button flxLoader
-        type="burron"
+        type="button"
         class="flx-button flx-button-primary"
+        [disabled]="loader.isVisible()"
         (click)="load()">
-  <span *ngIf="!loader.isVisible()">Load</span>
+  <span>Load</span>
 </button>

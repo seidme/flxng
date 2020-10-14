@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { LoaderDirective } from '@flxng/loader';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-overview-c',
@@ -8,8 +6,6 @@ import { LoaderDirective } from '@flxng/loader';
   styleUrls: ['./overview-c.component.scss'],
 })
 export class OverviewCComponent implements OnInit {
-  @ViewChild(LoaderDirective, { static: true }) loader: LoaderDirective;
-
   loading = false;
   loaded = false;
 

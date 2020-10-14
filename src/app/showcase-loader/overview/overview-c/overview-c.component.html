@@ -6,7 +6,7 @@
 
 <div class="controls">
   <button type="button"
-          [disabled]="loaded || loader.isVisible()"
+          [disabled]="loaded || loading"
           (click)="load()">Load</button>
   <button type="button"
           [disabled]="!loaded"
