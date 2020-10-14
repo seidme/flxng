@@ -3,5 +3,5 @@
         class="flx-button flx-button-primary"
         [disabled]="loader.isVisible()"
         (click)="load()">
-  <span>Load</span>
+  <span *ngIf="!loader.isVisible()">Load</span>
 </button>

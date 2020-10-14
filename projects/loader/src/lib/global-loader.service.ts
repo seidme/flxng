@@ -10,7 +10,7 @@ export class GlobalLoaderService {
   private visible = false;
 
   constructor(protected loaderService: LoaderService) {
-    this.loaderElem = this.loaderService.appendLoader(document.body, true);
+    this.loaderElem = this.loaderService.appendLoader(document.body);
   }
 
   show(): void {

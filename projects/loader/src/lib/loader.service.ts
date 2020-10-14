@@ -14,17 +14,15 @@ export class LoaderService {
     document.head.appendChild(styleElem);
   }
 
-  appendLoader(hostElem: HTMLElement, global = false): HTMLElement {
-    if (!global) {
-      hostElem.style['position'] = 'relative';
-    }
-
+  appendLoader(hostElem: HTMLElement): HTMLElement {
     const loaderElem = document.createElement('div');
     loaderElem.className = 'flx-loader';
 
     loaderElem.style['display'] = 'none';
-    if (!global) {
-      loaderElem.style['border-radius'] = getComputedStyle(hostElem)['border-radius'];
+
+    const hostBorderRadius = getComputedStyle(hostElem)['border-radius'];
+    if (parseInt(hostBorderRadius, 10)) {
+      loaderElem.style['border-radius'] = hostBorderRadius;
     }
 
     loaderElem.innerHTML = `
@@ -38,6 +36,10 @@ export class LoaderService {
 
   getStylesAsString(): string {
     return `
+      [flxLoader] {
+        position: relative;
+      }
+
       .flx-loader {
         position: absolute;
         top: 0;
@@ -54,8 +56,8 @@ export class LoaderService {
 
       .flx-spinner {
         display: inline-block;
-        width: 50px;
-        height: 50px;
+        width: 25px;
+        height: 25px;
         border: 3px solid rgba(255, 255, 255, 0.3);
         border-radius: 50%;
         border-top-color: #fff;
