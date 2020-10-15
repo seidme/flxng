@@ -86,11 +86,14 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
     this.currentPage = p;
     this.setVisiblePageLinks();
 
+    const skip = this.itemsPerPage * (this.currentPage - 1);
+    const take = this.itemsPerPage;
     const endIndex = this.itemsPerPage * this.currentPage;
     const startIndex = endIndex - this.itemsPerPage;
 
     this.onPageChange.emit({
-      // TODO: change it so it emits object with skip and take props..
+      skip: skip,
+      take: take,
       startIndex: startIndex,
       endIndex: endIndex,
     });

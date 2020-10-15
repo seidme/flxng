@@ -1,32 +1,36 @@
-// @import "@flxng/common/src/styles/utils.scss";
-// @import '../../common/src/styles/utils.scss'; // https://stackoverflow.com/questions/41504726/angular-cli-sass
-
 :host {
   * {
     box-sizing: border-box;
   }
 
-  height: 100%;
+  //height: 100%;
   width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
   .flx-paginator {
-    flex: 1 0 30%;
-    margin-left: 1rem;
+    flex: 0 0 auto;
+    margin: 0.5rem;
 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 
+    .dots {
+      opacity: 0.4;
+      user-select: none;
+    }
+
     button {
       flex: 0 0 auto;
       height: 1.8rem;
+      min-width: 1.8rem;
       background: transparent;
-      margin: 0 0.2rem 0 0.2rem;
+      // margin: 0 0.2rem 0 0.2rem;
       border: 0;
       cursor: pointer;
 
@@ -40,9 +44,19 @@
       }
 
       &.navigate-btn {
-        width: 5rem;
+        //width: 2.2rem;
         text-align: center;
         border: 1px solid #40337f;
+        border-radius: 3px;
+        margin: 0;
+
+        &.left {
+          margin-right: 0.8em;
+        }
+
+        &.right {
+          margin-left: 0.8rem;
+        }
       }
 
       &:disabled {
@@ -53,8 +67,8 @@
   }
 
   .flx-paginator-settings {
-    flex: 0 1 70%;
-    margin-right: 1rem;
+    flex: 0 0 auto;
+    margin: 0.5rem;
 
     display: flex;
     flex-direction: row;
@@ -64,7 +78,9 @@
     select {
       height: 1.8rem;
       border: 1px solid #40337f;
+      border-radius: 3px;
       margin-right: 1rem;
+      cursor: pointer;
     }
 
     .span {
@@ -72,6 +88,46 @@
       height: 1.8rem;
       margin: 0 0.2rem 0 0.2rem;
       border: 0;
+    }
+  }
+
+  .chevron-container {
+    position: relative;
+    height: 1.3rem;
+    width: 1.3rem;
+    background-color: transparent;
+
+    .chevron {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      //color: red;
+      opacity: 0.5;
+      user-select: none;
+      cursor: pointer;
+      //border: 1px solid #000000;
+      top: 0;
+      left: 0;
+
+      &:before {
+        height: 0.5em;
+        width: 0.5em;
+        border-width: 0.25em 0.25em 0 0;
+        border-style: solid;
+        content: '';
+        display: inline-block;
+        position: relative;
+        top: 0.4em;
+        left: 0;
+        vertical-align: top;
+        transform: rotate(45deg);
+      }
+
+      &.chevron-left {
+        &:before {
+          transform: rotate(225deg);
+        }
+      }
     }
   }
 }

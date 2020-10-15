@@ -1,10 +1,12 @@
 <div class="flx-paginator">
   <button type="button"
           title="Previous"
-          class="navigate-btn"
+          class="navigate-btn left"
           (click)="navigateToPage(currentPage - 1, $event)"
           [disabled]="currentPage === pageLinks[0]">
-    <span>Previous</span>
+    <div class="chevron-container">
+      <span class="chevron chevron-left"></span>
+    </div>
   </button>
 
   <ng-template [ngIf]="shouldShowPaginatorDots('left')">
@@ -14,10 +16,7 @@
       <span>{{pageLinks[0]}}</span>
     </button>
 
-    <button type="button"
-            [disabled]="true">
-      <strong>...</strong>
-    </button>
+    <strong class="dots">...</strong>
   </ng-template>
 
   <ng-template ngFor
@@ -33,10 +32,7 @@
   </ng-template>
 
   <ng-template [ngIf]="shouldShowPaginatorDots('right')">
-    <button type="button"
-            [disabled]="true">
-      <strong>...</strong>
-    </button>
+    <strong class="dots">...</strong>
 
     <button type="button"
             class="page-link"
@@ -47,10 +43,12 @@
 
   <button type="button"
           title="Next"
-          class="navigate-btn"
+          class="navigate-btn right"
           (click)="navigateToPage(currentPage + 1, $event)"
           [disabled]="currentPage === pageLinks[pageLinks.length - 1]">
-    <span>Next</span>
+    <div class="chevron-container">
+      <span class="chevron"></span>
+    </div>
   </button>
 </div>
 
