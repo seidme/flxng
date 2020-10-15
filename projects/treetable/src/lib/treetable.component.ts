@@ -21,10 +21,10 @@ import {
   forwardRef,
   IterableDiffers,
   KeyValueDiffer,
-  Renderer,
   NgZone,
   ViewContainerRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Renderer2,
 } from '@angular/core';
 
 import { animate, style, trigger, transition, AnimationEvent } from '@angular/animations';
@@ -39,12 +39,12 @@ import {
   resolveDeepValue,
   isValueValidForView,
   filterDuplicates,
-  debounce
+  debounce,
 } from '@flxng/common/src/utils';
 
 import { PaginatorComponent } from '@flxng/paginator';
 
-//import { TreetableComponent as ParentTreetableComponent } from './treetable.component';
+// import { TreetableComponent as ParentTreetableComponent } from './treetable.component';
 
 import { ColumnComponent } from './column/column.component';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -60,11 +60,11 @@ import { ResizeModes, GridTemplates, ColumnTemplates, PaginatorSettings, Element
       transition('void => rowExpansion', [
         style({ height: 0 }),
         // update toggleRow method if animation duration is changed
-        animate('120ms ease-out', style({ height: '*' }))
+        animate('120ms ease-out', style({ height: '*' })),
       ]),
-      transition('rowExpansion => void', [style({ height: '*' }), animate('120ms ease-out', style({ height: '0' }))])
-    ])
-  ]
+      transition('rowExpansion => void', [style({ height: '*' }), animate('120ms ease-out', style({ height: '0' }))]),
+    ]),
+  ],
 })
 export class TreetableComponent implements OnInit, AfterContentInit, AfterViewInit, DoCheck, OnDestroy {
   @Input() data: Array<any>;
@@ -120,14 +120,14 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   // storable/inheritable properties
   metas: any = {
     width: {
-      value: ''
+      value: '',
     },
     resizeMode: {
-      value: ''
+      value: '',
     },
     itemsPerPage: {
-      value: NaN
-    }
+      value: NaN,
+    },
   };
 
   // constants
@@ -140,14 +140,15 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   constructor(
     private _ngZone: NgZone,
-    private _renderer: Renderer,
+    private _renderer: Renderer2,
     private _elementRef: ElementRef,
     private _iterableDiffers: IterableDiffers,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _storageService: StorageService //private _injector: Injector
-  ) //private _viewContainerRef: ViewContainerRef,
-  //@SkipSelf() @Optional() @Inject(forwardRef(() => ParentTreetableComponent)) private _parentRef?: TreetableComponent
-  {}
+    // private _injector: Injector,
+    // private _viewContainerRef: ViewContainerRef,
+    // @SkipSelf() @Optional() @Inject(forwardRef(() => ParentTreetableComponent)) private _parentRef?: TreetableComponent
+    private _storageService: StorageService
+  ) {}
 
   ngOnInit() {
     this.checkInputParamsValidity();
@@ -162,8 +163,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
     if (this.virtualScroll) {
-      const bodyHeight = parseInt(this.bodyStyle['height'] || this.bodyStyle['max-height']); // flex-basis?
-      const rowHeight = parseInt(this.rowStyle['height']);
+      const bodyHeight = parseInt(this.bodyStyle['height'] || this.bodyStyle['max-height'], 10); // flex-basis?
+      const rowHeight = parseInt(this.rowStyle['height'], 10);
 
       this.maxVisibleRowsCount = Math.ceil(bodyHeight / rowHeight);
     }
@@ -187,7 +188,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     this.initScrollbarVisibilityHandlers();
 
-    this.onColsMetaPositionChange.subscribe(_ => {
+    this.onColsMetaPositionChange.subscribe((_) => {
       // sort columns by their meta position value
       this.cols.sort(
         (colA: ColumnComponent, colB: ColumnComponent) => colA.metas.position.value - colB.metas.position.value
@@ -196,7 +197,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     this.onColsMetaPositionChange.emit(null);
 
-    let globalFilterInputElem = this.globalFilterInputRef
+    const globalFilterInputElem = this.globalFilterInputRef
       ? this.globalFilterInputRef
       : this._elementRef.nativeElement.querySelector(`input#${ElementIds.globalFilter}`);
 
@@ -220,10 +221,6 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
   }
 
-  ngAfterViewChecked(): void {}
-
-  ngOnChanges(changes): void {}
-
   checkAndProcessInputDataChanges(): void {
     if (!this.data || this.data.constructor !== Array || !this.data.length) {
       if (this.allData.length) {
@@ -237,7 +234,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             this.renderData = this.filteredData.slice();
           }
 
-          //this.renderData = this.filteredData.slice();
+          // this.renderData = this.filteredData.slice();
         }
       }
 
@@ -259,9 +256,11 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
       return;
     }
 
-    let changes = this.iterableDiffer.diff(this.data);
+    const changes = this.iterableDiffer.diff(this.data);
     // check whether an element inside an input array has been added, moved or removed
-    if (changes) this.onInputDataChanges();
+    if (changes) {
+      this.onInputDataChanges();
+    }
   }
 
   onInputDataChanges(): void {
@@ -280,7 +279,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
       return rowData;
     });
 
-    let sortedColumns = this.getSortedColumns();
+    const sortedColumns = this.getSortedColumns();
     if (sortedColumns.length) {
       // does not really matter which one is passed if there are multiple sorted columns,
       // they will be sorted respecting the sortIndex meta
@@ -314,7 +313,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
     return this.cols
-      .filter(c => c.metas.sortIndex.value > -1)
+      .filter((c) => c.metas.sortIndex.value > -1)
       .sort((cA: ColumnComponent, cB: ColumnComponent) => {
         return cA.metas.sortIndex.value - cB.metas.sortIndex.value;
       });
@@ -329,12 +328,12 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     // they will be appropriately ordered after setting the metas
     this.cols = this.columnList.toArray();
 
-    let dupColIds = filterDuplicates(this.cols.map(c => c.id));
+    const dupColIds = filterDuplicates(this.cols.map((c) => c.id));
     if (dupColIds.length) {
       throw new Error(`Duplicate column field: ${dupColIds[0]}`);
     }
 
-    let expanderColIdx = this.cols.findIndex(c => c.expander);
+    const expanderColIdx = this.cols.findIndex((c) => c.expander);
     if (expanderColIdx !== -1) {
       this.expanderCol = this.cols[expanderColIdx];
 
@@ -355,23 +354,24 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   setMetas(): void {
-    // TODO: setting metas needs to be in the following order: default -> stored -> inheritable.... (default metas need to be set no matter what..)
+    // TODO: setting metas needs to be in the following order: default -> stored -> inheritable....
+    // (default metas need to be set no matter what..)
     if (this.parentRef && this.doColsMapsMatch(this.colsMap, this.parentRef.colsMap)) {
       this.inheritsMetas = true;
 
-      let inheritableGridMetaKeys = ['width', 'resizeMode'];
-      let inheritableColMetaKeys = ['width', 'position', 'visibility'];
+      const inheritableGridMetaKeys = ['width', 'resizeMode'];
+      const inheritableColMetaKeys = ['width', 'position', 'visibility'];
 
       this.inheritMetas(inheritableGridMetaKeys, inheritableColMetaKeys);
 
       this.onColsMetaPositionChange = this.parentRef.onColsMetaPositionChange;
 
       // set metas that are non-inheritable but can be restored from storage
-      let storedMetasMap = this.getStoredMetasMap(false);
+      const storedMetasMap = this.getStoredMetasMap(false);
       if (this.canApplyStoredMetas(storedMetasMap)) {
         // TODO: no need for check using canApplyStoredMetas method? Is the method even doing right thing??
-        let gridMetaKeysToApply = ['itemsPerPage'];
-        let colMetaKeysToApply = ['sortOrder', 'sortIndex'];
+        const gridMetaKeysToApply = ['itemsPerPage'];
+        const colMetaKeysToApply = ['sortOrder', 'sortIndex'];
 
         this.applyStoredMetas(storedMetasMap, gridMetaKeysToApply, colMetaKeysToApply);
       } else {
@@ -379,12 +379,13 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         this.metas.itemsPerPage.value = this.pagination ? this.pagination.itemsPerPage : NaN;
       }
     } else {
-      let storedMetasMap = this.getStoredMetasMap(false);
+      const storedMetasMap = this.getStoredMetasMap(false);
       if (this.canApplyStoredMetas(storedMetasMap)) {
-        let storableGridMetaKeys = ['width', 'resizeMode', 'itemsPerPage'];
-        let storableColMetaKeys = ['width', 'position', 'visibility', 'sortOrder', 'sortIndex'];
+        const storableGridMetaKeys = ['width', 'resizeMode', 'itemsPerPage'];
+        const storableColMetaKeys = ['width', 'position', 'visibility', 'sortOrder', 'sortIndex'];
         // TODO: if canApplyStoredMetas returns true, but paginotr wasn't included at the time first metas are stored,
-        // itemsPerPage meta will be null (and will be applied). Can apply stored metas check needs to be performed for each meta individually!?
+        // itemsPerPage meta will be null (and will be applied). Can apply stored metas check needs
+        // to be performed for each meta individually!?
 
         this.applyStoredMetas(storedMetasMap, storableGridMetaKeys, storableColMetaKeys);
       } else {
@@ -416,19 +417,25 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   canApplyStoredMetas(storedMetasMap: any): boolean {
-    if (!storedMetasMap) return false;
+    if (!storedMetasMap) {
+      return false;
+    }
 
-    let resizeModeChanged = storedMetasMap['grid'].resizeMode.value !== this.resizeMode;
-    let doColsMapMatchesStoredColsMetasMap = this.doColsMapsMatch(this.colsMap, storedMetasMap['columns']);
+    const resizeModeChanged = storedMetasMap['grid'].resizeMode.value !== this.resizeMode;
+    const doColsMapMatchesStoredColsMetasMap = this.doColsMapsMatch(this.colsMap, storedMetasMap['columns']);
 
     return !resizeModeChanged && doColsMapMatchesStoredColsMetasMap;
   }
 
   doColsMapsMatch(colsMapA: any, colsMapB: any): boolean {
-    if (Object.keys(colsMapA).length !== Object.keys(colsMapB).length) return false;
+    if (Object.keys(colsMapA).length !== Object.keys(colsMapB).length) {
+      return false;
+    }
 
-    for (let key in colsMapA) {
-      if (!colsMapB[key]) return false;
+    for (const key in colsMapA) {
+      if (!colsMapB[key]) {
+        return false;
+      }
     }
 
     return true;
@@ -474,15 +481,15 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   reflectComputedStyleWidths(): void {
-    let contentInnerElem = this.contentInnerRef.nativeElement;
-    let contentInnerElemComputedWidth = parseFloat(getComputedStyle(contentInnerElem).width);
+    const contentInnerElem = this.contentInnerRef.nativeElement;
+    const contentInnerElemComputedWidth = parseFloat(getComputedStyle(contentInnerElem).width);
 
     console.log('contentInnerElemComputedWidth', contentInnerElemComputedWidth);
 
-    let visibleCols = this.getVisibleCols();
+    const visibleCols = this.getVisibleCols();
 
-    let colDefaultWidthValue = contentInnerElemComputedWidth / visibleCols.length;
-    let colDefaultWidth =
+    const colDefaultWidthValue = contentInnerElemComputedWidth / visibleCols.length;
+    const colDefaultWidth =
       this.metas.resizeMode.value === this.ResizeModes.expand
         ? colDefaultWidthValue + 'px'
         : calcPercentage(colDefaultWidthValue, contentInnerElemComputedWidth) + '%';
@@ -513,7 +520,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     let mouseleaveListener;
 
     this._ngZone.runOutsideAngular(() => {
-      mousemoveListener = this._renderer.listen(this._elementRef.nativeElement, 'mousemove', e => {
+      mousemoveListener = this._renderer.listen(this._elementRef.nativeElement, 'mousemove', (e) => {
         e.stopPropagation();
 
         this.checkAndSetScrollFocus();
@@ -521,7 +528,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     });
 
     this._ngZone.runOutsideAngular(() => {
-      mouseleaveListener = this._renderer.listen(this._elementRef.nativeElement, 'mouseleave', e => {
+      mouseleaveListener = this._renderer.listen(this._elementRef.nativeElement, 'mouseleave', (e) => {
         if (this.level !== 0) {
           // keep scrollbar on root table if mouse leaves
           this.setNotInScrollFocus(false);
@@ -569,7 +576,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     this._ngZone.runOutsideAngular(() => {
       // TODO: breaks initial mouse wheel scrolling in Chrome (for nested tables)..
       animateScroll(this.bodyRef.nativeElement, rowElem.offsetTop, { duration: 250 });
-      //this.bodyRef.nativeElement.scrollTop = rowElem.offsetTop;
+      // this.bodyRef.nativeElement.scrollTop = rowElem.offsetTop;
     });
   }
 
@@ -583,7 +590,9 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     const parentRowElemHeight = parseFloat(getComputedStyle(parentRowElement).height);
 
     // child table's height can't be higher then parent's.. Increse parent's height or decrese child's
-    this.bodyStyle[attrKey] = parseInt(this.bodyStyle[attrKey]) - (this.level - 1) * parentRowElemHeight + 'px'; // TODO: max-height and height have to be in pixels..? Also, root's height has to be heigher.. (needed checks within input params validity)
+    // TODO: max-height and height have to be in pixels..? Also, root's height has to be heigher..
+    // (needed checks within input params validity)
+    this.bodyStyle[attrKey] = parseInt(this.bodyStyle[attrKey], 10) - (this.level - 1) * parentRowElemHeight + 'px';
   }
 
   isBodyHeightProvided(): boolean {
@@ -597,8 +606,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   listenGlobalFilterInputEvents(filterInputElem: Element): void {
     this._ngZone.runOutsideAngular(() => {
-      let onInput = debounce(
-        e => {
+      const onInput = debounce(
+        (e) => {
           this.globalFilterValue = e.target.value.trim();
 
           this.globalFilterValue
@@ -644,10 +653,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     this.filteredData = this.allData.filter((rowData: any, i: number) => {
       return !!cols.find(
-        (col: ColumnComponent) =>
-          this.resolveFieldValue(rowData, col.field)
-            .toUpperCase()
-            .indexOf(value) > -1
+        (col: ColumnComponent) => this.resolveFieldValue(rowData, col.field).toUpperCase().indexOf(value) > -1
       );
     });
   }
@@ -684,7 +690,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   updateDataToRenderForVirtualScroll(event: any, bodyScrollTop: number): void {
-    const NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE = this.maxVisibleRowsCount; // number of rendered rows that are not within the viewport (before or after)
+    // number of rendered rows that are not within the viewport (before or after)
+    const NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE = this.maxVisibleRowsCount;
 
     const finalNumberOfRowsPriorViewPort = !this.hasExpandableContent()
       ? Math.floor(bodyScrollTop / parseFloat(this.rowStyle['height']))
@@ -692,7 +699,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     console.log('finalNumberOfRowsPriorViewPort: ', finalNumberOfRowsPriorViewPort);
 
-    let numberOfRowsToSkipRendering =
+    const numberOfRowsToSkipRendering =
       finalNumberOfRowsPriorViewPort > NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE
         ? finalNumberOfRowsPriorViewPort - NUMBER_OF_ROWS_TO_RENDER_IN_ADVANCE
         : 0;
@@ -725,7 +732,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   listenBodyScrollEvents(): void {
     this._ngZone.runOutsideAngular(() => {
-      this._renderer.listen(this.bodyRef.nativeElement, 'scroll', event => {
+      this._renderer.listen(this.bodyRef.nativeElement, 'scroll', (event) => {
         this.updateDataToRenderForVirtualScroll(event, this.bodyRef.nativeElement.scrollTop);
         this._changeDetectorRef.detectChanges();
       });
@@ -737,7 +744,9 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   isRowExpandable(rowData: any): boolean {
-    if (!this.hasExpandableContent()) return false;
+    if (!this.hasExpandableContent()) {
+      return false;
+    }
 
     const rowExpandableIndicatorPropertyValue = rowData[this.expanderCol.rowExpandableIndicatorProperty];
     return rowExpandableIndicatorPropertyValue && Array.isArray(rowExpandableIndicatorPropertyValue)
@@ -753,9 +762,9 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         const rowElem = findAncestor(event.target, 'row');
         const rowExpandedContentContainerElem = this.getRowExpandedContentContainerElem(rowElem);
         rowData.ttExpandedContentHeight = getComputedStyle(rowExpandedContentContainerElem).height;
-        //console.log(this.level, rowData.ttExpandedContentHeight, rowExpandedContentContainerElem);
+        // console.log(this.level, rowData.ttExpandedContentHeight, rowExpandedContentContainerElem);
         // this.bodyInnerStyle['height'] should be updated each time row is expanded/collapsed (to show appropriate scrollbar height)
-        //this.bodyInnerStyle['height'] = (parseFloat(this.bodyInnerStyle['height']) + parseFloat(rowData.ttExpandedContentHeight)) + 'px';
+        // this.bodyInnerStyle['height'] = (parseFloat(this.bodyInnerStyle['height']) + parseFloat(rowData.ttExpandedContentHeight)) + 'px';
       } else {
         rowData.ttExpandedContentHeight = '';
       }
@@ -818,7 +827,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   resolveFieldValue(rowData: any, field: any): string {
     if (typeof field === 'string') {
-      let resolvedValue = resolveDeepValue(rowData, field);
+      const resolvedValue = resolveDeepValue(rowData, field);
 
       return isValueValidForView(resolvedValue) ? resolvedValue.toString() : '';
     }
@@ -826,14 +835,18 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     if (Array.isArray(field)) {
       let compoundValue = '';
 
-      field.forEach(k => {
-        if (typeof k !== 'string') return;
+      field.forEach((k) => {
+        if (typeof k !== 'string') {
+          return;
+        }
 
         if (k[0] === '+' && k[k.length - 1] === '+') {
           compoundValue += k.slice(1, -1);
         } else {
-          let resolvedValue = resolveDeepValue(rowData, k);
-          if (isValueValidForView(resolvedValue)) compoundValue += resolvedValue;
+          const resolvedValue = resolveDeepValue(rowData, k);
+          if (isValueValidForView(resolvedValue)) {
+            compoundValue += resolvedValue;
+          }
         }
       });
 
@@ -872,15 +885,17 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         });
       }
 
-      if (this.saveSettings) this.storeMetasMap(true);
+      if (this.saveSettings) {
+        this.storeMetasMap(true);
+      }
     }
 
-    let getCompareResult = (c: ColumnComponent, rowDataA: any, rowDataB: any): number => {
+    const getCompareResult = (c: ColumnComponent, rowDataA: any, rowDataB: any): number => {
       if (c.sortComparator) {
         return c.sortComparator(rowDataA, rowDataB);
       } else {
-        let valA = this.resolveFieldValue(rowDataA, c.field);
-        let valB = this.resolveFieldValue(rowDataB, c.field);
+        const valA = this.resolveFieldValue(rowDataA, c.field);
+        const valB = this.resolveFieldValue(rowDataB, c.field);
 
         return compareValues(valA, valB, c.sortCollator);
       }
@@ -932,7 +947,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     if (this.metas.resizeMode.value === this.ResizeModes.expand) {
       targetedCol.metas.visibility.value = !targetedCol.metas.visibility.value;
 
-      let visibleCols = this.getVisibleCols();
+      const visibleCols = this.getVisibleCols();
       let visibleColsWidthSum = 0;
       visibleCols.forEach((col: ColumnComponent, i: number) => {
         visibleColsWidthSum += parseFloat(col.metas.width.value);
@@ -941,31 +956,31 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
       this.metas.width.value = visibleColsWidthSum + 'px';
     } else if (this.metas.resizeMode.value === this.ResizeModes.fit) {
       if (targetedCol.metas.visibility.value) {
-        let affectedCols = this.getVisibleCols().filter(c => c !== targetedCol); // exclude targeted col
-        let targetedColWidthPct = parseFloat(targetedCol.metas.width.value);
-        let targetedColDividedWithPct = targetedColWidthPct / affectedCols.length;
+        const affectedCols = this.getVisibleCols().filter((c) => c !== targetedCol); // exclude targeted col
+        const targetedColWidthPct = parseFloat(targetedCol.metas.width.value);
+        const targetedColDividedWithPct = targetedColWidthPct / affectedCols.length;
 
         affectedCols.forEach((c: ColumnComponent) => {
-          let colWidthPct = parseFloat(c.metas.width.value);
-          let colNewWidthPct = colWidthPct + targetedColDividedWithPct;
+          const colWidthPct = parseFloat(c.metas.width.value);
+          const colNewWidthPct = colWidthPct + targetedColDividedWithPct;
 
           c.metas.width.value = colNewWidthPct + '%';
         });
       } else {
-        let contentInnerElem = this.contentInnerRef.nativeElement;
-        let contentInnerElemWidth = parseFloat(getComputedStyle(contentInnerElem).width);
-        let targetedColWidthPct = parseFloat(targetedCol.metas.width.value);
+        const contentInnerElem = this.contentInnerRef.nativeElement;
+        const contentInnerElemWidth = parseFloat(getComputedStyle(contentInnerElem).width);
+        const targetedColWidthPct = parseFloat(targetedCol.metas.width.value);
         let targetedColDividedWithPct: number;
         let affectedCols: Array<ColumnComponent>;
 
-        let determineAffectedCols = (cols: Array<ColumnComponent>): void => {
+        const determineAffectedCols = (cols: Array<ColumnComponent>): void => {
           targetedColDividedWithPct = targetedColWidthPct / cols.length;
           affectedCols = [];
 
           for (let i = 0; i < cols.length; ++i) {
-            let colWidthPct = parseFloat(cols[i].metas.width.value);
-            let colNewWidthPct = colWidthPct - targetedColDividedWithPct;
-            let colNewWidthPx = (colNewWidthPct / 100) * contentInnerElemWidth;
+            const colWidthPct = parseFloat(cols[i].metas.width.value);
+            const colNewWidthPct = colWidthPct - targetedColDividedWithPct;
+            const colNewWidthPx = (colNewWidthPct / 100) * contentInnerElemWidth;
 
             if (colNewWidthPx < this.colMinWidth) {
               // re-set affected cols excluding this one
@@ -982,8 +997,8 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
         determineAffectedCols(this.getVisibleCols());
 
         affectedCols.forEach((c: ColumnComponent) => {
-          let colWidthPct = parseFloat(c.metas.width.value);
-          let colNewWidthPct = colWidthPct - targetedColDividedWithPct;
+          const colWidthPct = parseFloat(c.metas.width.value);
+          const colNewWidthPct = colWidthPct - targetedColDividedWithPct;
 
           c.metas.width.value = colNewWidthPct + '%';
         });
@@ -995,25 +1010,33 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
       this.reflectComputedStyleWidths();
     }
 
-    if (this.saveSettings) this.storeMetasMap(true);
+    if (this.saveSettings) {
+      this.storeMetasMap(true);
+    }
   }
 
   shouldEmbedColResizer(col: ColumnComponent, colIndex: number, resizerSide: string): boolean {
-    if (!this.ResizeModes[this.metas.resizeMode.value] || col.expander || !col.metas.visibility.value) return false;
+    if (!this.ResizeModes[this.metas.resizeMode.value] || col.expander || !col.metas.visibility.value) {
+      return false;
+    }
 
     if (resizerSide === 'right') {
-      if (this.metas.resizeMode.value === this.ResizeModes.expand) return true;
+      if (this.metas.resizeMode.value === this.ResizeModes.expand) {
+        return true;
+      }
 
-      let isLastVisibleColumn = !this.cols.find((c: ColumnComponent, i: number) => {
+      const isLastVisibleColumn = !this.cols.find((c: ColumnComponent, i: number) => {
         return c.metas.visibility.value && i > colIndex;
       });
 
       return !isLastVisibleColumn;
     } else {
-      let expanderColExists = !!this.expanderCol;
-      if (expanderColExists) return true;
+      const expanderColExists = !!this.expanderCol;
+      if (expanderColExists) {
+        return true;
+      }
 
-      let isFirstVisibleColumn = !this.cols.find((c: ColumnComponent, i: number) => {
+      const isFirstVisibleColumn = !this.cols.find((c: ColumnComponent, i: number) => {
         return c.metas.visibility.value && i < colIndex;
       });
 
@@ -1022,23 +1045,23 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   handleColResizing(event: any, colIndex: number, resizerSide: string): void {
-    let colResizerElem = event.target;
-    //if (colResizerElem.setCapture) colResizerElem.setCapture();
+    const colResizerElem = event.target;
+    // if (colResizerElem.setCapture) colResizerElem.setCapture();
     this.appendDragCoverElem('col-resize');
 
-    let mouseInitialClientX = event.clientX;
-    let documentElem = document.documentElement;
+    const mouseInitialClientX = event.clientX;
+    const documentElem = document.documentElement;
 
-    let headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
-    let visibleCols = this.getVisibleCols();
+    const headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
+    const visibleCols = this.getVisibleCols();
 
-    let contentInnerElem = this.contentInnerRef.nativeElement;
-    let contentInnerElemInitialWidth = parseFloat(getComputedStyle(contentInnerElem).width);
+    const contentInnerElem = this.contentInnerRef.nativeElement;
+    const contentInnerElemInitialWidth = parseFloat(getComputedStyle(contentInnerElem).width);
 
     let targetedColumn, targetedColumnIdx, targetedHeadCellElem, targetedHeadCellElemInitialWidth;
     let affectedColumn, affectedColumnIdx, affectedHeadCellElem, affectedHeadCellElemInitialWidth;
 
-    let setTargetedColumn = (): void => {
+    const setTargetedColumn = (): void => {
       if (resizerSide === 'right') {
         targetedColumn = this.cols[colIndex];
         targetedColumnIdx = colIndex;
@@ -1056,7 +1079,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
       targetedHeadCellElemInitialWidth = parseFloat(getComputedStyle(targetedHeadCellElem).width);
     };
 
-    let setAffectedColumn = (): void => {
+    const setAffectedColumn = (): void => {
       affectedColumn = this.cols.find(
         (c: ColumnComponent, i: number) => i > targetedColumnIdx && c.metas.visibility.value
       );
@@ -1067,24 +1090,32 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
     setTargetedColumn();
 
-    if (this.metas.resizeMode.value === this.ResizeModes.fit) setAffectedColumn();
+    if (this.metas.resizeMode.value === this.ResizeModes.fit) {
+      setAffectedColumn();
+    }
 
-    let globalMouseupListener = this._renderer.listen(documentElem, 'mouseup', e => {
-      if (globalMousemoveListener) globalMousemoveListener(); // unbind
-      if (globalMouseupListener) globalMouseupListener(); // unbind
+    const globalMouseupListener = this._renderer.listen(documentElem, 'mouseup', (e) => {
+      if (globalMousemoveListener) {
+        globalMousemoveListener(); // unbind
+      }
+      if (globalMouseupListener) {
+        globalMouseupListener(); // unbind
+      }
       //if (colResizerElem.releaseCapture) colResizerElem.releaseCapture();
       this.removeDragCoverElem();
 
-      if (this.saveSettings) this.storeMetasMap(true);
+      if (this.saveSettings) {
+        this.storeMetasMap(true);
+      }
     });
 
     let globalMousemoveListener;
     this._ngZone.runOutsideAngular(() => {
-      globalMousemoveListener = this._renderer.listen(documentElem, 'mousemove', e => {
-        let mouseClientX = e.clientX;
-        let pxDelta = mouseClientX - mouseInitialClientX;
+      globalMousemoveListener = this._renderer.listen(documentElem, 'mousemove', (e) => {
+        const mouseClientX = e.clientX;
+        const pxDelta = mouseClientX - mouseInitialClientX;
 
-        let targetedHeadCellElemNewWidth = targetedHeadCellElemInitialWidth + pxDelta;
+        const targetedHeadCellElemNewWidth = targetedHeadCellElemInitialWidth + pxDelta;
 
         if (this.metas.resizeMode.value === this.ResizeModes.expand) {
           if (targetedHeadCellElemNewWidth >= this.colMinWidth) {
@@ -1094,7 +1125,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
             this._changeDetectorRef.detectChanges();
           }
         } else {
-          let affectedHeadCellElemNewWidth = affectedHeadCellElemInitialWidth - pxDelta;
+          const affectedHeadCellElemNewWidth = affectedHeadCellElemInitialWidth - pxDelta;
 
           if (targetedHeadCellElemNewWidth >= this.colMinWidth && affectedHeadCellElemNewWidth >= this.colMinWidth) {
             targetedColumn.metas.width.value =
@@ -1110,23 +1141,25 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   handleColDragging(event: any, draggedColumn: ColumnComponent): void {
-    if (!this.reorderable || !draggedColumn.isReorderable()) return;
+    if (!this.reorderable || !draggedColumn.isReorderable()) {
+      return;
+    }
 
-    let documentElem = document.documentElement;
-    let mouseInitialClientX = event.clientX;
+    const documentElem = document.documentElement;
+    const mouseInitialClientX = event.clientX;
     let mouseStartClientX = mouseInitialClientX;
 
-    let visibleCols = this.getVisibleCols();
-    let draggedCol = draggedColumn;
+    const visibleCols = this.getVisibleCols();
+    const draggedCol = draggedColumn;
     let draggedColIdx = this.cols.indexOf(draggedColumn);
     let draggedColVisibleIdx = visibleCols.indexOf(draggedCol);
 
     let headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
-    let draggedCellElem = headCellNodeList[draggedColVisibleIdx];
-    let draggedCellElemWidth = parseFloat(getComputedStyle(draggedCellElem).width);
-    let draggedCellElemViewportOffset = draggedCellElem.getBoundingClientRect();
+    const draggedCellElem = headCellNodeList[draggedColVisibleIdx];
+    const draggedCellElemWidth = parseFloat(getComputedStyle(draggedCellElem).width);
+    const draggedCellElemViewportOffset = draggedCellElem.getBoundingClientRect();
 
-    let draggedCellElemClone = draggedCellElem.cloneNode(true);
+    const draggedCellElemClone = draggedCellElem.cloneNode(true);
     draggedCellElemClone.className += ' cloned';
     draggedCellElemClone.style['top'] = draggedCellElemViewportOffset.top + 'px';
     draggedCellElemClone.style['left'] = draggedCellElemViewportOffset.left + 'px';
@@ -1135,40 +1168,46 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
     draggedCol.dragged = true;
     this.appendDragCoverElem('move');
     draggedCellElem.parentNode.appendChild(draggedCellElemClone);
-    //draggedCellElem.parentNode.insertBefore(draggedCellElemClone, draggedCellElem.parentNode.children[0]);
+    // draggedCellElem.parentNode.insertBefore(draggedCellElemClone, draggedCellElem.parentNode.children[0]);
 
-    let globalMouseupListener = this._renderer.listen(documentElem, 'mouseup', e => {
-      if (globalMousemoveListener) globalMousemoveListener(); // unbind
-      if (globalMouseupListener) globalMouseupListener(); // unbind
+    const globalMouseupListener = this._renderer.listen(documentElem, 'mouseup', (e) => {
+      if (globalMousemoveListener) {
+        globalMousemoveListener(); // unbind
+      }
+      if (globalMouseupListener) {
+        globalMouseupListener(); // unbind
+      }
 
       draggedCol.dragged = false;
       this.removeDragCoverElem();
       draggedCellElem.parentNode.removeChild(draggedCellElemClone);
 
-      if (this.saveSettings) this.storeMetasMap(true);
+      if (this.saveSettings) {
+        this.storeMetasMap(true);
+      }
     });
 
     let globalMousemoveListener;
     this._ngZone.runOutsideAngular(() => {
-      globalMousemoveListener = this._renderer.listen(documentElem, 'mousemove', e => {
-        let pxDeltaX = e.clientX - mouseInitialClientX;
+      globalMousemoveListener = this._renderer.listen(documentElem, 'mousemove', (e) => {
+        const pxDeltaX = e.clientX - mouseInitialClientX;
 
         draggedCellElemClone.style['left'] = draggedCellElemViewportOffset.left + pxDeltaX + 'px';
 
-        let isDraggedColMovedRight = e.clientX - mouseStartClientX > 0;
+        const isDraggedColMovedRight = e.clientX - mouseStartClientX > 0;
 
-        let affectedColVisibleIdx = isDraggedColMovedRight ? draggedColVisibleIdx + 1 : draggedColVisibleIdx - 1;
-        let affectedCol = this.getVisibleCols()[affectedColVisibleIdx];
-        let affectedColIdx = this.cols.indexOf(affectedCol);
+        const affectedColVisibleIdx = isDraggedColMovedRight ? draggedColVisibleIdx + 1 : draggedColVisibleIdx - 1;
+        const affectedCol = this.getVisibleCols()[affectedColVisibleIdx];
+        const affectedColIdx = this.cols.indexOf(affectedCol);
 
         headCellNodeList = this.headRef.nativeElement.querySelectorAll('.cell');
-        let affectedCellElem = headCellNodeList[affectedColVisibleIdx];
+        const affectedCellElem = headCellNodeList[affectedColVisibleIdx];
 
         if (affectedCellElem && affectedCol && affectedCol.isReorderable()) {
-          let affectedCellElemWidth = parseFloat(getComputedStyle(affectedCellElem).width);
-          let affectedCellElemOffsetLeft = affectedCellElem.getBoundingClientRect().left;
+          const affectedCellElemWidth = parseFloat(getComputedStyle(affectedCellElem).width);
+          const affectedCellElemOffsetLeft = affectedCellElem.getBoundingClientRect().left;
 
-          let shouldSwapCols = isDraggedColMovedRight
+          const shouldSwapCols = isDraggedColMovedRight
             ? e.clientX >= affectedCellElemOffsetLeft + affectedCellElemWidth / 2
             : e.clientX <= affectedCellElemOffsetLeft + affectedCellElemWidth / 2;
 
@@ -1191,7 +1230,7 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   appendDragCoverElem(cursorStyle: string = ''): Element {
-    let wholeContentCoverElem = document.createElement('div');
+    const wholeContentCoverElem = document.createElement('div');
     wholeContentCoverElem.className = 'flx-whole-content-cover';
     wholeContentCoverElem.style['cursor'] = cursorStyle;
 
@@ -1201,9 +1240,11 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   removeDragCoverElem(): void {
-    let wholeContentCoverElem = document.querySelector('.flx-whole-content-cover');
+    const wholeContentCoverElem = document.querySelector('.flx-whole-content-cover');
 
-    if (wholeContentCoverElem) document.body.removeChild(wholeContentCoverElem);
+    if (wholeContentCoverElem) {
+      document.body.removeChild(wholeContentCoverElem);
+    }
   }
 
   onBodyWidthChange(width: string) {
@@ -1214,12 +1255,14 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   getScrollbarWidthOffset(scrollableElem: any): string {
     // calculates scrollbar's width for given element, returns '0px' if scrollbar isn't visible...
     // TODO: move to dom-utils..
-    let offsetWidth = -(scrollableElem.offsetWidth - scrollableElem.clientWidth) + 'px';
+    const offsetWidth = -(scrollableElem.offsetWidth - scrollableElem.clientWidth) + 'px';
     return offsetWidth;
   }
 
   stopPropagation(event: any): void {
-    if (event && event.stopPropagation) event.stopPropagation();
+    if (event && event.stopPropagation) {
+      event.stopPropagation();
+    }
   }
 
   bindFnContext(fn: Function): Function {
@@ -1227,7 +1270,9 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   getStoredMetasMap(async?: boolean): Promise<any> | any {
-    if (!this.saveSettings || !this.settingsStorageKey) return null;
+    if (!this.saveSettings || !this.settingsStorageKey) {
+      return null;
+    }
 
     return async
       ? this._storageService.getAsync(this.settingsStorageKey)
@@ -1236,14 +1281,14 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   storeMetasMap(async?: boolean): Promise<any> | any {
     // TODO: filter storable metas prior storing..
-    let colsMetasMap = {};
+    const colsMetasMap = {};
     this.cols.forEach((col: ColumnComponent) => {
       colsMetasMap[col.id] = col.metas;
     });
 
-    let metasMapToStore = {
+    const metasMapToStore = {
       grid: this.metas,
-      columns: colsMetasMap
+      columns: colsMetasMap,
     };
 
     return async
@@ -1258,49 +1303,56 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   }
 
   checkInputParamsValidity(): void {
-    if (this.parentRef && !(this.parentRef instanceof TreetableComponent))
-      throw new Error("Invalid parameter: 'parentRef'.");
+    if (this.parentRef && !(this.parentRef instanceof TreetableComponent)) {
+      throw new Error(`Invalid parameter: 'parentRef'.`);
+    }
 
-    if (this.saveSettings && (!this.settingsStorageKey || typeof this.settingsStorageKey !== 'string'))
-      throw new Error("Mandatory parameter is missing or invalid: 'settingsStorageKey'.");
+    if (this.saveSettings && (!this.settingsStorageKey || typeof this.settingsStorageKey !== 'string')) {
+      throw new Error(`Mandatory parameter is missing or invalid: 'settingsStorageKey'.`);
+    }
 
     if (
       this.bodyStyle &&
       this.bodyStyle['max-height'] &&
       (typeof this.bodyStyle['max-height'] !== 'string' ||
         this.bodyStyle['max-height'].indexOf('px') === -1 ||
-        !parseInt(this.bodyStyle['max-height']))
-    )
+        !parseInt(this.bodyStyle['max-height'], 10))
+    ) {
       throw new Error(
-        "Invalid value for: 'max-height' (bodyStyle). Expecting positive number as string representing the value in px."
+        `Invalid value for: 'max-height' (bodyStyle). Expecting positive number as string representing the value in px.`
       );
+    }
 
     if (
       this.bodyStyle &&
       this.bodyStyle['height'] &&
       (typeof this.bodyStyle['height'] !== 'string' ||
         this.bodyStyle['height'].indexOf('px') === -1 ||
-        !parseInt(this.bodyStyle['height']))
-    )
+        !parseInt(this.bodyStyle['height'], 10))
+    ) {
       throw new Error(
-        "Invalid value for: 'height' (bodyStyle). Expecting positive number as string representing the value in px."
+        `Invalid value for: 'height' (bodyStyle). Expecting positive number as string representing the value in px.`
       );
+    }
 
     if (
       this.rowStyle &&
       this.rowStyle['height'] &&
       (typeof this.rowStyle['height'] !== 'string' ||
         this.rowStyle['height'].indexOf('px') === -1 ||
-        !parseInt(this.rowStyle['height']))
-    )
+        !parseInt(this.rowStyle['height'], 10))
+    ) {
       throw new Error(
-        "Invalid value for: 'height' (rowStyle). Expecting positive number as string representing the value in px."
+        `Invalid value for: 'height' (rowStyle). Expecting positive number as string representing the value in px.`
       );
+    }
 
-    if (this.virtualScroll && !this.rowStyle['height'])
-      throw new Error("Virtual scroll requires row's height to be provided. See: -docs-.");
+    if (this.virtualScroll && !this.rowStyle['height']) {
+      throw new Error(`Virtual scroll requires row's height to be provided. See: -docs-.`);
+    }
 
-    if (this.virtualScroll && !this.isBodyHeightProvided())
-      throw new Error("Virtual scroll requires body's height to be provided. See: -docs-.");
+    if (this.virtualScroll && !this.isBodyHeightProvided()) {
+      throw new Error(`Virtual scroll requires body's height to be provided. See: -docs-.`);
+    }
   }
 }

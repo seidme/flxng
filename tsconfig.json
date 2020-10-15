@@ -26,12 +26,6 @@
       "@flxng/common/*": [
         "app/packages/common/*"
       ],
-      "@flxng/treetable": [
-        "app/packages/treetable"
-      ],
-      "@flxng/treetable/*": [
-        "app/packages/treetable/*"
-      ],
       "@flxng/code-show": [
         "../projects/code-show/src/lib"
       ],
@@ -55,6 +49,12 @@
       ],
       "@flxng/paginator/*": [
         "../projects/paginator/src/lib/*"
+      ],
+      "@flxng/treetable": [
+        "../projects/treetable/src/lib"
+      ],
+      "@flxng/treetable/*": [
+        "../projects/treetable/src/lib/*"
       ]
     }
   },

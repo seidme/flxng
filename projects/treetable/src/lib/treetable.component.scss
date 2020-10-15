@@ -1,13 +1,11 @@
 // @import "@flxng/common/src/styles/utils.scss";
-@import '../../common/src/styles/utils.scss'; // https://stackoverflow.com/questions/41504726/angular-cli-sass
+// @import '../../common/src/styles/utils.scss'; // https://stackoverflow.com/questions/41504726/angular-cli-sass
 
 :host {
   * {
-    //font-family: $omnesRegular;
     box-sizing: border-box;
   }
 
-  //.flx-treetable {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -65,10 +63,6 @@
               &:last-child {
                 box-shadow: inset 1px 0px 0px 0px #dcdcdc, inset -1px 0px 0px 0px #dcdcdc;
               }
-
-              // &:hover {
-              //     box-shadow: inset 1px 0px 0px 0px #e9ecf5, inset -1px 0px 0px 0px #e9ecf5;
-              // }
 
               &.cloned {
                 position: fixed;
@@ -249,20 +243,6 @@
           }
 
           .row-expanded-content-container {
-            // position: relative;
-            // .content {
-            //     .content-inner {
-            //         .body {
-            //             .body-inner {
-            //                 .row {
-            //                     .cell {
-            //                         background-color: #f5f6fa;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
           }
         }
 
@@ -283,9 +263,61 @@
     flex: 0 0 auto;
     position: relative;
   }
-  //}
 
   .material-icons {
     font-family: 'Material Icons';
+  }
+}
+
+.flx-no-select {
+  user-select: none;
+}
+
+.flx-clickable {
+  cursor: pointer;
+}
+
+.flx-css-icon-container {
+  position: relative;
+  height: 1.3rem;
+  min-height: 1.3rem;
+  width: 1.3rem;
+  min-width: 1.3rem;
+  background-color: transparent;
+}
+
+.flx-chevron {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  //color: #6b6b6b;
+  opacity: 0.6;
+
+  &.flx-chevron-circle {
+    border-radius: 50%;
+    border: 1px solid #000000;
+  }
+
+  &:before {
+    height: 0.5em;
+    width: 0.5em;
+    border-width: 0.25em 0.25em 0 0;
+    border-style: solid;
+    content: '';
+    display: inline-block;
+    position: relative;
+    top: 0.4em;
+    left: 0.4em;
+    vertical-align: top;
+    transform: rotate(45deg);
+
+    transition-property: transform;
+    transition-duration: 0.2s;
+  }
+
+  &.flx-chevron-down {
+    &:before {
+      transform: rotate(135deg);
+    }
   }
 }
