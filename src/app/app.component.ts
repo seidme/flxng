@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, RoutesRecognized, NavigationEnd } from '@angular/router';
 
+declare const gtag: Function;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   currentUrl = '';
@@ -20,11 +22,15 @@ export class AppComponent implements OnInit {
     // this.showHeaderAndSidebar =
     //   window.location.hostname === 'localhost' || window.location.hostname === 'flxng.codeeve.com';
 
-    this._router.events.subscribe(event => {
+    this._router.events.subscribe((event) => {
       /* Event classes: NavigationStart, RoutesRecognized, NavigationEnd, NavigationCancel and NavigationError */
 
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.urlAfterRedirects;
+
+        gtag('config', 'UA-158060618-2', {
+          page_path: event.urlAfterRedirects,
+        });
       }
     });
   }
