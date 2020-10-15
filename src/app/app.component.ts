@@ -10,7 +10,6 @@ declare const gtag: Function;
 })
 export class AppComponent implements OnInit {
   currentUrl = '';
-  // showHeaderAndSidebar = false;
 
   constructor(private _router: Router, private _activatedRoute: ActivatedRoute) {}
 
@@ -23,8 +22,6 @@ export class AppComponent implements OnInit {
     //   window.location.hostname === 'localhost' || window.location.hostname === 'flxng.codeeve.com';
 
     this._router.events.subscribe((event) => {
-      /* Event classes: NavigationStart, RoutesRecognized, NavigationEnd, NavigationCancel and NavigationError */
-
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.urlAfterRedirects;
 

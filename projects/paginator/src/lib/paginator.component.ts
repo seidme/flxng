@@ -24,7 +24,6 @@ import { mapToIterable } from '@flxng/common/src/utils';
   styleUrls: ['./paginator.component.scss'],
 })
 export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
-  // constants
   readonly templateTypes: any = {
     //menuHead: 'menuHead'
   };

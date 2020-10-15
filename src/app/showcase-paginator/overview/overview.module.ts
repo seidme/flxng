@@ -10,6 +10,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { OverviewComponent } from './overview.component';
 import { OverviewAComponent } from './overview-a/overview-a.component';
+import { OverviewBComponent } from './overview-b/overview-b.component';
 // import { OverviewAComponent } from './overview-a/overview-a.component';
 // import { OverviewBComponent } from './overview-b/overview-b.component';
 
@@ -17,6 +18,7 @@ import { OverviewAComponent } from './overview-a/overview-a.component';
   declarations: [
     OverviewComponent,
     OverviewAComponent,
+    OverviewBComponent,
     // OverviewAComponent,
     // OverviewBComponent,
   ],
