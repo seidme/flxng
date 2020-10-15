@@ -1,0 +1,22 @@
+:host {
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    &.extra-gap-top {
+      margin-top: 2rem;
+    }
+
+    .row-item {
+      flex: 1 1 40%;
+      margin-top: 2rem;
+      margin-right: 6rem;
+
+      p {
+        width: 90%;
+        min-height: 60px;
+      }
+    }
+  }
+}
