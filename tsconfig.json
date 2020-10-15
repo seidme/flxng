@@ -21,10 +21,10 @@
     ],
     "paths": {
       "@flxng/common": [
-        "app/packages/common"
+        "../projects/common/src/lib"
       ],
       "@flxng/common/*": [
-        "app/packages/common/*"
+        "../projects/common/src/lib"
       ],
       "@flxng/code-show": [
         "../projects/code-show/src/lib"
@@ -55,7 +55,7 @@
       ],
       "@flxng/treetable/*": [
         "../projects/treetable/src/lib/*"
-      ]
+      ],
     }
   },
   "angularCompilerOptions": {
