@@ -15,8 +15,4 @@ export class OverviewAComponent implements OnInit {
   onPageChange(newPage: { [key: string]: number }): void {
     this.newPage = newPage;
   }
-
-  onItemsPerPageValueChange(newItemsPerPageValue): void {
-    console.log('newItemsPerPageValue', newItemsPerPageValue);
-  }
 }

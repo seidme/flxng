@@ -19,17 +19,14 @@
     <strong class="dots">...</strong>
   </ng-template>
 
-  <ng-template ngFor
-               let-pl
-               [ngForOf]="visiblePageLinks">
-    <button type="button"
-            class="page-link"
-            [class.current]="pl === currentPage"
-            (click)="navigateToPage(pl, $event)"
-            [disabled]="pl === currentPage">
-      <span>{{pl}}</span>
-    </button>
-  </ng-template>
+  <button *ngFor="let pl of visiblePageLinks"
+          type="button"
+          class="page-link"
+          [class.current]="pl === currentPage"
+          (click)="navigateToPage(pl, $event)"
+          [disabled]="pl === currentPage">
+    <span>{{pl}}</span>
+  </button>
 
   <ng-template [ngIf]="shouldShowPaginatorDots('right')">
     <strong class="dots">...</strong>
@@ -52,20 +49,19 @@
   </button>
 </div>
 
-<div class="flx-paginator-settings">
-  <select #itemsPerPageSelectElemRef>
+<div class="flx-paginator-settings"
+     *ngIf="itemsPerPageOptions">
+  <select (change)="itemsPerPageValueChange($event)">
     <ng-template ngFor
                  let-option
                  [ngForOf]="itemsPerPageOptions">
-      <ng-template [ngIf]="option === itemsPerPage">
-        <option [value]="option"
-                selected="selected">{{option}}</option>
-      </ng-template>
-      <ng-template [ngIf]="option !== itemsPerPage">
-        <option [value]="option">{{option}}</option>
-      </ng-template>
+      <option *ngIf="option === itemsPerPage"
+              [value]="option"
+              selected="selected">{{option}}</option>
+      <option *ngIf="option !== itemsPerPage"
+              [value]="option">{{option}}</option>
     </ng-template>
   </select>
 
-  <span>records per page</span>
+  <!-- <span>records per page</span> -->
 </div>

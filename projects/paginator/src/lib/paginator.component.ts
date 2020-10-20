@@ -1,6 +1,5 @@
 import {
   Component,
-  ViewChild,
   ContentChildren,
   QueryList,
   Input,
@@ -10,7 +9,6 @@ import {
   OnInit,
   OnChanges,
   AfterContentInit,
-  AfterViewInit,
   SimpleChanges,
   Renderer2,
 } from '@angular/core';
@@ -23,41 +21,37 @@ import { mapToIterable } from '@flxng/common/src/utils';
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss'],
 })
-export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
+export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
   readonly templateTypes: any = {
     //menuHead: 'menuHead'
   };
 
   @Input() itemsCount = 0;
-  @Input() pageLinksSize = 5;
-  @Input() itemsPerPage = 5;
-  @Input() itemsPerPageOptions = [5, 10, 20, 50, 100];
+  @Input() pageLinksSize = 7;
+  @Input() itemsPerPage = 10;
+  @Input() itemsPerPageOptions?: number[]; // e.g: [5, 10, 20, 50, 100]
+  @Input() currentPage = 1;
   @Input() templateRefs: any = {};
 
   @Output() onPageChange = new EventEmitter<any>();
   @Output() onItemsPerPageValueChange = new EventEmitter<number>();
 
-  @ViewChild('itemsPerPageSelectElemRef', { static: true }) itemsPerPageSelectElemRef: ElementRef;
-
   @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
 
   pageLinks = [1];
   visiblePageLinks = [1];
-  currentPage = 1;
 
-  constructor(private _renderer: Renderer2) {}
+  constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.init(this.currentPage);
+  }
 
   ngAfterContentInit(): void {
     this.collectTemplateRefs();
   }
 
-  ngAfterViewInit(): void {
-    this.listenItemsPerPageSelectEvents();
-  }
-
-  init(): void {
+  init(page = 1): void {
     this.pageLinks = [];
 
     const pageCount = this.getPageCount();
@@ -66,7 +60,7 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
       this.pageLinks.push(i);
     }
 
-    this.navigateToPage(1);
+    this.navigateToPage(page);
   }
 
   getPageCount(): number {
@@ -78,8 +72,9 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
       event.stopPropagation();
     }
 
-    if (!this.pageLinks.find((pl) => pl === p)) {
-      return;
+    const pageExists = this.pageLinks.find((pl) => pl === p);
+    if (!pageExists) {
+      p = 1;
     }
 
     this.currentPage = p;
@@ -95,6 +90,7 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
       take: take,
       startIndex: startIndex,
       endIndex: endIndex,
+      currentPage: this.currentPage,
     });
   }
 
@@ -122,7 +118,7 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
       }
     }
 
-    this.visiblePageLinks.sort((a: number, b: number) => a - b);
+    this.visiblePageLinks.sort((plA: number, plB: number) => plA - plB);
 
     const lowestVisiblePl = this.visiblePageLinks[0];
     const plsPriorLowestVisiblePlExist = this.pageLinks.indexOf(lowestVisiblePl) > 0;
@@ -151,12 +147,10 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
     }
   }
 
-  listenItemsPerPageSelectEvents(): void {
-    this._renderer.listen(this.itemsPerPageSelectElemRef.nativeElement, 'change', (e) => {
-      this.itemsPerPage = parseInt(e.target.value, 10);
-      this.onItemsPerPageValueChange.emit(this.itemsPerPage);
-      this.init();
-    });
+  itemsPerPageValueChange(event: any): void {
+    this.itemsPerPage = parseInt(event.target.value, 10);
+    this.onItemsPerPageValueChange.emit(this.itemsPerPage);
+    this.init(1);
   }
 
   bindFnContext(fn: Function): Function {
@@ -182,18 +176,39 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['itemsCount']) {
+      const firstChange = changes['itemsCount'].firstChange;
       const value = changes['itemsCount'].currentValue;
+
       if (typeof value !== 'number' || this.isExpNaN(value) || value < 0) {
         console.warn('`itemsCount` input parameter should be positive number.', `itemsCount: ${value}`);
         this.itemsCount = 0;
       }
 
-      this.init();
+      if (!firstChange) {
+        this.init(1);
+      }
     }
 
-    // TODO: this property should not change after initially set!?
+    if (changes['currentPage']) {
+      const firstChange = changes['currentPage'].firstChange;
+      const value = changes['currentPage'].currentValue;
+
+      if (typeof value !== 'number' || this.isExpNaN(value) || value < 1) {
+        console.warn(
+          '`currentPage` input parameter should be positive number greater than 0.',
+          `currentPage: ${value}`
+        );
+        this.currentPage = 1;
+      }
+
+      if (!firstChange) {
+        this.navigateToPage(this.currentPage);
+      }
+    }
+
     if (changes['pageLinksSize']) {
       const value = changes['pageLinksSize'].currentValue;
+
       if (typeof value !== 'number' || this.isExpNaN(value) || value < 3) {
         console.warn(
           '`pageLinksSize` input parameter should be positive number greater then 2.',
@@ -202,10 +217,10 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
       }
     }
 
-    // TODO: this property should not change after initially set!?
     if (changes['itemsPerPageOptions']) {
       const value = changes['itemsPerPageOptions'].currentValue;
-      if (!Array.isArray(value) || !value.length) {
+
+      if (value && (!Array.isArray(value) || !value.length)) {
         console.warn(
           '`itemsPerPageOptions` input parameter should be an array of positive numbers.',
           `itemsPerPageOptions: ${value}`
@@ -213,12 +228,13 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit, 
       }
     }
 
-    // TODO: this property should not change after initially set!?
     if (changes['itemsPerPage']) {
       const value = changes['itemsPerPage'].currentValue;
       const isItemsPerPageValueValid = typeof value === 'number' && value > 1;
       const isItemsPerPageOptionsValueValid =
-        Array.isArray(this.itemsPerPageOptions) && this.itemsPerPageOptions.indexOf(value) > -1;
+        !this.itemsPerPageOptions ||
+        (Array.isArray(this.itemsPerPageOptions) && this.itemsPerPageOptions.indexOf(value) > -1);
+
       if (!isItemsPerPageValueValid || !isItemsPerPageOptionsValueValid) {
         console.warn(
           '`itemsPerPage` input parameter should be positive number contained within the `itemsPerPageOptions`.',

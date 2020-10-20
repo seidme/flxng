@@ -1,8 +1,9 @@
-<pre>{{newPage | json}}</pre>
+<pre class="flx-code">{{newPage | json}}</pre>
 
 <flx-paginator [itemsCount]="203"
                [pageLinksSize]="5"
                [itemsPerPage]="20"
-               [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500]"
+               [itemsPerPageOptions]="[5, 10, 20, 50, 100]"
+               [currentPage]="2"
                (onPageChange)="onPageChange($event)"
                (onItemsPerPageValueChange)="onItemsPerPageValueChange($event)"></flx-paginator>
