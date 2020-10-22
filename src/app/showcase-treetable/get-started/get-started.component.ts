@@ -3,9 +3,9 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ShowcaseTreetableService, Log } from '../showcase-treetable.service';
 
 @Component({
-  selector: '',
+  selector: 'app-get-started',
   templateUrl: './get-started.component.html',
-  styleUrls: ['./get-started.component.scss']
+  styleUrls: ['./get-started.component.scss'],
 })
 export class GetStartedComponent implements OnInit, AfterViewInit {
   logs: Log[];

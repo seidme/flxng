@@ -11,12 +11,10 @@ import { SvgComponent } from './components/svg/svg.component';
 import { ExpandableComponent } from './components/expandable/expandable.component';
 import { ChevronComponent } from './components/chevron/chevron.component';
 import { AccordionComponent } from './components/accordion/accordion.component';
+import { PackageSetupDocsComponent } from './components/package-setup-docs/package-setup-docs.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FlxngCommonModule
-  ],
+  imports: [CommonModule, FlxngCommonModule],
   exports: [
     MenuComponent,
     HamburgerComponent,
@@ -25,8 +23,9 @@ import { AccordionComponent } from './components/accordion/accordion.component';
     SvgComponent,
     ExpandableComponent,
     ChevronComponent,
-    AccordionComponent
-],
+    AccordionComponent,
+    PackageSetupDocsComponent,
+  ],
   declarations: [
     MenuComponent,
     HamburgerComponent,
@@ -35,9 +34,9 @@ import { AccordionComponent } from './components/accordion/accordion.component';
     SvgComponent,
     ExpandableComponent,
     ChevronComponent,
-    AccordionComponent
+    AccordionComponent,
+    PackageSetupDocsComponent,
   ],
-  providers: [
-  ]
+  providers: [],
 })
-export class SharedModule { }
+export class SharedModule {}

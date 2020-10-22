@@ -36,7 +36,7 @@ export class LoaderService {
 
   getStylesAsString(): string {
     return `
-      [flxLoader] {
+      [flxLoader], [ng-reflect-flx-loader] {
         position: relative;
       }
 

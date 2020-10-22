@@ -119,3 +119,41 @@ button {
     }
   }
 }
+
+.flx-docs-table {
+  border-collapse: collapse;
+  min-width: 60%;
+  color: #24292e;
+  font-size: 14px;
+
+  th,
+  td {
+    border: 1px solid #dfe2e5;
+  }
+
+  th {
+    padding: 1rem;
+  }
+
+  td {
+    padding: 0.6rem;
+  }
+}
+
+.flx-code {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  word-spacing: 2px;
+
+  &.flx-code-bash {
+    &:before {
+      content: '$';
+      margin-right: 0.4rem;
+    }
+  }
+}
