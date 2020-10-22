@@ -1,0 +1,26 @@
+{
+  "name": "@flxng/treetable",
+  "version": "1.1.8",
+  "description": "Treetable component for Angular",
+  "author": "seidme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seidme/flxng"
+  },
+  "homepage": "",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "treetable",
+    "datatable",
+    "component"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14",
+    "@flxng/common": "^1.0.0",
+    "@flxng/paginator": "^1.0.0"
+  }
+}

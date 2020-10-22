@@ -1,25 +1,34 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
- import { ShowcaseDatatableModule } from './showcase-datatable/showcase-datatable.module';
+import { SharedModule } from './shared/shared.module';
+import { ShowcaseModule } from './showcase/showcase.module';
+import { ShowcaseTreetableModule } from './showcase-treetable/showcase-treetable.module';
+import { ShowcaseCircleTimerModule } from './showcase-circle-timer/showcase-circle-timer.module';
+import { ShowcaseLoaderModule } from './showcase-loader/showcase-loader.module';
+import { ShowcasePaginatorModule } from './showcase-paginator/showcase-paginator.module';
 
 import { AppComponent } from './app.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 import { routes } from './app-routes.const';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
-    HttpModule,
+    HttpClientModule,
     BrowserModule,
-    RouterModule.forRoot(routes, {useHash: true}),
-    ShowcaseDatatableModule
+    RouterModule.forRoot(routes, { useHash: true }),
+    SharedModule,
+    ShowcaseModule,
+    ShowcaseTreetableModule,
+    ShowcaseCircleTimerModule,
+    ShowcaseLoaderModule,
+    ShowcasePaginatorModule,
   ],
+  declarations: [AppComponent, NavigationComponent],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,0 +1,14 @@
+{
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "editor.rulers": [120],
+  // "prettier.printWidth": 120,
+  // "prettier.tabWidth": 2,
+  // "prettier.proseWrap": "never",
+  // "prettier.singleQuote": true,
+  // "prettier.disableLanguages": [
+  //   "html"
+  // ],
+  "html.format.wrapAttributes": "force-aligned",
+  "typescript.surveys.enabled": false
+}

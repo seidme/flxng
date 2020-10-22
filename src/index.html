@@ -1,15 +1,42 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async
+          src="https://www.googletagmanager.com/gtag/js?id=UA-158060618-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    // gtag('config', 'UA-158060618-2'); // Moved to app.component.ts
+  </script>
+
+
   <meta charset="utf-8">
   <title>Flxng</title>
   <base href="/">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <link rel="icon"
+        type="image/x-icon"
+        href="favicon.ico">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script> -->
+
+  <!-- https://highlightjs.org/download/ -->
+  <!-- For light theme put 'vs.min.css' instead of 'vs2015.min.css'-->
+  <link rel="stylesheet"
+        href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/vs2015.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
 </head>
+
 <body>
   <app-root>Loading...</app-root>
 </body>
+
 </html>

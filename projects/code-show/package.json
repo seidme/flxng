@@ -1,0 +1,25 @@
+{
+  "name": "@flxng/code-show",
+  "description": "Angular component for highlighting code.",
+  "version": "1.0.2",
+  "author": "seidme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seidme/flxng"
+  },
+  "homepage": "",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "code highlight",
+    "component"
+  ],
+  "peerDependencies": {
+    "@angular/animations": "^8.2.14",
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14",
+    "@angular/http": "^7.2.16"
+  }
+}

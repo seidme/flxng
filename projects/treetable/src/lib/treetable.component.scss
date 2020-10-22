@@ -1,0 +1,323 @@
+// @import "@flxng/common/src/styles/utils.scss";
+// @import '../../common/src/styles/utils.scss'; // https://stackoverflow.com/questions/41504726/angular-cli-sass
+
+:host {
+  * {
+    box-sizing: border-box;
+  }
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+
+  .options {
+    flex: 0 0 auto;
+    position: relative;
+  }
+
+  .content {
+    flex: 1 0 auto;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    &.scrollable-horizontally {
+      overflow-x: auto;
+    }
+
+    .content-inner {
+      flex: 1 0 auto;
+      overflow: hidden;
+      //width: {{ngStyle}};
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+
+      .head {
+        flex: 0 0 40px;
+
+        display: flex;
+        flex-direction: column;
+
+        .head-inner {
+          .row {
+            display: flex;
+            flex-direction: row;
+
+            .cell {
+              flex: 0 0 auto;
+              //width: {{ngStyle}};
+              height: 40px;
+              position: relative;
+              overflow: visible;
+              background-color: #f1f4fe;
+              border-bottom: 1px solid #dcdcdc;
+              border-top: 1px solid #dcdcdc;
+
+              box-shadow: inset 1px 0px 0px 0px #dcdcdc;
+
+              &:last-child {
+                box-shadow: inset 1px 0px 0px 0px #dcdcdc, inset -1px 0px 0px 0px #dcdcdc;
+              }
+
+              &.cloned {
+                position: fixed;
+                opacity: 0.8;
+                z-index: 12;
+                cursor: move;
+              }
+
+              .cell-inner-cover {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #e9ecf5;
+                box-shadow: inset 1px 1px 0px 0px #adadad;
+                z-index: 11;
+
+                &.active {
+                  display: block;
+                }
+              }
+
+              .cell-inner {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 13px;
+
+                height: inherit;
+
+                .col-resizer {
+                  position: absolute;
+                  width: 0.3rem;
+                  height: 100%;
+                  cursor: col-resize;
+                  top: 0;
+
+                  &.left {
+                    left: 0;
+                  }
+                  &.right {
+                    right: 0;
+                  }
+                }
+
+                .col-header {
+                  height: inherit;
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  max-width: calc(100% - 40px);
+                  letter-spacing: 1px;
+                  cursor: default;
+
+                  > span {
+                    opacity: 0.7;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                  }
+                }
+
+                .col-sorter {
+                  position: relative;
+                  display: inline-flex;
+                  cursor: pointer;
+                  width: 20px;
+                  height: 20px;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+
+                  .arrow {
+                    position: relative;
+                    color: #dedede;
+                    background-color: transparent;
+                    cursor: pointer;
+                    line-height: 8px;
+
+                    &.active {
+                      color: #7ae6d1;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .body {
+        overflow-x: hidden;
+        overflow-y: hidden;
+        //overflow-y: overlay; // fixes issue with 'fit' resize mode when scrollbar appears (for webkit broesers only...)
+        //-ms-overflow-style: -ms-autohiding-scrollbar; // does the similar to overflow-y: overlay; for IE..
+
+        &.in-focus {
+          overflow-y: auto;
+          //overflow-y: overlay; // fixes issue with 'fit' resize mode when scrollbar appears (for webkit broesers only...)
+          //-ms-overflow-style: -ms-autohiding-scrollbar; // does the similar to overflow-y: overlay; for IE..
+        }
+
+        //&.root {
+        // default flex-basis to 7rem (needed for scrolling to work properly on all major browsers)
+        //    flex: 1 1 7rem;
+        //}
+
+        //&.nested {
+        flex: 1 1 auto;
+        //max-height: {{ngStyle}};
+        //}
+
+        .body-inner {
+          // width: {{ngStyle}};
+          // height: {{ngStyle}};
+
+          .row {
+            display: flex;
+            flex-direction: row;
+            //height: {{ngStyle}};
+
+            &.expanded {
+              .cell {
+                background-color: #f5f7fe;
+              }
+            }
+
+            &:hover {
+              .cell {
+                background-color: #e9ecf5;
+              }
+            }
+
+            .cell {
+              // flex: 0 0 auto;
+              flex-grow: 0;
+              flex-shrink: 0;
+              flex-basis: auto;
+              //width: {{ngStyle}};
+              height: inherit;
+
+              position: relative;
+              overflow: visible;
+              padding: 0 5px 0 10px; // TODO: remove!
+              border-bottom: 1px solid #f5f4f4;
+              border-right: 1px solid #f5f4f4; // TEmp----
+
+              &:first-child {
+                box-shadow: inset 1px 0px 0px 0px #e9ecf5;
+              }
+
+              &:last-child {
+                box-shadow: inset -1px 0px 0px 0px #e9ecf5;
+              }
+
+              .cell-inner {
+                height: inherit;
+                display: flex; // TODO: does it need to be flex? Can these attrs be moved to cell?
+                align-items: center;
+                font-size: 12px;
+
+                .flx-css-icon-container {
+                  // expand-icon
+                  margin-right: 1rem;
+                }
+
+                > span.field-value {
+                  // TODO: replace with flx-text or something..
+                  opacity: 0.9;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
+                }
+              }
+            }
+          }
+
+          .row-expanded-content-container {
+          }
+        }
+
+        .body-no-results-template-container {
+          position: relative;
+        }
+      }
+    }
+  }
+
+  .paginator-container {
+    flex: 0 0 auto;
+    position: relative;
+    height: 4rem;
+  }
+
+  .foot {
+    flex: 0 0 auto;
+    position: relative;
+  }
+
+  .material-icons {
+    font-family: 'Material Icons';
+  }
+}
+
+.flx-no-select {
+  user-select: none;
+}
+
+.flx-clickable {
+  cursor: pointer;
+}
+
+.flx-css-icon-container {
+  position: relative;
+  height: 1.3rem;
+  min-height: 1.3rem;
+  width: 1.3rem;
+  min-width: 1.3rem;
+  background-color: transparent;
+}
+
+.flx-chevron {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  //color: #6b6b6b;
+  opacity: 0.6;
+
+  &.flx-chevron-circle {
+    border-radius: 50%;
+    border: 1px solid #000000;
+  }
+
+  &:before {
+    height: 0.5em;
+    width: 0.5em;
+    border-width: 0.25em 0.25em 0 0;
+    border-style: solid;
+    content: '';
+    display: inline-block;
+    position: relative;
+    top: 0.4em;
+    left: 0.4em;
+    vertical-align: top;
+    transform: rotate(45deg);
+
+    transition-property: transform;
+    transition-duration: 0.2s;
+  }
+
+  &.flx-chevron-down {
+    &:before {
+      transform: rotate(135deg);
+    }
+  }
+}

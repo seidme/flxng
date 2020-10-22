@@ -1,0 +1,44 @@
+:host {
+  height: 100%;
+
+  .container {
+    //width: 250px;
+    width: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    transition: width 0.2s;
+    // @media only screen and (max-width: 768px) {
+    //   position: fixed;
+    //   width: 0;
+    // }
+
+    &.mobile-view {
+      position: fixed;
+    }
+
+    &.sidebar-visible {
+      width: 250px;
+    }
+
+    &.fixed-sidebar-visible {
+      position: fixed;
+      width: 250px;
+      z-index: 999;
+    }
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+
+    &.fixed-sidebar-visible {
+      display: block;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+:host {
+  width: 100%;
+
+  .container {
+    width: 100%;
+
+    .header {
+      width: 100%;
+      position: relative;
+      cursor: pointer;
+
+      .expander {
+        position: absolute;
+        top: calc(50% - 0.7rem);
+        right: 0.5rem;
+      }
+    }
+
+    .content {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,103 @@
+:host {
+  // .filters-container {
+  //   background: #fff;
+  //   width: 100%;
+  // }
+
+  .table-container {
+    //height:500px;
+  }
+
+  flx-treetable {
+    //height: 100%;
+    //min-height: min-content;
+
+    //height: 500px;
+    background: #fff;
+  }
+
+  .grid-options-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // height: 500px;
+
+    .grid-options-row {
+      position: relative;
+      width: 100%;
+      min-height: 4.2rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      &.api-filters {
+        margin: 10px;
+        flex-direction: column;
+        justify-content: center;
+
+        .api-filter {
+          margin-top: 10px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+
+          flx-menu {
+            .flx-selectable-list-item {
+              height: 2rem;
+            }
+          }
+        }
+
+        button.add-new-filter {
+          margin: 10px;
+        }
+      }
+    }
+
+    .cols-selector {
+      flx-menu {
+        margin-right: 3rem;
+      }
+    }
+
+    .global-filter {
+      margin-left: 1rem;
+
+      input[type='text'] {
+        height: 2.2rem;
+        width: 15rem;
+        padding-left: 2.5rem;
+        border: none;
+        outline: none;
+        border-radius: 1.7rem;
+        background: transparent;
+        transition: background-color 0.2s ease-in-out;
+        //font: 14px $omnesMedium;
+        //background-image: url(/assets/images/filter-icon.png);
+        background-repeat: no-repeat;
+        background-position: 1rem 0.7rem;
+
+        &:focus {
+          background-color: rgba(229, 232, 244, 0.48);
+        }
+      }
+    }
+  }
+
+  .data-cell-content {
+    height: inherit;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+
+    > span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}

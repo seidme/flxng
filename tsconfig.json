@@ -1,19 +1,65 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@flxng/common": [
+        "../projects/common/src/lib"
+      ],
+      "@flxng/common/*": [
+        "../projects/common/src/lib"
+      ],
+      "@flxng/code-show": [
+        "../projects/code-show/src/lib"
+      ],
+      "@flxng/code-show/*": [
+        "../projects/code-show/src/lib/*"
+      ],
+      "@flxng/circle-timer": [
+        "../projects/circle-timer/src/lib"
+      ],
+      "@flxng/circle-timer/*": [
+        "../projects/circle-timer/src/lib/*"
+      ],
+      "@flxng/loader": [
+        "../projects/loader/src/lib"
+      ],
+      "@flxng/loader/*": [
+        "../projects/loader/src/lib/*"
+      ],
+      "@flxng/paginator": [
+        "../projects/paginator/src/lib"
+      ],
+      "@flxng/paginator/*": [
+        "../projects/paginator/src/lib/*"
+      ],
+      "@flxng/treetable": [
+        "../projects/treetable/src/lib"
+      ],
+      "@flxng/treetable/*": [
+        "../projects/treetable/src/lib/*"
+      ],
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": false,
+    "strictInjectionParameters": true
   }
 }

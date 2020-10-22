@@ -1,0 +1,127 @@
+
+<ng-template [ngIf]="templateRefs[GridTemplates.options]">
+    <div class="options">
+            <flx-templateLoader [templateRef]="templateRefs[GridTemplates.options]"
+                                [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+    </div>
+</ng-template>
+
+
+<div class="content" #contentRef [class.scrollable-horizontally]="!inheritsMetas && metas.resizeMode.value === ResizeModes.expand">
+    <div class="content-inner" #contentInnerRef [style.width]="metas.width.value">
+        <ng-template [ngIf]="includeHead">
+            <div class="head" #headRef>
+                <div class="head-inner">
+                    <div class="row">
+                        <ng-template ngFor let-col [ngForOf]="cols" let-colIndex="index">
+                            <ng-template [ngIf]="col.metas.visibility.value">
+                                <div class="cell" [style.width]="col.metas.width.value" (mousedown)="stopPropagation($event); handleColDragging($event, col)">
+                                    <div class="cell-inner-cover" [class.active]="col.dragged"></div>
+    
+                                    <ng-template [ngIf]="col.templateRefs[ColumnTemplates.headCell]">
+                                            <flx-templateLoader [templateRef]="col.templateRefs[ColumnTemplates.headCell]"
+                                                                [templateCtx]="{ 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+                                    </ng-template>
+    
+                                    <ng-template [ngIf]="!col.templateRefs[ColumnTemplates.headCell]">
+                                        <div class="cell-inner">
+                                            <div class="col-resizer left flx-no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'left')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'left')"></div>
+                                            <div class="col-header flx-no-select">
+                                                <span title="{{col.header}}">{{col.header}}</span>
+                                            </div>
+                                            <div class="col-sorter flx-no-select" (click)="stopPropagation($event); col.sort($event)" (mousedown)="stopPropagation($event)" *ngIf="col.sortable && !!col.field">
+                                                <i *ngIf="col.metas.sortOrder.value === 1" class="material-icons arrow active">arrow_drop_up</i>
+                                                <i *ngIf="col.metas.sortOrder.value === 0 || col.metas.sortOrder.value === -1" class="material-icons arrow" [class.active]="col.metas.sortOrder.value !== 0">arrow_drop_down</i>
+                                            </div>
+                                            <div class="col-resizer right flx-no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'right')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'right')"></div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <div class="body" #bodyRef [ngClass]="level === 0 ? 'root': 'nested'"  [class.in-focus]="hasScrollFocus" [ngStyle]="bodyStyle" [flxObserveWidth]="readyToProcessData && metas.resizeMode.value !== ResizeModes.expand" (onWidthChange)="onBodyWidthChange($event)">
+            <ng-template [ngIf]="allData.length">
+                <div class="body-inner" #bodyInnerRef [ngStyle]="bodyInnerStyle">
+                    <ng-template ngFor let-rowData [ngForOf]="renderData" let-rowIndex="index" let-firstRow="first" let-lastRow="last">
+                        <div class="row" [class.expanded]="rowData.ttExpanded" [ngStyle]="rowStyle">
+                            <ng-template ngFor let-col [ngForOf]="cols" let-colIndex="index">
+                                <ng-template [ngIf]="col.metas.visibility.value">
+                                    <div class="cell" [style.width]="col.metas.width.value">
+                                        <ng-template [ngIf]="col.templateRefs[ColumnTemplates.bodyCell]">
+                                            <flx-templateLoader [templateRef]="col.templateRefs[ColumnTemplates.bodyCell]"
+                                                                [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'toggleRow': bindFnContext(toggleRow) }"></flx-templateLoader>
+                                        </ng-template>
+    
+                                        <ng-template [ngIf]="!col.templateRefs[ColumnTemplates.bodyCell]">
+                                            <div class="cell-inner">
+                                                <ng-template [ngIf]="col.expander">
+                                                    <div class="flx-css-icon-container" [style.margin-left]="level * 30 + 'px'">
+                                                        <span class="flx-chevron flx-chevron-circle flx-clickable flx-no-select" [class.flx-chevron-down]="rowData.ttExpanded" (click)="toggleRow(rowData, rowData.ttIndex, $event)" *ngIf="isRowExpandable(rowData)"></span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template [ngIf]="!!col.field">
+                                                    <span *flxVar="resolveFieldValue(rowData, col.field) as resolvedFieldValue" class="field-value" title="{{resolvedFieldValue}}">{{resolvedFieldValue}}</span>
+                                                </ng-template>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                        </div>
+
+                        <ng-template [ngIf]="rowData.ttExpanded && virtualScroll">
+                            <!-- virtual scroll doesn't work properly with animations (there is no way to add animations conditionally, need better solution here) -->
+                            <div class="row-expanded-content-container">
+                                <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
+                                                    [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                            </div>
+                        </ng-template>
+                        <ng-template [ngIf]="rowData.ttExpanded && !virtualScroll">
+                            <div class="row-expanded-content-container" [@rowExpansion]="'rowExpansion'" (@rowExpansion.done)="onRowExpansionAnimationDone($event, rowData)">
+                                <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
+                                                    [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </div>
+            </ng-template>
+
+            <ng-template [ngIf]="!allData.length && templateRefs[GridTemplates.noResults]">
+                <div class="body-no-results-template-container">
+                    <flx-templateLoader [templateRef]="templateRefs[GridTemplates.noResults]"
+                                        [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+<ng-template [ngIf]="pagination && readyToProcessData">
+    <div class="paginator-container flx-no-select">
+        <flx-paginator [itemsCount]="filteredData.length" 
+                        [pageLinksSize]="pagination.pageLinksSize" 
+                        [itemsPerPage]="metas.itemsPerPage.value" 
+                        [itemsPerPageOptions]="pagination.itemsPerPageOptions"
+                        (onPageChange)="onPageChange($event)"
+                        (onItemsPerPageValueChange)="onItemsPerPageValueChange($event)"></flx-paginator>
+    </div>
+</ng-template>
+
+
+<ng-template [ngIf]="templateRefs[GridTemplates.footer]">
+    <div class="foot" #foot>
+        <flx-templateLoader [templateRef]="templateRefs[GridTemplates.footer]"
+                            [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+    </div>
+</ng-template>
+
+<!-- <ng-template [ngIf]="templateRefs[GridTemplates.headContextMenu] && headRef">
+    <flx-contextMenu [hostElementRef]="headRef"
+                     [templateRef]="templateRefs[GridTemplates.headContextMenu]"
+                     [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap }"></flx-contextMenu>
+</ng-template> -->

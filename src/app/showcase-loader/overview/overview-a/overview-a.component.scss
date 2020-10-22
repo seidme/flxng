@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  align-items: center;
+
+  .box {
+    width: 220px;
+    height: 220px;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: #f1eefe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .controls {
+    margin-left: 2rem;
+  }
+}

@@ -1,27 +1,26 @@
-# Flxng
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.7.
+# @flxng
+NPM scope for various Angular components.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Packages
+Name | Description | Demo and Docs | Version
+--- | --- | --- | --- 
+[@flxng/common](https://github.com/seidme/flxng/tree/master/src/app/packages/common)| Common components, directives, etc. | / |  1.1.2
+[@flxng/treetable](https://github.com/seidme/flxng/tree/master/src/app/packages/treetable) | Treetable component. | https://flxng.codeeve.com/#/treetable | 1.1.8
+[@flxng/paginator](https://github.com/seidme/flxng/tree/master/src/app/packages/paginator) | Paginator component. | https://flxng.codeeve.com/#/paginator | 1.1.8
+[@flxng/loader](https://github.com/seidme/flxng/tree/master/src/app/packages/loader) | Loader component. | https://flxng.codeeve.com/#/loader | 1.1.3
+[@flxng/code-show](https://github.com/seidme/flxng/tree/master/projects/code-show) | Code-show component. | / | 1.0.2
+[@flxng/circle-timer](https://github.com/seidme/flxng/tree/master/projects/circle-timer) | Circle Timer component. | https://flxng.codeeve.com/#/circle-timer | 1.1.4
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Blog
+https://codeeve.com/
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## Support
+All suggestions and improvements are welcome and appreciated.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## License
+The [MIT License](https://github.com/seidme/flxng/blob/master/LICENSE).

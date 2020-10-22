@@ -1,0 +1,86 @@
+:host {
+  .container {
+    //padding-top: 1rem;
+
+    &.expanded {
+      //background: #1e1e1e;
+    }
+
+    .opener {
+      margin: 1rem;
+    }
+
+    .content {
+      background: #e9ecf5;
+      padding: 0.2rem;
+      border-radius: 0.2rem;
+
+      pre {
+        margin: 0;
+      }
+
+      code {
+        max-height: 30rem;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0.2rem;
+
+        .languages {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+        }
+
+        button {
+          height: 2rem;
+          background: #ffffff;
+
+          &:hover {
+            background: #e3e7f3;
+          }
+
+          &:active {
+            background: #dae1f6;
+          }
+
+          &.selected {
+            background: #e9ecf5;
+          }
+        }
+      }
+    }
+  }
+
+  button {
+    height: 2.5rem;
+    min-width: 4rem;
+    cursor: pointer;
+    border: 0;
+    background: #e9ecf5;
+    border-radius: 0.2rem;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px -2px rgba(0, 0, 0, 0.2),
+      0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+    color: #40337f;
+    font-weight: bold;
+
+    &:hover {
+      background: #e3e7f3;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &.selected {
+      background: #e3e8f8;
+    }
+
+    &:active {
+      background: #dae1f6;
+    }
+  }
+}

@@ -1,0 +1,67 @@
+<div class="flx-paginator">
+  <button type="button"
+          title="Previous"
+          class="navigate-btn left"
+          (click)="navigateToPage(currentPage - 1, $event)"
+          [disabled]="currentPage === pageLinks[0]">
+    <div class="chevron-container">
+      <span class="chevron chevron-left"></span>
+    </div>
+  </button>
+
+  <ng-template [ngIf]="shouldShowPaginatorDots('left')">
+    <button type="button"
+            class="page-link"
+            (click)="navigateToPage(pageLinks[0], $event)">
+      <span>{{pageLinks[0]}}</span>
+    </button>
+
+    <strong class="dots">...</strong>
+  </ng-template>
+
+  <button *ngFor="let pl of visiblePageLinks"
+          type="button"
+          class="page-link"
+          [class.current]="pl === currentPage"
+          (click)="navigateToPage(pl, $event)"
+          [disabled]="pl === currentPage">
+    <span>{{pl}}</span>
+  </button>
+
+  <ng-template [ngIf]="shouldShowPaginatorDots('right')">
+    <strong class="dots">...</strong>
+
+    <button type="button"
+            class="page-link"
+            (click)="navigateToPage(pageLinks[pageLinks.length - 1], $event)">
+      <span>{{pageLinks[pageLinks.length - 1]}}</span>
+    </button>
+  </ng-template>
+
+  <button type="button"
+          title="Next"
+          class="navigate-btn right"
+          (click)="navigateToPage(currentPage + 1, $event)"
+          [disabled]="currentPage === pageLinks[pageLinks.length - 1]">
+    <div class="chevron-container">
+      <span class="chevron"></span>
+    </div>
+  </button>
+</div>
+
+<div class="flx-paginator-settings"
+     *ngIf="itemsPerPageOptions">
+  <select (change)="itemsPerPageValueChange($event)">
+    <ng-template ngFor
+                 let-option
+                 [ngForOf]="itemsPerPageOptions">
+      <option *ngIf="option === itemsPerPage"
+              [value]="option"
+              selected="selected">{{option}}</option>
+      <option *ngIf="option !== itemsPerPage"
+              [value]="option">{{option}}</option>
+    </ng-template>
+  </select>
+
+  <!-- <span>records per page</span> -->
+</div>

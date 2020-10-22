@@ -1,0 +1,69 @@
+<p>
+  <a href="https://github.com/seidme/flxng/tree/master/projects/loader"
+     target="_blank"
+     aria-label="Source code"
+     class="flx-link">Source code</a>
+</p>
+
+<p>
+  Flexible, lightweight, easy-to-use, without external dependencies - Loader component for Angular.
+</p>
+
+<div class="row">
+  <div class="row-item">
+    <p>
+      Apply directive to the element which has some dynamic content to be loaded, basic example:
+    </p>
+    <app-overview-a></app-overview-a>
+    <flx-code-show packageName="loader"
+                   componentName="overview-a"></flx-code-show>
+  </div>
+
+  <div class="row-item">
+    <p>
+      Controlling the loader by providing the flag to the <code>[flxLoader]</code> directive:
+    </p>
+    <app-overview-c></app-overview-c>
+    <flx-code-show packageName="loader"
+                   componentName="overview-c"></flx-code-show>
+  </div>
+</div>
+
+<div class="row">
+  <div class="row-item">
+    <p>
+      Example with multiple loaders (doing some parallel fetching).
+      <br>
+      <br>
+      In this example <code>@ViewChildren</code> is used to query the list of loaders, but the same can be achieved by providing the flag to the <code>[flxLoader]</code> directive (the second example
+      from the above):
+    </p>
+    <app-overview-b></app-overview-b>
+    <flx-code-show packageName="loader"
+                   componentName="overview-b"></flx-code-show>
+  </div>
+</div>
+
+<div class="row extra-gap-top">
+  <div class="row-item">
+    <p>
+      Global loader example (controlled through the service):
+    </p>
+    <app-overview-d></app-overview-d>
+    <br>
+    <br>
+    <flx-code-show packageName="loader"
+                   componentName="overview-d"></flx-code-show>
+  </div>
+
+  <div class="row-item">
+    <p>
+      Loader inside buttons:
+    </p>
+    <app-overview-e></app-overview-e>
+    <br>
+    <br>
+    <flx-code-show packageName="loader"
+                   componentName="overview-e"></flx-code-show>
+  </div>
+</div>

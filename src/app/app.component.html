@@ -1,86 +1,37 @@
+<div class="app-layout">
+  <div class="app-layout-head">
+    <app-header #header
+                (hamburgerToggle)="sidebar.toggle($event)">
+      <div headerContentLeft
+           class="header-content-left">
+        <span class="flx-text app-title">@flxng</span>
+      </div>
+      <div headerContentRight
+           class="header-content-right">
+        <span class="flx-text heading">{{currentUrl}}</span>
+        <a href="https://github.com/seidme/flxng"
+           target="_blank"
+           aria-label="Star @flxng/treetable on GitHub"
+           class="flx-link">
+          <app-svg icon="github"></app-svg>
+          <span class="flx-text btn-text">Star</span>
+        </a>
+      </div>
+    </app-header>
+  </div>
 
-<div class="flx-layout">
-    <!-- <flx-bar-loader #barLoader></flx-bar-loader> -->
-  
-    <div class="flx-layout-head">
-        <div class="flx-header">
-            <div class="left right-shadow">
-                <span class="flx-text">@flxng</span>
-            </div>
-            <div class="right">
-                <span class="flx-text heading">{{currentUrl}}</span>
-                <a href="" aria-label="Star @flxng/datatable on GitHub" class="flx-link">
-                    <span class="svg-container">
-                        <svg version="1.1" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
-                        </svg> 
-                    </span>
-                    <span class="flx-text btn-text">Star</span>
-                </a>
-            </div>
-        </div>
+  <div class="app-layout-body">
+    <div class="app-layout-body-sidebar flx-right-shadow">
+      <app-sidebar #sidebar
+                   (sidebarVisibilityAutoChange)="header.toggleHamburger($event)">
+        <app-navigation></app-navigation>
+      </app-sidebar>
     </div>
-  
-    <div class="flx-layout-body">
-        <div class="flx-layout-body-sidebar right-shadow">
-            <div class="flx-sidebar">
-                <a routerLink="/datatable" [routerLinkActive]="['active']" class="flx-link root">
-                    <span class="flx-text">Datatable</span>
-                </a>
-                <a routerLink="/datatable/get-started" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Get started</span>
-                </a>
-                <a routerLink="/datatable/pagination" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Pagination</span>
-                </a>
-                <a routerLink="/datatable/templating" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Templating</span>
-                </a>
-                <a routerLink="/datatable/tree-view" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Tree view</span>
-                </a>
-                <a routerLink="/datatable/scrolling" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Scrolling</span>
-                </a>
-                <a routerLink="/datatable/sorting" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Sorting</span>
-                </a>
-                <a routerLink="/datatable/filtering" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Filtering</span>
-                </a>
-                <a routerLink="/datatable/expandable-rows" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Expandable rows</span>
-                </a>
-                <a routerLink="/datatable/selectable-rows" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Selectable rows</span>
-                </a>
-                <a routerLink="/datatable/resizable-columns" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Resizable columns</span>
-                </a>
-                <a routerLink="/datatable/reorderable-columns" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Reorderable columns</span>
-                </a>
-                <a routerLink="/datatable/dynamic-columns" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Dynamic columns</span>
-                </a>
-                <a routerLink="/datatable/lazy-loading" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Lazy loading</span>
-                </a>
-                <a routerLink="/datatable/context-menu" [routerLinkActive]="['active']" class="flx-link">
-                    <span class="flx-text">Context menu</span>
-                </a>
 
-
-                <a routerLink="/datatable/test" [routerLinkActive]="['active']" class="flx-link">
-                    <span>Test</span>
-                </a>
-            </div>
-        </div>
-  
-        <div class="flx-layout-body-content">
-            <div class="flx-component-wrapper">
-                <router-outlet></router-outlet>
-            </div>
-        </div>
+    <div class="app-layout-body-content">
+      <div class="app-content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
+</div>

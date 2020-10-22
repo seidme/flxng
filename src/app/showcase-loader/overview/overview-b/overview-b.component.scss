@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .box {
+    width: 240px;
+    height: 240px;
+    border: 1px solid black;
+    border-radius: 50%;
+    margin-left: 5px;
+    background-color: #f1eefe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .controls {
+    margin-left: 2rem;
+    margin-top: 1rem;
+  }
+}
