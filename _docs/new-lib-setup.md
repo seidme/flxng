@@ -78,7 +78,7 @@ This way we will mimick imports from the lib while developing, all by having aut
 
 - Build lib:
 ```bash
-$ ng build code-show --prod
+$ ng build my-lib --prod
 ```
 
 - Go to `dist/my-lib` and run:
@@ -87,17 +87,30 @@ $ npm publish --access=public
 ```
 
 
-### Bumping major versions
-- Create new branch from the currently active one, e.g. v2 from v1 (development branch is obsolete)
-- Update package.json files with new major version (all libs should have the same major version)
-- Do global search for '/{current major version branch}/' (e.g. /v2/), and replace the value with new one
-- Commit and push newly created branch
-- Add change logs to get-started sections for all chnages made
-- See also NPM official versioning guide: [semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
-
-
-
 ### Additional info
 For additional info visit: 
 https://angular.io/guide/creating-libraries
 https://medium.com/@esanjiv/complete-beginner-guide-to-publish-an-angular-library-to-npm-d42343801660
+
+
+
+## Versioning
+
+### Bumping major versions
+- Create new branch from the currently active one, e.g. `v2` from `v1` (development branch is obsolete)
+- Update `package.json` files with new major version (all libs should have the same major version - in this example all libs should have 2.0.0 as the starting version)
+- When bumping versions in `package.json` file make sure also to update the latest lib version specified in the main README file
+- Commit and push newly created branch
+- Do the actual development for changes that caused the major version bumping
+- Add change logs to get-started sections for all changes made
+- Publish all libs to NPM (reflecting new versions)
+- Merge the newly created branch into `master` (make it public - Jenkins is listening `master` branch, and it's the default branch on GH)
+- See also NPM official versioning guide: [semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
+
+### Bumping minor versions (minor features and bug fixes)
+- Bump version in `package.json` file for the lib where minor changes are made (see: [semantic versioning](https://docs.npmjs.com/about-semantic-versioning))
+- Update the latest lib version specified in the main README file
+- Do the actual development for changes that caused the minor version bumping
+- Add change logs to get-started section
+- Publish new lib version to NPM
+- Merge the current branch into `master` (make it public - Jenkins is listening `master` branch, and it's the default branch on GH)

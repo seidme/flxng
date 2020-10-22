@@ -1,24 +1,15 @@
-# CodeShow
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+# @flxng/code-show
+Code-show component for Angular.
 
-## Code scaffolding
 
-Run `ng generate component component-name --project code-show` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project code-show`.
-> Note: Don't forget to add `--project code-show` or else it will be added to the default project in your `angular.json` file. 
+## Docs and Demo
+https://flxng.codeeve.com/#/code-show
 
-## Build
 
-Run `ng build code-show` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Support
+All suggestions and improvements are welcome and appreciated.
 
-## Publishing
 
-After building your library with `ng build code-show`, go to the dist folder `cd dist/code-show` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test code-show` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## License
+The [MIT License](https://github.com/seidme/flxng/blob/master/LICENSE).

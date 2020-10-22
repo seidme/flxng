@@ -12,4 +12,4 @@ All suggestions and improvements are welcome and appreciated.
 
 
 ## License
-The [MIT License](https://github.com/seidme/flxng/blob/development/LICENSE).
+The [MIT License](https://github.com/seidme/flxng/blob/master/LICENSE).

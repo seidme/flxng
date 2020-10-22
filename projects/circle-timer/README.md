@@ -1,24 +1,15 @@
-# CircleTimer
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+# @flxng/circle-timer
+Flexible, lightweight, easy-to-use, without external dependencies - Circle Timer component for Angular.
 
-## Code scaffolding
 
-Run `ng generate component component-name --project circle-timer` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project circle-timer`.
-> Note: Don't forget to add `--project circle-timer` or else it will be added to the default project in your `angular.json` file. 
+## Docs and Demo
+https://flxng.codeeve.com/#/circle-timer
 
-## Build
 
-Run `ng build circle-timer` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Support
+All suggestions and improvements are welcome and appreciated.
 
-## Publishing
 
-After building your library with `ng build circle-timer`, go to the dist folder `cd dist/circle-timer` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test circle-timer` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## License
+The [MIT License](https://github.com/seidme/flxng/blob/master/LICENSE).

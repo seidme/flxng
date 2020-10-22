@@ -77,7 +77,7 @@ export class CodeShowComponent implements OnInit {
   async fetchCode(): Promise<void> {
     this.fetchingCode = true;
     try {
-      const fileUrl = `https://raw.githubusercontent.com/seidme/flxng/development/src/app/showcase-${this.packageName}/${this.composeComponentPath()}`;
+      const fileUrl = `https://raw.githubusercontent.com/seidme/flxng/master/src/app/showcase-${this.packageName}/${this.composeComponentPath()}`;
       const code = await this._http.get(fileUrl, { responseType: 'text' }).toPromise();
       this.fetchingCode = false;
 
