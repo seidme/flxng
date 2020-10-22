@@ -88,9 +88,11 @@ $ npm publish --access=public
 
 
 ### Bumping major versions
-- Create new branch from the currently active one (e.g. v10 from v8)
+- Create new branch from the currently active one, e.g. v2 from v1 (development branch is obsolete)
 - Update package.json files with new major version (all libs should have the same major version)
-- Add change logs to get-started sections
+- Do global search for '/{current major version branch}/' (e.g. /v2/), and replace the value with new one
+- Commit and push newly created branch
+- Add change logs to get-started sections for all chnages made
 - See also NPM official versioning guide: [semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
 
 
