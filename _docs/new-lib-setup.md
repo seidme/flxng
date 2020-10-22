@@ -87,6 +87,14 @@ $ npm publish --access=public
 ```
 
 
+### Bumping major versions
+- Create new branch from the currently active one (e.g. v10 from v8)
+- Update package.json files with new major version (all libs should have the same major version)
+- Add change logs to get-started sections
+- See also NPM official versioning guide: [semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
+
+
+
 ### Additional info
 For additional info visit: 
 https://angular.io/guide/creating-libraries
