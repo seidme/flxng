@@ -5,11 +5,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TemplateLoaderComponent } from './components/template-loader.component';
 
-import { VarDirective } from './directives';
-import { TemplateDirective } from './directives';
-import { OutsideClickDirective } from './directives';
-import { globalFilterDirective } from './directives';
-import { ObserveWidthDirective } from './directives';
+import { VarDirective } from './directives/var.directive';
+import { TemplateDirective } from './directives/template.directive';
+import { OutsideClickDirective } from './directives/outside-click.directive';
+import { globalFilterDirective } from './directives/global-filter.directive';
+import { ObserveWidthDirective } from './directives/observe-width.directive';
 
 import { StorageService } from './services/storage.service';
 

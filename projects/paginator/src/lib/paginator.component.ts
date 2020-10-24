@@ -13,8 +13,8 @@ import {
   Renderer2,
 } from '@angular/core';
 
-import { TemplateDirective } from '@flxng/common/src/directives';
-import { mapToIterable } from '@flxng/common/src/utils';
+import { TemplateDirective } from '@flxng/common';
+import { mapToIterable } from '@flxng/common';
 
 @Component({
   selector: 'flx-paginator',
