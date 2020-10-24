@@ -30,8 +30,8 @@ import {
 import { animate, style, trigger, transition, AnimationEvent } from '@angular/animations';
 
 import { StorageService } from '@flxng/common';
-import { TemplateDirective } from '@flxng/common/src/directives';
-import { getScrollbarWidth, animateScroll, findAncestor } from '@flxng/common/src/utils-dom';
+import { TemplateDirective } from '@flxng/common';
+import { getScrollbarWidth, animateScroll, findAncestor } from '@flxng/common';
 import {
   mapToIterable,
   compareValues,
@@ -40,7 +40,7 @@ import {
   isValueValidForView,
   filterDuplicates,
   debounce,
-} from '@flxng/common/src/utils';
+} from '@flxng/common';
 
 import { PaginatorComponent } from '@flxng/paginator';
 
