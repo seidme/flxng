@@ -20,6 +20,8 @@ export class LoaderService {
 
     loaderElem.style['display'] = 'none';
 
+    // TODO: if appending to button add min-height?
+
     const hostBorderRadius = getComputedStyle(hostElem)['border-radius'];
     if (parseInt(hostBorderRadius, 10)) {
       loaderElem.style['border-radius'] = hostBorderRadius;
