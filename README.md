@@ -13,7 +13,7 @@ Name | Description | Demo and Docs | Latest Version
 [@flxng/common](https://github.com/seidme/flxng/tree/master/projects/common)| Common components, directives, etc. | / |  1.1.3
 [@flxng/treetable](https://github.com/seidme/flxng/tree/master/projects/treetable) | Treetable component. | https://flxng.codeeve.com/#/treetable | 1.1.9
 [@flxng/paginator](https://github.com/seidme/flxng/tree/master/projects/paginator) | Paginator component. | https://flxng.codeeve.com/#/paginator | 1.1.9
-[@flxng/loader](https://github.com/seidme/flxng/tree/master/projects/loader) | Loader component. | https://flxng.codeeve.com/#/loader | 1.1.4
+[@flxng/loader](https://github.com/seidme/flxng/tree/master/projects/loader) | Loader component. | https://flxng.codeeve.com/#/loader | 1.1.5
 [@flxng/code-show](https://github.com/seidme/flxng/tree/master/projects/code-show) | Code-show component. | / | 1.0.4
 [@flxng/circle-timer](https://github.com/seidme/flxng/tree/master/projects/circle-timer) | Circle Timer component. | https://flxng.codeeve.com/#/circle-timer | 1.1.5
 
