@@ -14,7 +14,7 @@ $ npm i @flxng/common && npm i @flxng/paginator && npm i @flxng/treetable
 ```
 
 After importing the module the lib is ready to use:
-```javascript
+```typescript
 import { TreetableModule } from '@flxng/treetable';
 
 @NgModule({

@@ -14,7 +14,7 @@ $ npm install @flxng/circle-timer
 ```
 
 After importing the module the lib is ready to use:
-```javascript
+```typescript
 import { CircleTimerModule } from '@flxng/circle-timer';
 
 @NgModule({

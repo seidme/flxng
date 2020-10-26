@@ -14,7 +14,7 @@ $ npm i @flxng/common && npm i @flxng/paginator
 ```
 
 After importing the module the lib is ready to use:
-```javascript
+```typescript
 import { PaginatorModule } from '@flxng/paginator';
 
 @NgModule({
