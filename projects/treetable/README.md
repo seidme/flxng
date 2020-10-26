@@ -7,6 +7,27 @@ A flexible, feature-rich, customizable, lightweight Angular Treetable component 
 https://flxng.codeeve.com/#/treetable
 
 
+## Getting Started
+Installation:
+```bash
+$ npm i @flxng/common && npm i @flxng/paginator && npm i @flxng/treetable
+```
+
+After importing the module the lib is ready to use:
+```javascript
+import { TreetableModule } from '@flxng/treetable';
+
+@NgModule({
+  imports: [TreetableModule],
+  declarations: [],
+})
+export class DemoModule {}
+```
+
+## Usage
+Check [Docs and Demo](https://flxng.codeeve.com/#/treetable).
+
+
 ## Support
 All suggestions and improvements are welcome and appreciated.
 
