@@ -1,5 +1,6 @@
 <div class="box"
-     [flxLoader]="loading">
+     flxLoader
+     [flxLoaderVisible]="loading">
   <span *ngIf="!loaded">Some content to be loaded</span>
   <span *ngIf="loaded">Loaded!</span>
 </div>

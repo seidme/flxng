@@ -11,7 +11,9 @@ export class OverviewCComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.load();
+  }
 
   load(): void {
     this.loading = true;

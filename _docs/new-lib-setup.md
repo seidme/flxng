@@ -122,5 +122,5 @@ https://medium.com/@esanjiv/complete-beginner-guide-to-publish-an-angular-librar
 - Update the latest lib version specified in the main README file
 - Do the actual development for changes that caused the minor version bumping
 - Add change logs
-- Publish new lib version to NPM
+- Build and Publish new lib version to NPM
 - Merge the current branch into `master` (make it public - Jenkins is listening `master` branch, and it's the default branch on GH)
