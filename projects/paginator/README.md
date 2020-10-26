@@ -7,6 +7,27 @@ Flexible, lightweight, easy-to-use, without external dependencies - Paginator co
 https://flxng.codeeve.com/#/paginator
 
 
+## Getting Started
+Installation:
+```bash
+$ npm i @flxng/common && npm i @flxng/paginator
+```
+
+After importing the module the lib is ready to use:
+```javascript
+import { PaginatorModule } from '@flxng/paginator';
+
+@NgModule({
+  imports: [PaginatorModule],
+  declarations: [],
+})
+export class DemoModule {}
+```
+
+## Usage
+Check [Docs and Demo](https://flxng.codeeve.com/#/paginator).
+
+
 ## Support
 All suggestions and improvements are welcome and appreciated.
 

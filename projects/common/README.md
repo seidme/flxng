@@ -7,6 +7,24 @@ Common utilities, directives, pipes, components, etc.
 https://flxng.codeeve.com/#/common
 
 
+## Getting Started
+Installation:
+```bash
+$ npm install @flxng/common
+```
+
+Importing module:
+```javascript
+import { CommonModule as FlxngCommonModule } from '@flxng/common';
+
+@NgModule({
+  imports: [FlxngCommonModule],
+  declarations: [],
+})
+export class DemoModule {}
+```
+
+
 ## Support
 All suggestions and improvements are welcome and appreciated.
 
