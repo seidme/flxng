@@ -14,7 +14,7 @@ $ npm install @flxng/loader
 ```
 
 After importing the module the lib is ready to use:
-```javascript
+```typescript
 import { LoaderModule } from '@flxng/loader';
 
 @NgModule({

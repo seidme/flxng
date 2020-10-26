@@ -14,7 +14,7 @@ $ npm install @flxng/common
 ```
 
 Importing module:
-```javascript
+```typescript
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 
 @NgModule({
