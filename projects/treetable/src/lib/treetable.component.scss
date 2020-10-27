@@ -137,15 +137,24 @@
                   align-items: center;
                   justify-content: center;
 
-                  .arrow {
-                    position: relative;
-                    color: #dedede;
-                    background-color: transparent;
-                    cursor: pointer;
-                    line-height: 8px;
+                  .triangle {
+                    width: 0;
+                    height: 0;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
 
-                    &.active {
-                      color: #7ae6d1;
+                    &.up {
+                      border-bottom: 6px solid #dedede;
+                      &.active {
+                        border-bottom: 6px solid #7ae6d1;
+                      }
+                    }
+
+                    &.down {
+                      border-top: 6px solid #dedede;
+                      &.active {
+                        border-top: 6px solid #7ae6d1;
+                      }
                     }
                   }
                 }
@@ -262,10 +271,6 @@
   .foot {
     flex: 0 0 auto;
     position: relative;
-  }
-
-  .material-icons {
-    font-family: 'Material Icons';
   }
 }
 

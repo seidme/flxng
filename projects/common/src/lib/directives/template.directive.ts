@@ -1,17 +1,11 @@
-import {
-    Directive,
-    Input,
-    TemplateRef,
-    ViewContainerRef
-} from '@angular/core';
+import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
-    selector: '[flxTemplate]'
-    //host: { }
+  selector: '[flxTemplate]',
+  //host: { }
 })
 export class TemplateDirective {
+  @Input('flxTemplate') type = '';
 
-    @Input('flxTemplate') type: string = '';
-
-    constructor(public templateRef: TemplateRef<any>) { }
+  constructor(public templateRef: TemplateRef<any>) {}
 }

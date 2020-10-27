@@ -1232,6 +1232,12 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
   appendDragCoverElem(cursorStyle: string = ''): Element {
     const wholeContentCoverElem = document.createElement('div');
     wholeContentCoverElem.className = 'flx-whole-content-cover';
+    wholeContentCoverElem.style['position'] = 'absolute';
+    wholeContentCoverElem.style['top'] = '0';
+    wholeContentCoverElem.style['left'] = '0';
+    wholeContentCoverElem.style['width'] = '100%';
+    wholeContentCoverElem.style['height'] = '100%';
+    wholeContentCoverElem.style['z-index'] = '999';
     wholeContentCoverElem.style['cursor'] = cursorStyle;
 
     document.body.appendChild(wholeContentCoverElem);
