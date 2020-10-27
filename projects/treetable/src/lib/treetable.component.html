@@ -1,8 +1,7 @@
 
 <ng-template [ngIf]="templateRefs[GridTemplates.options]">
     <div class="options">
-            <flx-templateLoader [templateRef]="templateRefs[GridTemplates.options]"
-                                [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+        <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.options]; context: { 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
     </div>
 </ng-template>
 
@@ -19,8 +18,7 @@
                                     <div class="cell-inner-cover" [class.active]="col.dragged"></div>
     
                                     <ng-template [ngIf]="col.templateRefs[ColumnTemplates.headCell]">
-                                            <flx-templateLoader [templateRef]="col.templateRefs[ColumnTemplates.headCell]"
-                                                                [templateCtx]="{ 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+                                        <ng-container *ngTemplateOutlet="col.templateRefs[ColumnTemplates.headCell]; context: { 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
                                     </ng-template>
     
                                     <ng-template [ngIf]="!col.templateRefs[ColumnTemplates.headCell]">
@@ -30,8 +28,8 @@
                                                 <span title="{{col.header}}">{{col.header}}</span>
                                             </div>
                                             <div class="col-sorter flx-no-select" (click)="stopPropagation($event); col.sort($event)" (mousedown)="stopPropagation($event)" *ngIf="col.sortable && !!col.field">
-                                                <i *ngIf="col.metas.sortOrder.value === 1" class="material-icons arrow active">arrow_drop_up</i>
-                                                <i *ngIf="col.metas.sortOrder.value === 0 || col.metas.sortOrder.value === -1" class="material-icons arrow" [class.active]="col.metas.sortOrder.value !== 0">arrow_drop_down</i>
+                                                <i *ngIf="col.metas.sortOrder.value === 1" class="triangle up active"></i>
+                                                <i *ngIf="col.metas.sortOrder.value === 0 || col.metas.sortOrder.value === -1" class="triangle down" [class.active]="col.metas.sortOrder.value !== 0"></i>
                                             </div>
                                             <div class="col-resizer right flx-no-select" *ngIf="shouldEmbedColResizer(col, colIndex, 'right')" (mousedown)="stopPropagation($event); handleColResizing($event, colIndex, 'right')"></div>
                                         </div>
@@ -53,8 +51,7 @@
                                 <ng-template [ngIf]="col.metas.visibility.value">
                                     <div class="cell" [style.width]="col.metas.width.value">
                                         <ng-template [ngIf]="col.templateRefs[ColumnTemplates.bodyCell]">
-                                            <flx-templateLoader [templateRef]="col.templateRefs[ColumnTemplates.bodyCell]"
-                                                                [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'toggleRow': bindFnContext(toggleRow) }"></flx-templateLoader>
+                                            <ng-container *ngTemplateOutlet="col.templateRefs[ColumnTemplates.bodyCell]; context: { 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'column': col, 'columnIndex': colIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'toggleRow': bindFnContext(toggleRow) }"></ng-container>
                                         </ng-template>
     
                                         <ng-template [ngIf]="!col.templateRefs[ColumnTemplates.bodyCell]">
@@ -77,14 +74,12 @@
                         <ng-template [ngIf]="rowData.ttExpanded && virtualScroll">
                             <!-- virtual scroll doesn't work properly with animations (there is no way to add animations conditionally, need better solution here) -->
                             <div class="row-expanded-content-container">
-                                <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
-                                                    [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                                <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.rowExpansion]; context: { 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></ng-container>
                             </div>
                         </ng-template>
                         <ng-template [ngIf]="rowData.ttExpanded && !virtualScroll">
                             <div class="row-expanded-content-container" [@rowExpansion]="'rowExpansion'" (@rowExpansion.done)="onRowExpansionAnimationDone($event, rowData)">
-                                <flx-templateLoader [templateRef]="templateRefs[GridTemplates.rowExpansion]"
-                                                    [templateCtx]="{ 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></flx-templateLoader>
+                                <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.rowExpansion]; context: { 'rowData': rowData, 'rowIndex': rowData.ttIndex, 'columns': cols, 'columnsMap': colsMap, 'level': level, 'self': self }"></ng-container>
                             </div>
                         </ng-template>
                     </ng-template>
@@ -93,8 +88,7 @@
 
             <ng-template [ngIf]="!allData.length && templateRefs[GridTemplates.noResults]">
                 <div class="body-no-results-template-container">
-                    <flx-templateLoader [templateRef]="templateRefs[GridTemplates.noResults]"
-                                        [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+                    <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.noResults]; context: { 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
                 </div>
             </ng-template>
         </div>
@@ -115,8 +109,7 @@
 
 <ng-template [ngIf]="templateRefs[GridTemplates.footer]">
     <div class="foot" #foot>
-        <flx-templateLoader [templateRef]="templateRefs[GridTemplates.footer]"
-                            [templateCtx]="{ 'columns': cols, 'columnsMap': colsMap, 'level': level }"></flx-templateLoader>
+        <ng-container *ngTemplateOutlet="templateRefs[GridTemplates.footer]; context: { 'columns': cols, 'columnsMap': colsMap, 'level': level }"></ng-container>
     </div>
 </ng-template>
 
