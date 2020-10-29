@@ -6,6 +6,8 @@ Flexible, lightweight, easy-to-use, without external dependencies - Paginator co
 ## Docs and Demo
 https://flxng.codeeve.com/#/paginator
 
+![Paginator GIF](https://media.giphy.com/media/8jCJEneitTLcl7UKiv/giphy.gif)
+
 
 ## Getting Started
 Installation:

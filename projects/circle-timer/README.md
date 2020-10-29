@@ -6,6 +6,8 @@ Flexible, lightweight, easy-to-use, without external dependencies - Circle Timer
 ## Docs and Demo
 https://flxng.codeeve.com/#/circle-timer
 
+![Circle Timer GIF](https://media.giphy.com/media/48clzFjCaF8SCRLbEI/giphy.gif)
+
 
 ## Getting Started
 Installation:
