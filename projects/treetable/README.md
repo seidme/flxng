@@ -6,6 +6,8 @@ A flexible, feature-rich, customizable, lightweight Angular Treetable component 
 ## Docs and Demo
 https://flxng.codeeve.com/#/treetable
 
+![Treetable GIF](https://media.giphy.com/media/1P0DvArDIOaYW4I9Zw/giphy.gif)
+
 
 ## Getting Started
 Installation:
