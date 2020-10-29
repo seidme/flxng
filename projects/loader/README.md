@@ -6,6 +6,8 @@ Flexible, lightweight, easy-to-use, without external dependencies - Loader compo
 ## Docs and Demo
 https://flxng.codeeve.com/#/loader
 
+![Alt Text](https://media.giphy.com/media/812ZHID59Eh1PZvVVe/giphy.gif)
+
 
 ## Getting Started
 Installation:
