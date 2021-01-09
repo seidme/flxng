@@ -1,6 +1,23 @@
 {
-  "name": "mentions",
-  "version": "0.0.1",
+  "name": "@flxng/mentions",
+  "version": "1.2.0",
+  "description": "Mentions component for Angular.",
+  "author": "seidme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seidme/flxng"
+  },
+  "homepage": "",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "component",
+    "mentions",
+    "input-highlight",
+    "autocomplete"
+  ],
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14"

@@ -56,11 +56,11 @@
       "@flxng/treetable/*": [
         "../projects/treetable/src/lib/*"
       ],
-      "mentions": [
-        "dist/mentions"
+      "@flxng/mentions": [
+        "../projects/mentions/src/lib"
       ],
-      "mentions/*": [
-        "dist/mentions/*"
+      "@flxng/mentions/*": [
+        "../projects/mentions/src/lib/*"
       ]
     }
   },
