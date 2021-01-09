@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'flx-overview-a',
+  selector: 'app-overview-a',
   templateUrl: './overview-a.component.html',
-  styleUrls: ['./overview-a.component.scss']
+  styleUrls: ['./overview-a.component.scss'],
 })
 export class OverviewAComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
