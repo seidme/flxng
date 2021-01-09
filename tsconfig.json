@@ -26,12 +26,6 @@
       "@flxng/common/*": [
         "../projects/common/src/lib/*"
       ],
-      // "@flxng/common": [
-      //   "dist/common"
-      // ],
-      // "@flxng/common/*": [
-      //   "dist/common/*"
-      // ],
       "@flxng/code-show": [
         "../projects/code-show/src/lib"
       ],
@@ -56,18 +50,18 @@
       "@flxng/paginator/*": [
         "../projects/paginator/src/lib/*"
       ],
-      // "@flxng/paginator": [
-      //   "dist/paginator"
-      // ],
-      // "@flxng/paginator/*": [
-      //   "dist/paginato/*"
-      // ],
       "@flxng/treetable": [
         "../projects/treetable/src/lib"
       ],
       "@flxng/treetable/*": [
         "../projects/treetable/src/lib/*"
       ],
+      "@flxng/mentions": [
+        "../projects/mentions/src/lib"
+      ],
+      "@flxng/mentions/*": [
+        "../projects/mentions/src/lib/*"
+      ]
     }
   },
   "angularCompilerOptions": {

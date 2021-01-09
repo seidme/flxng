@@ -9,6 +9,7 @@ import { ShowcaseTreetableModule } from './showcase-treetable/showcase-treetable
 import { ShowcaseCircleTimerModule } from './showcase-circle-timer/showcase-circle-timer.module';
 import { ShowcaseLoaderModule } from './showcase-loader/showcase-loader.module';
 import { ShowcasePaginatorModule } from './showcase-paginator/showcase-paginator.module';
+import { ShowcaseMentionsModule } from './showcase-mentions/showcase-mentions.module';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -26,6 +27,7 @@ import { routes } from './app-routes.const';
     ShowcaseCircleTimerModule,
     ShowcaseLoaderModule,
     ShowcasePaginatorModule,
+    ShowcaseMentionsModule,
   ],
   declarations: [AppComponent, NavigationComponent],
   providers: [],
