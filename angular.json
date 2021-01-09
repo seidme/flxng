@@ -328,6 +328,41 @@
           }
         }
       }
+    },
+    "mentions": {
+      "projectType": "library",
+      "root": "projects/mentions",
+      "sourceRoot": "projects/mentions/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/mentions/tsconfig.lib.json",
+            "project": "projects/mentions/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/mentions/src/test.ts",
+            "tsConfig": "projects/mentions/tsconfig.spec.json",
+            "karmaConfig": "projects/mentions/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/mentions/tsconfig.lib.json",
+              "projects/mentions/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "flxng",
