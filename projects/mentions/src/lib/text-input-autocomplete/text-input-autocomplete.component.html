@@ -1,0 +1,5 @@
+<div *ngIf="_menuCtrl"
+     class="menu-template-container"
+     [style.top]="_menuCtrl.position.top + 'px'"
+     [style.left]="_menuCtrl.position.left + 'px'">
+  <ng-container *ngTemplateOutlet="menuTemplate; context: _menuCtrl.context"></ng-container>
