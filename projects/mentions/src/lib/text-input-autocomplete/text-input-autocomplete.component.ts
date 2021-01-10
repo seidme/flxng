@@ -131,7 +131,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   private _dumpedCwis: ChoiceWithIndices[] = [];
   private _editingCwi: ChoiceWithIndices;
 
-  private _menuCtrl?: {
+  menuCtrl?: {
     template: TemplateRef<any>;
     context: any;
     position: {
@@ -236,7 +236,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     const value = event.target.value;
     const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
 
-    if (!this._menuCtrl) {
+    if (!this.menuCtrl) {
       // dump choices that are removed from the text (e.g. select all + paste),
       // and/or retrieve them if user e.g. UNDO the action
       this.dumpNonExistingChoices();
@@ -254,18 +254,18 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       this.selectedChoicesChange.emit(this._selectedCwis);
     }
 
-    if (value[this._menuCtrl.triggerCharacterPosition] !== this.triggerCharacter) {
+    if (value[this.menuCtrl.triggerCharacterPosition] !== this.triggerCharacter) {
       this.hideMenu();
       return;
     }
 
     const cursorPosition = this.textInputElement.selectionStart;
-    if (cursorPosition < this._menuCtrl.triggerCharacterPosition) {
+    if (cursorPosition < this.menuCtrl.triggerCharacterPosition) {
       this.hideMenu();
       return;
     }
 
-    const searchText = value.slice(this._menuCtrl.triggerCharacterPosition + 1, cursorPosition);
+    const searchText = value.slice(this.menuCtrl.triggerCharacterPosition + 1, cursorPosition);
     if (!searchText.match(this.searchRegexp)) {
       this.hideMenu();
       return;
@@ -299,11 +299,11 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   onBlur(event: any): void {
-    if (!this._menuCtrl) {
+    if (!this.menuCtrl) {
       return;
     }
 
-    this._menuCtrl.lastCaretPosition = this.textInputElement.selectionStart;
+    this.menuCtrl.lastCaretPosition = this.textInputElement.selectionStart;
 
     if (this.closeMenuOnBlur) {
       this.hideMenu();
@@ -311,17 +311,17 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   onClick(event: MouseEvent): void {
-    if (!this._menuCtrl) {
+    if (!this.menuCtrl) {
       return;
     }
 
     const cursorPosition = this.textInputElement.selectionStart;
-    if (cursorPosition <= this._menuCtrl.triggerCharacterPosition) {
+    if (cursorPosition <= this.menuCtrl.triggerCharacterPosition) {
       this.hideMenu();
       return;
     }
 
-    const searchText = this.textInputElement.value.slice(this._menuCtrl.triggerCharacterPosition + 1, cursorPosition);
+    const searchText = this.textInputElement.value.slice(this.menuCtrl.triggerCharacterPosition + 1, cursorPosition);
     if (!searchText.match(this.searchRegexp)) {
       this.hideMenu();
       return;
@@ -329,13 +329,13 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   private hideMenu() {
-    if (!this._menuCtrl) {
+    if (!this.menuCtrl) {
       return;
     }
 
     // this.menu.component.destroy();
     this._menuHidden$.next();
-    this._menuCtrl = undefined;
+    this.menuCtrl = undefined;
     this.menuHidden.emit();
 
     if (this._editingCwi) {
@@ -353,7 +353,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   private showMenu() {
-    if (this._menuCtrl) {
+    if (this.menuCtrl) {
       return;
     }
 
@@ -374,7 +374,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     // };
     // this.menu.component.changeDetectorRef.detectChanges();
 
-    this._menuCtrl = {
+    this.menuCtrl = {
       template: this.menuTemplate,
       context: {
         selectChoice: this.selectChoice,
@@ -398,9 +398,9 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
 
   selectChoice = (choice: any) => {
     const label = this.getChoiceLabel(choice);
-    const startIndex = this._menuCtrl!.triggerCharacterPosition;
+    const startIndex = this.menuCtrl!.triggerCharacterPosition;
     const start = this.textInputElement.value.slice(0, startIndex);
-    const caretPosition = this._menuCtrl!.lastCaretPosition || this.textInputElement.selectionStart;
+    const caretPosition = this.menuCtrl!.lastCaretPosition || this.textInputElement.selectionStart;
     const end = this.textInputElement.value.slice(caretPosition);
     const insertValue = label + ' ';
     this.textInputElement.value = start + insertValue + end;
@@ -439,7 +439,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     this.textInputElement.setSelectionRange(endIndex, endIndex);
 
     this.showMenu();
-    this._menuCtrl.triggerCharacterPosition = startIndex;
+    this.menuCtrl.triggerCharacterPosition = startIndex;
 
     // TODO: editValue to be provided externally?
     const editValue = label.replace(this.triggerCharacter, '');
