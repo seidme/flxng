@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { MentionsModule as FlxngMentionsModule } from '@flxng/mentions';
@@ -12,6 +13,6 @@ import { OverviewAComponent } from './overview-a/overview-a.component';
 
 @NgModule({
   declarations: [OverviewComponent, OverviewAComponent],
-  imports: [CommonModule, FlxngCommonModule, FlxngMentionsModule, FlxngCodeShowModule, SharedModule],
+  imports: [CommonModule, FormsModule, FlxngCommonModule, FlxngMentionsModule, FlxngCodeShowModule, SharedModule],
 })
 export class OverviewModule {}

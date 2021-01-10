@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ChoiceWithIndices } from '@flxng/mentions';
+import { ChoiceWithIndices, HighlightTag } from '@flxng/mentions';
 
 interface User {
   id: number;
@@ -13,22 +13,15 @@ interface User {
   styleUrls: ['./overview-a.component.scss'],
 })
 export class OverviewAComponent implements OnInit {
+  text = 'Hey @Ted';
   mentions: ChoiceWithIndices[] = [];
 
   constructor() {}
 
   ngOnInit() {}
 
-  getSelectedChoices(): ChoiceWithIndices[] {
-    return [];
-  }
-
-  onSelectedChoicesChange(choices: ChoiceWithIndices[]): void {
-    this.mentions = choices;
-  }
-
   getAutocompleteMentions = (searchTerm: string): User[] => {
-    if(!searchTerm) {
+    if (!searchTerm) {
       return [];
     }
 
@@ -37,6 +30,40 @@ export class OverviewAComponent implements OnInit {
     return users.filter((user) => {
       return user.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
+  };
+
+  onSelectedChoicesChange(choices: ChoiceWithIndices[]): void {
+    this.mentions = choices;
+    console.log('this.choices" ', choices);
+  }
+
+  getChoiceLabel = (user: User): string => {
+    return `@${user.name}`;
+  };
+
+  getSelectedChoices(): User[] {
+    if (this.mentions.length) {
+      return this.mentions.map((m) => m.choice);
+    } else {
+      return [
+        {
+          id: 8,
+          name: 'Ted',
+        },
+      ];
+    }
+  }
+
+  onHighlighTagClick(tagEvent: { event: MouseEvent; tag: HighlightTag }): void {
+    //console.log('onHighlighTagClick:', tagEvent);
+  }
+
+  onHighlightTagMouseEnter(tagEvent: { event: any; tag: HighlightTag }): void {
+    //console.log('onHighlightTagMouseEnter:', tagEvent);
+  }
+
+  onHighlightTagMouseLeave(tagEvent: { event: any; tag: HighlightTag }): void {
+    //console.log('onHighlightTagMouseLeave:', tagEvent);
   }
 
   getUsers(): User[] {
@@ -55,7 +82,7 @@ export class OverviewAComponent implements OnInit {
       },
       {
         id: 4,
-        name: 'John Doe Jr.',
+        name: 'John J. Doe',
       },
       {
         id: 5,

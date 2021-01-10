@@ -1,19 +1,30 @@
-<textarea name=""
-          id=""
-          cols="30"
-          rows="10"
-          #textareaRef
-          flxTextInputAutocomplete
-          triggerCharacter="@"
-          [findChoices]="getAutocompleteMentions"
-          [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
-          [getChoiceLabel]="getChoiceLabel"
-          [selectedChoices]="getSelectedChoices()"
-          (selectedChoicesChange)="onSelectedChoicesChange($event)"></textarea>
+<div class="container">
+  <textarea cols="30"
+            rows="10"
+            #textareaRef
+            [(ngModel)]="text"></textarea>
 
-<flx-text-input-highlight #textInputHighlight
-                          [tags]="mentions"
-                          [textInputElement]="textareaRef"
-                          (tagClick)="highlightEntityClicked($event)"
-                          (tagMouseEnter)="highlightTagMouseEnter($event)"
-                          (tagMouseLeave)="highlightTagMouseLeave($event)"></flx-text-input-highlight>
+  <!-- <input type="text" #inputRef> -->
+
+  <ng-template #menuTemplate
+               let-ctx
+               let-choice>
+    njah!
+  </ng-template>
+
+  <flx-text-input-autocomplete [textInputElement]="textareaRef"
+                               [menuTemplate]="menuTemplate"
+                               triggerCharacter="@"
+                               [findChoices]="getAutocompleteMentions"
+                               [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
+                               [getChoiceLabel]="getChoiceLabel"
+                               [selectedChoices]="getSelectedChoices()"
+                               (selectedChoicesChange)="onSelectedChoicesChange($event)"></flx-text-input-autocomplete>
+
+  <flx-text-input-highlight #textInputHighlight
+                            [tags]="mentions"
+                            [textInputElement]="textareaRef"
+                            (tagClick)="onHighlighTagClick($event)"
+                            (tagMouseEnter)="onHighlightTagMouseEnter($event)"
+                            (tagMouseLeave)="onHighlightTagMouseLeave($event)"></flx-text-input-highlight>
+</div>

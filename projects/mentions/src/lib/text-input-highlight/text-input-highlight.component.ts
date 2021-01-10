@@ -12,6 +12,7 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { HighlightTag } from './highlight-tag.interface';
@@ -57,7 +58,7 @@ const styleProperties = Object.freeze([
   'MozTabSize',
 ]);
 
-const tagIndexIdPrefix = 'text-highlight-tag-id-';
+const tagIndexIdPrefix = 'flx-text-highlight-tag-id-';
 
 function indexIsInsideTag(index: number, tag: HighlightTag) {
   return tag.indices.start < index && index < tag.indices.end;
@@ -83,15 +84,9 @@ export interface TagMouseEvent {
 
 @Component({
   selector: 'flx-text-input-highlight',
-  template: `
-    <div
-      class="text-highlight-element"
-      [ngStyle]="highlightElementContainerStyle"
-      [innerHtml]="highlightedText"
-      #highlightElement
-    ></div>
-  `,
-  styles: ['./text-input-highlight.component.scss'],
+  templateUrl: './text-input-highlight.component.html',
+  styleUrls: ['./text-input-highlight.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TextInputHighlightComponent implements OnChanges, OnDestroy {
   /**
@@ -129,44 +124,21 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
    */
   @Output() tagMouseLeave = new EventEmitter<TagMouseEvent>();
 
-  /**
-   * @private
-   */
-  highlightElementContainerStyle: { [key: string]: string } = {};
-
-  /**
-   * @private
-   */
-  highlightedText: string;
-
   @ViewChild('highlightElement', { static: true }) private highlightElement: ElementRef;
 
-  private textareaEventListeners: Array<() => void> = [];
+  highlightElementContainerStyle: { [key: string]: string } = {};
+  highlightedText: string;
 
+  private textareaEventListeners: Array<() => void> = [];
   private highlightTagElements: Array<{
     element: HTMLElement;
     clientRect: ClientRect;
   }>;
-
   private mouseHoveredTag: TagMouseEvent | undefined;
-
   private isDestroyed = false;
 
   constructor(private renderer: Renderer2, private ngZone: NgZone, private cdr: ChangeDetectorRef) {}
 
-  /**
-   * Manually call this function to refresh the highlight element if the textarea styles have changed
-   */
-  refresh() {
-    const computed: any = getComputedStyle(this.textInputElement);
-    styleProperties.forEach((prop) => {
-      this.highlightElementContainerStyle[prop] = computed[prop];
-    });
-  }
-
-  /**
-   * @private
-   */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.textInputElement) {
       this.textInputElementChanged();
@@ -177,20 +149,31 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
     }
   }
 
-  /**
-   * @private
-   */
+  ngOnInit(): void {
+    this.textInputElement.parentElement.style['position'] = 'relative';
+    this.textInputElement.style['background'] = 'none';
+    this.textInputElement.style['position'] = 'relative';
+    this.textInputElement.style['z-index'] = '2';
+  }
+
   ngOnDestroy(): void {
     this.isDestroyed = true;
     this.textareaEventListeners.forEach((unregister) => unregister());
   }
 
-  /**
-   * @private
-   */
   @HostListener('window:resize')
   onWindowResize() {
     this.refresh();
+  }
+
+  /**
+   * Manually call this function to refresh the highlight element if the textarea styles have changed
+   */
+  refresh() {
+    const computed: any = getComputedStyle(this.textInputElement);
+    styleProperties.forEach((prop) => {
+      this.highlightElementContainerStyle[prop] = computed[prop];
+    });
   }
 
   private textInputElementChanged() {
@@ -297,8 +280,8 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
           parts.push(escapeHtml(before));
           const cssClass = tag.cssClass || this.tagCssClass;
           const tagId = tagIndexIdPrefix + this.tags.indexOf(tag);
-          // text-highlight-tag-id-${id} is used instead of a data attribute to prevent an angular sanitization warning
-          parts.push(`<span class="text-highlight-tag ${tagId} ${cssClass}">${escapeHtml(tagContents)}</span>`);
+          // flx-text-highlight-tag-id-${id} is used instead of a data attribute to prevent an angular sanitization warning
+          parts.push(`<span class="flx-text-highlight-tag ${tagId} ${cssClass}">${escapeHtml(tagContents)}</span>`);
           prevTags.push(tag);
         }
       });

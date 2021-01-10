@@ -1,30 +1,29 @@
-.text-input-highlight-container {
-  position: relative;
+// .flx-text-input-element {
+//   background: none;
+//   position: relative;
+//   z-index: 2;
+// }
 
-  .text-input-element {
-    background: none;
-    position: relative;
-    z-index: 2;
-  }
+.flx-text-highlight-element {
+  overflow: hidden;
+  word-break: break-word;
+  white-space: pre-wrap;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  background: transparent;
+  color: rgba(0, 0, 0, 0);
+  z-index: 1;
+}
 
-  .text-highlight-element {
-    overflow: hidden !important;
-    word-break: break-word;
-    white-space: pre-wrap;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    color: rgba(0, 0, 0, 0);
-    z-index: 1;
-  }
-
-  .text-highlight-tag {
-    border-radius: 8px;
-    padding: 1px 3px;
-    margin: -1px -3px;
-    overflow-wrap: break-word;
-  }
+.flx-text-highlight-tag {
+  padding: 1px 3px;
+  margin: -1px -3px;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  // color: #1264a3;
+  background-color: #def0fe;
 }

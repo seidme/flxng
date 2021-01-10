@@ -1,9 +1,9 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: 'textarea[flxTextInputElement]',
+  selector: '[flxTextInputElement]',
   host: {
-    '[class.text-input-element]': 'true'
+    '[class.flx-text-input-element]': 'true'
   }
 })
 export class TextInputElementDirective {}

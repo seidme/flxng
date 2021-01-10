@@ -1,12 +1,12 @@
 import {
   AfterViewInit,
   ChangeDetectorRef,
+  Component,
   ComponentFactoryResolver,
   ComponentRef,
-  Directive,
+  ContentChild,
   ElementRef,
   EventEmitter,
-  HostListener,
   Injector,
   Input,
   NgZone,
@@ -14,7 +14,9 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Renderer2,
   SimpleChanges,
+  TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -32,10 +34,22 @@ export interface ChoiceWithIndices {
   };
 }
 
-@Directive({
-  selector: 'textarea[flxTextInputAutocomplete],input[type="text"][flxTextInputAutocomplete]',
+@Component({
+  selector: 'flx-text-input-autocomplete',
+  templateUrl: './text-input-autocomplete.component.html',
+  styleUrls: ['./text-input-autocomplete.component.scss'],
 })
-export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDestroy {
+export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDestroy {
+  /**
+   * Reference to the text input element
+   */
+  @Input() textInputElement: HTMLTextAreaElement | HTMLInputElement;
+
+  /**
+   * Reference to the menu template
+   */
+  @Input() menuTemplate: TemplateRef<any>;
+
   /**
    * The character that will trigger the menu to appear
    */
@@ -47,7 +61,7 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
   @Input() searchRegexp = /^\w*$/;
 
   /**
-   * Whether to close the menu when the host textarea loses focus
+   * Whether to close the menu when the host textInputElement loses focus
    */
   @Input() closeMenuOnBlur = false;
 
@@ -98,7 +112,9 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
    */
   @Input() getChoiceLabel: (choice: any) => string;
 
-  textarea: HTMLTextAreaElement;
+  // @ContentChild(TemplateRef) menuTemplate: TemplateRef<any>;
+
+  private _eventListeners: Array<() => void> = [];
 
   /* tslint:disable member-ordering */
   private menu:
@@ -116,6 +132,7 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
   private _editingCwi: ChoiceWithIndices;
 
   constructor(
+    private renderer: Renderer2,
     private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
     private changeDetectorRef: ChangeDetectorRef,
@@ -128,51 +145,61 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
     if (changes.selectedChoices) {
       if (Array.isArray(this.selectedChoices)) {
         /**
-         * Timeout needed since ngOnChanges is fired before the textarea value is updated.
+         * Timeout needed since ngOnChanges is fired before the textInputElement value is updated.
          * The problem is specific to publisher.landing component implementation, i.e. single
          * textarea element is used for each account, only text changes..
          * Use ngZone.runOutsideAngular to optimize the timeout so it doesn't fire
          * global change detection events continuously..
          */
-        this.ngZone.runOutsideAngular(() => {
-          setTimeout(() => {
-            const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
+        // this.ngZone.runOutsideAngular(() => {
+        //   setTimeout(() => {
+        const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
 
-            this._selectedCwis = this.selectedChoices.map((c) => {
-              return {
-                choice: c,
-                indices: { start: -1, end: -1 },
-              };
-            });
-            this.updateIndices();
-
-            // Remove choices that index couldn't be found for
-            this._selectedCwis = this._selectedCwis.filter((cwi) => cwi.indices.start > -1);
-
-            if (JSON.stringify(this._selectedCwis) !== selectedCwisPrevious) {
-              // TODO: Should check for indices change only (ignoring the changes inside choice object)
-              this.ngZone.run(() => {
-                this.selectedChoicesChange.emit(this._selectedCwis);
-              });
-            }
-          });
+        this._selectedCwis = this.selectedChoices.map((c) => {
+          return {
+            choice: c,
+            indices: { start: -1, end: -1 },
+          };
         });
+        this.updateIndices();
+
+        // Remove choices that index couldn't be found for
+        this._selectedCwis = this._selectedCwis.filter((cwi) => cwi.indices.start > -1);
+
+        if (JSON.stringify(this._selectedCwis) !== selectedCwisPrevious) {
+          // TODO: Should check for indices change only (ignoring the changes inside choice object)
+          this.ngZone.run(() => {
+            this.selectedChoicesChange.emit(this._selectedCwis);
+          });
+        }
+        //   });
+        // });
       }
     }
   }
 
   ngOnInit() {
-    this.textarea = this.elementRef.nativeElement;
+    const onKeydown = this.renderer.listen(this.textInputElement, 'keydown', (event) => this.onKeydown(event));
+    this._eventListeners.push(onKeydown);
+
+    const onInput = this.renderer.listen(this.textInputElement, 'input', (event) => this.onInput(event));
+    this._eventListeners.push(onInput);
+
+    const onBlur = this.renderer.listen(this.textInputElement, 'blur', (event) => this.onBlur(event));
+    this._eventListeners.push(onBlur);
+
+    const onClick = this.renderer.listen(this.textInputElement, 'click', (event) => this.onClick(event));
+    this._eventListeners.push(onClick);
   }
 
   ngOnDestroy() {
     this.hideMenu();
+    this._eventListeners.forEach((unregister) => unregister());
   }
 
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
-    const cursorPosition = this.textarea.selectionStart;
-    const precedingChar = this.textarea.value.charAt(cursorPosition - 1);
+  onKeydown(event: KeyboardEvent): void {
+    const cursorPosition = this.textInputElement.selectionStart;
+    const precedingChar = this.textInputElement.value.charAt(cursorPosition - 1);
 
     if (event.key === this.triggerCharacter && precedingCharValid(precedingChar)) {
       this.showMenu();
@@ -194,8 +221,8 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
     }
   }
 
-  @HostListener('input', ['$event.target.value'])
-  onInput(value: string) {
+  onInput(event: any): void {
+    const value = event.target.value;
     const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
 
     if (!this.menu) {
@@ -221,7 +248,7 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
       return;
     }
 
-    const cursorPosition = this.textarea.selectionStart;
+    const cursorPosition = this.textInputElement.selectionStart;
     if (cursorPosition < this.menu.triggerCharacterPosition) {
       this.hideMenu();
       return;
@@ -260,32 +287,30 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
       });
   }
 
-  @HostListener('blur')
-  onBlur() {
+  onBlur(event: any): void {
     if (!this.menu) {
       return;
     }
 
-    this.menu.lastCaretPosition = this.textarea.selectionStart;
+    this.menu.lastCaretPosition = this.textInputElement.selectionStart;
 
     if (this.closeMenuOnBlur) {
       this.hideMenu();
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick(event: MouseEvent) {
+  onClick(event: MouseEvent): void {
     if (!this.menu) {
       return;
     }
 
-    const cursorPosition = this.textarea.selectionStart;
+    const cursorPosition = this.textInputElement.selectionStart;
     if (cursorPosition <= this.menu.triggerCharacterPosition) {
       this.hideMenu();
       return;
     }
 
-    const searchText = this.textarea.value.slice(this.menu.triggerCharacterPosition + 1, cursorPosition);
+    const searchText = this.textInputElement.value.slice(this.menu.triggerCharacterPosition + 1, cursorPosition);
     if (!searchText.match(this.searchRegexp)) {
       this.hideMenu();
       return;
@@ -327,11 +352,11 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
 
     this.menu = {
       component: this.viewContainerRef.createComponent(menuFactory, 0, this.injector),
-      triggerCharacterPosition: this.textarea.selectionStart,
+      triggerCharacterPosition: this.textInputElement.selectionStart,
     };
 
-    const lineHeight = this.getLineHeight(this.textarea);
-    const { top, left } = getCaretCoordinates(this.textarea, this.textarea.selectionStart);
+    const lineHeight = this.getLineHeight(this.textInputElement);
+    const { top, left } = getCaretCoordinates(this.textInputElement, this.textInputElement.selectionStart);
     this.menu.component.instance.position = {
       top: top + lineHeight,
       left,
@@ -340,17 +365,17 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
     this.menu.component.instance.selectChoice.pipe(takeUntil(this.menuHidden$)).subscribe((choice: any) => {
       const label = this.getChoiceLabel(choice);
       const startIndex = this.menu!.triggerCharacterPosition;
-      const start = this.textarea.value.slice(0, startIndex);
-      const caretPosition = this.menu!.lastCaretPosition || this.textarea.selectionStart;
-      const end = this.textarea.value.slice(caretPosition);
+      const start = this.textInputElement.value.slice(0, startIndex);
+      const caretPosition = this.menu!.lastCaretPosition || this.textInputElement.selectionStart;
+      const end = this.textInputElement.value.slice(caretPosition);
       const insertValue = label + ' ';
-      this.textarea.value = start + insertValue + end;
+      this.textInputElement.value = start + insertValue + end;
       // force ng model / form control to update
-      this.textarea.dispatchEvent(new Event('input'));
+      this.textInputElement.dispatchEvent(new Event('input'));
 
       const setCursorAt = (start + insertValue).length;
-      this.textarea.setSelectionRange(setCursorAt, setCursorAt);
-      this.textarea.focus();
+      this.textInputElement.setSelectionRange(setCursorAt, setCursorAt);
+      this.textInputElement.focus();
 
       const choiceWithIndices = {
         choice,
@@ -379,8 +404,8 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
     this.removeFromSelected(this._editingCwi);
     this.selectedChoicesChange.emit(this._selectedCwis);
 
-    this.textarea.focus();
-    this.textarea.setSelectionRange(endIndex, endIndex);
+    this.textInputElement.focus();
+    this.textInputElement.setSelectionRange(endIndex, endIndex);
 
     this.showMenu();
     this.menu.triggerCharacterPosition = startIndex;
@@ -464,7 +489,7 @@ export class TextInputAutocompleteDirective implements OnChanges, OnInit, OnDest
   }
 
   getChoiceIndex(label: string): number {
-    const text = this.textarea && this.textarea.value;
+    const text = this.textInputElement && this.textInputElement.value;
     const labels = this._selectedCwis.map((cwi) => this.getChoiceLabel(cwi.choice));
 
     return getChoiceIndex(text, label, labels);

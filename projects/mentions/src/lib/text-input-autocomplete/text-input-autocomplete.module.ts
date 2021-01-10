@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TextInputAutocompleteDirective } from './text-input-autocomplete.directive';
+import { TextInputAutocompleteComponent } from './text-input-autocomplete.component';
 import { TextInputAutocompleteContainerComponent } from './text-input-autocomplete-container.component';
 import { TextInputAutocompleteMenuComponent } from './text-input-autocomplete-menu.component';
 
 @NgModule({
   declarations: [
-    TextInputAutocompleteDirective,
+    TextInputAutocompleteComponent,
     TextInputAutocompleteContainerComponent,
     TextInputAutocompleteMenuComponent
   ],
   imports: [CommonModule],
   exports: [
-    TextInputAutocompleteDirective,
+    TextInputAutocompleteComponent,
     TextInputAutocompleteContainerComponent,
     TextInputAutocompleteMenuComponent
   ],
