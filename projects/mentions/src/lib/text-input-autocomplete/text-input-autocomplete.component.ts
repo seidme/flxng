@@ -125,11 +125,22 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       }
     | undefined;
 
-  private menuHidden$ = new Subject();
+  private _menuHidden$ = new Subject();
 
   private _selectedCwis: ChoiceWithIndices[] = [];
   private _dumpedCwis: ChoiceWithIndices[] = [];
   private _editingCwi: ChoiceWithIndices;
+
+  private _menuCtrl?: {
+    template: TemplateRef<any>;
+    context: any;
+    position: {
+      top: number;
+      left: number;
+    };
+    triggerCharacterPosition: number;
+    lastCaretPosition?: number;
+  };
 
   constructor(
     private renderer: Renderer2,
@@ -151,29 +162,29 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
          * Use ngZone.runOutsideAngular to optimize the timeout so it doesn't fire
          * global change detection events continuously..
          */
-        // this.ngZone.runOutsideAngular(() => {
-        //   setTimeout(() => {
-        const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
+        this.ngZone.runOutsideAngular(() => {
+          setTimeout(() => {
+            const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
 
-        this._selectedCwis = this.selectedChoices.map((c) => {
-          return {
-            choice: c,
-            indices: { start: -1, end: -1 },
-          };
-        });
-        this.updateIndices();
+            this._selectedCwis = this.selectedChoices.map((c) => {
+              return {
+                choice: c,
+                indices: { start: -1, end: -1 },
+              };
+            });
+            this.updateIndices();
 
-        // Remove choices that index couldn't be found for
-        this._selectedCwis = this._selectedCwis.filter((cwi) => cwi.indices.start > -1);
+            // Remove choices that index couldn't be found for
+            this._selectedCwis = this._selectedCwis.filter((cwi) => cwi.indices.start > -1);
 
-        if (JSON.stringify(this._selectedCwis) !== selectedCwisPrevious) {
-          // TODO: Should check for indices change only (ignoring the changes inside choice object)
-          this.ngZone.run(() => {
-            this.selectedChoicesChange.emit(this._selectedCwis);
+            if (JSON.stringify(this._selectedCwis) !== selectedCwisPrevious) {
+              // TODO: Should check for indices change only (ignoring the changes inside choice object)
+              this.ngZone.run(() => {
+                this.selectedChoicesChange.emit(this._selectedCwis);
+              });
+            }
           });
-        }
-        //   });
-        // });
+        });
       }
     }
   }
@@ -225,7 +236,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     const value = event.target.value;
     const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
 
-    if (!this.menu) {
+    if (!this._menuCtrl) {
       // dump choices that are removed from the text (e.g. select all + paste),
       // and/or retrieve them if user e.g. UNDO the action
       this.dumpNonExistingChoices();
@@ -243,18 +254,18 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       this.selectedChoicesChange.emit(this._selectedCwis);
     }
 
-    if (value[this.menu.triggerCharacterPosition] !== this.triggerCharacter) {
+    if (value[this._menuCtrl.triggerCharacterPosition] !== this.triggerCharacter) {
       this.hideMenu();
       return;
     }
 
     const cursorPosition = this.textInputElement.selectionStart;
-    if (cursorPosition < this.menu.triggerCharacterPosition) {
+    if (cursorPosition < this._menuCtrl.triggerCharacterPosition) {
       this.hideMenu();
       return;
     }
 
-    const searchText = value.slice(this.menu.triggerCharacterPosition + 1, cursorPosition);
+    const searchText = value.slice(this._menuCtrl.triggerCharacterPosition + 1, cursorPosition);
     if (!searchText.match(this.searchRegexp)) {
       this.hideMenu();
       return;
@@ -264,35 +275,35 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   loadChoices(searchText): void {
-    this.menu.component.instance.searchText = searchText;
-    this.menu.component.instance.choices = [];
-    this.menu.component.instance.choiceLoadError = undefined;
-    this.menu.component.instance.choiceLoading = true;
-    this.menu.component.changeDetectorRef.detectChanges();
+    // this.menu.component.instance.searchText = searchText;
+    // this.menu.component.instance.choices = [];
+    // this.menu.component.instance.choiceLoadError = undefined;
+    // this.menu.component.instance.choiceLoading = true;
+    // this.menu.component.changeDetectorRef.detectChanges();
 
-    Promise.resolve(this.findChoices(searchText))
-      .then((choices) => {
-        if (this.menu) {
-          this.menu.component.instance.choices = choices;
-          this.menu.component.instance.choiceLoading = false;
-          this.menu.component.changeDetectorRef.detectChanges();
-        }
-      })
-      .catch((err) => {
-        if (this.menu) {
-          this.menu.component.instance.choiceLoading = false;
-          this.menu.component.instance.choiceLoadError = err;
-          this.menu.component.changeDetectorRef.detectChanges();
-        }
-      });
+    Promise.resolve(this.findChoices(searchText));
+    // .then((choices) => {
+    //   if (this.menu) {
+    //     this.menu.component.instance.choices = choices;
+    //     this.menu.component.instance.choiceLoading = false;
+    //     this.menu.component.changeDetectorRef.detectChanges();
+    //   }
+    // })
+    // .catch((err) => {
+    //   if (this.menu) {
+    //     this.menu.component.instance.choiceLoading = false;
+    //     this.menu.component.instance.choiceLoadError = err;
+    //     this.menu.component.changeDetectorRef.detectChanges();
+    //   }
+    // });
   }
 
   onBlur(event: any): void {
-    if (!this.menu) {
+    if (!this._menuCtrl) {
       return;
     }
 
-    this.menu.lastCaretPosition = this.textInputElement.selectionStart;
+    this._menuCtrl.lastCaretPosition = this.textInputElement.selectionStart;
 
     if (this.closeMenuOnBlur) {
       this.hideMenu();
@@ -300,17 +311,17 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   onClick(event: MouseEvent): void {
-    if (!this.menu) {
+    if (!this._menuCtrl) {
       return;
     }
 
     const cursorPosition = this.textInputElement.selectionStart;
-    if (cursorPosition <= this.menu.triggerCharacterPosition) {
+    if (cursorPosition <= this._menuCtrl.triggerCharacterPosition) {
       this.hideMenu();
       return;
     }
 
-    const searchText = this.textInputElement.value.slice(this.menu.triggerCharacterPosition + 1, cursorPosition);
+    const searchText = this.textInputElement.value.slice(this._menuCtrl.triggerCharacterPosition + 1, cursorPosition);
     if (!searchText.match(this.searchRegexp)) {
       this.hideMenu();
       return;
@@ -318,14 +329,14 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   private hideMenu() {
-    if (!this.menu) {
+    if (!this._menuCtrl) {
       return;
     }
 
-    this.menu.component.destroy();
-    this.menuHidden$.next();
+    // this.menu.component.destroy();
+    this._menuHidden$.next();
+    this._menuCtrl = undefined;
     this.menuHidden.emit();
-    this.menu = undefined;
 
     if (this._editingCwi) {
       // If user didn't make any changes to it, add it back to the selected choices
@@ -342,58 +353,78 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   private showMenu() {
-    if (this.menu) {
+    if (this._menuCtrl) {
       return;
     }
 
-    const menuFactory = this.componentFactoryResolver.resolveComponentFactory<TextInputAutocompleteMenuComponent>(
-      this.menuComponent
-    );
+    // const menuFactory = this.componentFactoryResolver.resolveComponentFactory<TextInputAutocompleteMenuComponent>(
+    //   this.menuComponent
+    // );
 
-    this.menu = {
-      component: this.viewContainerRef.createComponent(menuFactory, 0, this.injector),
-      triggerCharacterPosition: this.textInputElement.selectionStart,
-    };
+    // this.menu = {
+    //   component: this.viewContainerRef.createComponent(menuFactory, 0, this.injector),
+    //   triggerCharacterPosition: this.textInputElement.selectionStart,
+    // };
 
     const lineHeight = this.getLineHeight(this.textInputElement);
     const { top, left } = getCaretCoordinates(this.textInputElement, this.textInputElement.selectionStart);
-    this.menu.component.instance.position = {
-      top: top + lineHeight,
-      left,
+    // this.menu.component.instance.position = {
+    //   top: top + lineHeight,
+    //   left,
+    // };
+    // this.menu.component.changeDetectorRef.detectChanges();
+
+    this._menuCtrl = {
+      template: this.menuTemplate,
+      context: {
+        selectChoice: this.selectChoice,
+        // $implicit: {
+        //   selectChoice: this.selectChoice
+        // },
+      },
+      position: {
+        top: top + lineHeight,
+        left: left,
+      },
+      triggerCharacterPosition: this.textInputElement.selectionStart,
     };
-    this.menu.component.changeDetectorRef.detectChanges();
-    this.menu.component.instance.selectChoice.pipe(takeUntil(this.menuHidden$)).subscribe((choice: any) => {
-      const label = this.getChoiceLabel(choice);
-      const startIndex = this.menu!.triggerCharacterPosition;
-      const start = this.textInputElement.value.slice(0, startIndex);
-      const caretPosition = this.menu!.lastCaretPosition || this.textInputElement.selectionStart;
-      const end = this.textInputElement.value.slice(caretPosition);
-      const insertValue = label + ' ';
-      this.textInputElement.value = start + insertValue + end;
-      // force ng model / form control to update
-      this.textInputElement.dispatchEvent(new Event('input'));
 
-      const setCursorAt = (start + insertValue).length;
-      this.textInputElement.setSelectionRange(setCursorAt, setCursorAt);
-      this.textInputElement.focus();
+    // this.menu.component.instance.selectChoice.pipe(takeUntil(this._menuHidden$)).subscribe((choice: any) => {
 
-      const choiceWithIndices = {
-        choice,
-        indices: {
-          start: startIndex,
-          end: startIndex + label.length,
-        },
-      };
-
-      this.addToSelected(choiceWithIndices);
-      this.updateIndices();
-      this.selectedChoicesChange.emit(this._selectedCwis);
-
-      this.hideMenu();
-    });
+    // });
 
     this.menuShown.emit();
   }
+
+  selectChoice = (choice: any) => {
+    const label = this.getChoiceLabel(choice);
+    const startIndex = this._menuCtrl!.triggerCharacterPosition;
+    const start = this.textInputElement.value.slice(0, startIndex);
+    const caretPosition = this._menuCtrl!.lastCaretPosition || this.textInputElement.selectionStart;
+    const end = this.textInputElement.value.slice(caretPosition);
+    const insertValue = label + ' ';
+    this.textInputElement.value = start + insertValue + end;
+    // force ng model / form control to update
+    this.textInputElement.dispatchEvent(new Event('input'));
+
+    const setCursorAt = (start + insertValue).length;
+    this.textInputElement.setSelectionRange(setCursorAt, setCursorAt);
+    this.textInputElement.focus();
+
+    const choiceWithIndices = {
+      choice,
+      indices: {
+        start: startIndex,
+        end: startIndex + label.length,
+      },
+    };
+
+    this.addToSelected(choiceWithIndices);
+    this.updateIndices();
+    this.selectedChoicesChange.emit(this._selectedCwis);
+
+    this.hideMenu();
+  };
 
   editChoice(choice: any): void {
     const label = this.getChoiceLabel(choice);
@@ -408,7 +439,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     this.textInputElement.setSelectionRange(endIndex, endIndex);
 
     this.showMenu();
-    this.menu.triggerCharacterPosition = startIndex;
+    this._menuCtrl.triggerCharacterPosition = startIndex;
 
     // TODO: editValue to be provided externally?
     const editValue = label.replace(this.triggerCharacter, '');
