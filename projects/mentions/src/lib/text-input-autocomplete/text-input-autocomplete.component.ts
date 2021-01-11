@@ -1,13 +1,6 @@
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver,
-  ComponentRef,
-  ContentChild,
-  ElementRef,
   EventEmitter,
-  Injector,
   Input,
   NgZone,
   OnChanges,
@@ -17,12 +10,9 @@ import {
   Renderer2,
   SimpleChanges,
   TemplateRef,
-  ViewContainerRef,
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+
 import { getCaretCoordinates } from './textarea-caret-position';
-import { TextInputAutocompleteMenuComponent } from './text-input-autocomplete-menu.component';
 // @ts-ignore
 // import toPX from 'to-px';
 
@@ -71,10 +61,10 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   @Input() selectedChoices: ChoiceWithIndices[] = [];
 
   /**
-   * The menu component to show with available options.
-   * You can extend the built in `TextInputAutocompleteMenuComponent` component to use a custom template
+   * A function that formats the selected choice once selected.
+   * The result (label) is also used as a choice identifier (e.g. when editing choices)
    */
-  @Input() menuComponent = TextInputAutocompleteMenuComponent;
+  @Input() getChoiceLabel: (choice: any) => string;
 
   /**
    * Called when the options menu is shown
@@ -102,30 +92,11 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   @Output() selectedChoicesChange = new EventEmitter<ChoiceWithIndices[]>();
 
   /**
-   * A function that accepts a search string and returns an array of choices. Can also return a promise.
+   * Called on user input after entering trigger character. Emits search term to search by
    */
-  @Input() findChoices: (searchText: string) => any[] | Promise<any[]>;
-
-  /**
-   * A function that formats the selected choice once selected.
-   * The result (label) is also used as a choice identifier (e.g. when editing choices)
-   */
-  @Input() getChoiceLabel: (choice: any) => string;
-
-  // @ContentChild(TemplateRef) menuTemplate: TemplateRef<any>;
+  @Output() choicesSearch = new EventEmitter<string>();
 
   private _eventListeners: Array<() => void> = [];
-
-  /* tslint:disable member-ordering */
-  private menu:
-    | {
-        component: ComponentRef<TextInputAutocompleteMenuComponent>;
-        triggerCharacterPosition: number;
-        lastCaretPosition?: number;
-      }
-    | undefined;
-
-  private _menuHidden$ = new Subject();
 
   private _selectedCwis: ChoiceWithIndices[] = [];
   private _dumpedCwis: ChoiceWithIndices[] = [];
@@ -142,15 +113,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     lastCaretPosition?: number;
   };
 
-  constructor(
-    private renderer: Renderer2,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private viewContainerRef: ViewContainerRef,
-    private changeDetectorRef: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private injector: Injector,
-    private elementRef: ElementRef
-  ) {}
+  constructor(private ngZone: NgZone, private renderer: Renderer2) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedChoices) {
@@ -271,34 +234,10 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       return;
     }
 
-    this.loadChoices(searchText);
+    this.choicesSearch.emit(searchText);
   }
 
-  loadChoices(searchText): void {
-    // this.menu.component.instance.searchText = searchText;
-    // this.menu.component.instance.choices = [];
-    // this.menu.component.instance.choiceLoadError = undefined;
-    // this.menu.component.instance.choiceLoading = true;
-    // this.menu.component.changeDetectorRef.detectChanges();
-
-    Promise.resolve(this.findChoices(searchText));
-    // .then((choices) => {
-    //   if (this.menu) {
-    //     this.menu.component.instance.choices = choices;
-    //     this.menu.component.instance.choiceLoading = false;
-    //     this.menu.component.changeDetectorRef.detectChanges();
-    //   }
-    // })
-    // .catch((err) => {
-    //   if (this.menu) {
-    //     this.menu.component.instance.choiceLoading = false;
-    //     this.menu.component.instance.choiceLoadError = err;
-    //     this.menu.component.changeDetectorRef.detectChanges();
-    //   }
-    // });
-  }
-
-  onBlur(event: any): void {
+  onBlur(event: FocusEvent): void {
     if (!this.menuCtrl) {
       return;
     }
@@ -333,8 +272,6 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       return;
     }
 
-    // this.menu.component.destroy();
-    this._menuHidden$.next();
     this.menuCtrl = undefined;
     this.menuHidden.emit();
 
@@ -357,22 +294,8 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       return;
     }
 
-    // const menuFactory = this.componentFactoryResolver.resolveComponentFactory<TextInputAutocompleteMenuComponent>(
-    //   this.menuComponent
-    // );
-
-    // this.menu = {
-    //   component: this.viewContainerRef.createComponent(menuFactory, 0, this.injector),
-    //   triggerCharacterPosition: this.textInputElement.selectionStart,
-    // };
-
     const lineHeight = this.getLineHeight(this.textInputElement);
     const { top, left } = getCaretCoordinates(this.textInputElement, this.textInputElement.selectionStart);
-    // this.menu.component.instance.position = {
-    //   top: top + lineHeight,
-    //   left,
-    // };
-    // this.menu.component.changeDetectorRef.detectChanges();
 
     this.menuCtrl = {
       template: this.menuTemplate,
@@ -388,10 +311,6 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       },
       triggerCharacterPosition: this.textInputElement.selectionStart,
     };
-
-    // this.menu.component.instance.selectChoice.pipe(takeUntil(this._menuHidden$)).subscribe((choice: any) => {
-
-    // });
 
     this.menuShown.emit();
   }
@@ -443,7 +362,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
 
     // TODO: editValue to be provided externally?
     const editValue = label.replace(this.triggerCharacter, '');
-    this.loadChoices(editValue);
+    this.choicesSearch.emit(editValue);
   }
 
   dumpNonExistingChoices(): void {
