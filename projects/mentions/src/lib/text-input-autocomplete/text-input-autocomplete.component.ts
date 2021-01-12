@@ -58,7 +58,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   /**
    * Selected choices (required in editing mode in order to keep track of choices)
    */
-  @Input() selectedChoices: ChoiceWithIndices[] = [];
+  @Input() selectedChoices: any[] = [];
 
   /**
    * A function that formats the selected choice once selected.

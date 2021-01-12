@@ -20,10 +20,16 @@
 }
 
 .flx-text-highlight-tag {
-  padding: 1px 3px;
-  margin: -1px -3px;
-  border-radius: 5px;
+  padding: 1px 2px;
+  margin: -1px -2px;
+  border-radius: 6px;
   overflow-wrap: break-word;
-  // color: #1264a3;
-  background-color: #c1e4ff;
+  background-color: #e1f2fe;
+  color: #a8d3fe;
+  font-weight: bold;
+  opacity: 0.6;
+
+  &.flx-text-highlight-tag-hovered {
+    opacity: 1;
+  }
 }

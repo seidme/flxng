@@ -1,0 +1,20 @@
+<flx-text-input-autocomplete [textInputElement]="textInputElement"
+                             [menuTemplate]="menuTemplate"
+                             [triggerCharacter]="triggerCharacter"
+                             [searchRegexp]="searchRegexp"
+                             [closeMenuOnBlur]="closeMenuOnBlur"
+                             [getChoiceLabel]="getChoiceLabel"
+                             [selectedChoices]="selectedChoices"
+                             (choicesSearch)="choicesSearch.emit($event)"
+                             (choiceSelected)="choiceSelected.emit($event)"
+                             (choiceRemoved)="choiceRemoved.emit($event)"
+                             (selectedChoicesChange)="onSelectedChoicesChange($event)"
+                             (menuShown)="menuShown.emit()"
+                             (menuHidden)="menuHidden.emit()"></flx-text-input-autocomplete>
+
+<flx-text-input-highlight [textInputElement]="textInputElement"
+                          [tags]="selectedCwis"
+                          [tagCssClass]="tagCssClass"
+                          (tagClick)="tagClick.emit($event)"
+                          (tagMouseEnter)="tagMouseEnter.emit($event)"
+                          (tagMouseLeave)="tagMouseLeave.emit($event)"></flx-text-input-highlight>

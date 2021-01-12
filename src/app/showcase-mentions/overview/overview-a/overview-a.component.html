@@ -20,22 +20,21 @@
     </ul>
   </ng-template>
 
-  <flx-text-input-autocomplete [textInputElement]="textareaRef"
-                               [menuTemplate]="menuTemplate"
-                               [triggerCharacter]="'@'"
-                               [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
-                               [getChoiceLabel]="getChoiceLabel"
-                               [selectedChoices]="getSelectedChoices()"
-                               (choicesSearch)="loadChoices($event)"
-                               (selectedChoicesChange)="onSelectedChoicesChange($event)"
-                               (menuShown)="onMenuShown()"
-                               (menuHidden)="onMenuHidden()"></flx-text-input-autocomplete>
-
-  <flx-text-input-highlight #textInputHighlight
-                            [tags]="mentions"
-                            [tagCssClass]="'highlight-tag'"
-                            [textInputElement]="textareaRef"
-                            (tagClick)="onHighlighTagClick($event)"
-                            (tagMouseEnter)="onHighlightTagMouseEnter($event)"
-                            (tagMouseLeave)="onHighlightTagMouseLeave($event)"></flx-text-input-highlight>
+  <flx-mentions [textInputElement]="textareaRef"
+                [menuTemplate]="menuTemplate"
+                [triggerCharacter]="'@'"
+                [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
+                [closeMenuOnBlur]="false"
+                [getChoiceLabel]="getChoiceLabel"
+                [selectedChoices]="getSelectedChoices()"
+                (choicesSearch)="loadChoices($event)"
+                (choiceSelected)="onChoiceSelected($event)"
+                (choiceRemoved)="onChoiceRemoved($event)"
+                (selectedChoicesChange)="onSelectedChoicesChange($event)"
+                (menuShown)="onMenuShown()"
+                (menuHidden)="onMenuHidden()"
+                [tagCssClass]="'highlight-tag'"
+                (tagClick)="onHighlighTagClick($event)"
+                (tagMouseEnter)="onHighlightTagMouseEnter($event)"
+                (tagMouseLeave)="onHighlightTagMouseLeave($event)"></flx-mentions>
 </div>
