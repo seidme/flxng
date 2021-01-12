@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { ChoiceWithIndices, HighlightTag } from '@flxng/mentions';
 
@@ -11,6 +11,7 @@ interface User {
   selector: 'app-overview-a',
   templateUrl: './overview-a.component.html',
   styleUrls: ['./overview-a.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class OverviewAComponent implements OnInit {
   text = `Hello \n@John Doe \n@John J. Doe \n`;
@@ -22,11 +23,7 @@ export class OverviewAComponent implements OnInit {
 
   ngOnInit() {}
 
-  getChoices = async (searchTerm: string): Promise<User[]> => {
-    if (!searchTerm) {
-      return [];
-    }
-
+  async loadChoices(searchTerm: string): Promise<User[]> {
     const users = await this.getUsers();
 
     this.choices = users.filter((user) => {
@@ -34,16 +31,45 @@ export class OverviewAComponent implements OnInit {
     });
 
     return this.choices;
-  };
-
-  onSelectedChoicesChange(choices: ChoiceWithIndices[]): void {
-    this.mentions = choices;
-    console.log('this.choices" ', choices);
   }
 
   getChoiceLabel = (user: User): string => {
     return `@${user.name}`;
   };
+
+  onSelectedChoicesChange(choices: ChoiceWithIndices[]): void {
+    this.mentions = choices;
+    console.log('this.mentions:', this.mentions);
+  }
+
+  onChoiceSelected(choice: ChoiceWithIndices): void {
+    console.log('choiceSelected:', choice);
+  }
+
+  onChoiceRemoved(choice: ChoiceWithIndices): void {
+    console.log('choiceRemoved:', choice);
+  }
+
+  onHighlighTagClick(tagEvent: { event: MouseEvent; tag: HighlightTag }): void {
+    console.log('highlighTagClick:', tagEvent);
+  }
+
+  onHighlightTagMouseEnter(tagEvent: { event: any; tag: HighlightTag }): void {
+    console.log('highlightTagMouseEnter:', tagEvent);
+  }
+
+  onHighlightTagMouseLeave(tagEvent: { event: any; tag: HighlightTag }): void {
+    console.log('highlightTagMouseLeave:', tagEvent);
+  }
+
+  onMenuShown(): void {
+    console.log('Menu shown!');
+  }
+
+  onMenuHidden(): void {
+    console.log('Menu hidden!');
+    this.choices = [];
+  }
 
   getSelectedChoices(): User[] {
     if (this.mentions.length) {
@@ -60,26 +86,6 @@ export class OverviewAComponent implements OnInit {
         },
       ];
     }
-  }
-
-  onHighlighTagClick(tagEvent: { event: MouseEvent; tag: HighlightTag }): void {
-    //console.log('onHighlighTagClick:', tagEvent);
-  }
-
-  onHighlightTagMouseEnter(tagEvent: { event: any; tag: HighlightTag }): void {
-    //console.log('onHighlightTagMouseEnter:', tagEvent);
-  }
-
-  onHighlightTagMouseLeave(tagEvent: { event: any; tag: HighlightTag }): void {
-    //console.log('onHighlightTagMouseLeave:', tagEvent);
-  }
-
-  onMenuShown(): void {
-    console.log('Menu shown!');
-  }
-
-  onMenuHidden(): void {
-    console.log('Menu hidden!');
   }
 
   async getUsers(): Promise<User[]> {

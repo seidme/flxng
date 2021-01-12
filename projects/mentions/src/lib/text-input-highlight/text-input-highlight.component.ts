@@ -86,14 +86,9 @@ export interface TagMouseEvent {
   selector: 'flx-text-input-highlight',
   templateUrl: './text-input-highlight.component.html',
   styleUrls: ['./text-input-highlight.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class TextInputHighlightComponent implements OnChanges, OnDestroy {
-  /**
-   * The CSS class to add to highlighted tags
-   */
-  @Input() tagCssClass: string = '';
-
   /**
    * An array of indices of the textarea value to highlight
    */
@@ -108,6 +103,11 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
    * The textarea value, in not provided will fall back to trying to grab it automatically from the textarea
    */
   @Input() textInputValue: string;
+
+  /**
+   * The CSS class to add to highlighted tags
+   */
+  @Input() tagCssClass: string = '';
 
   /**
    * Called when the area over a tag is clicked
@@ -134,7 +134,7 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
     element: HTMLElement;
     clientRect: ClientRect;
   }>;
-  private mouseHoveredTag: TagMouseEvent | undefined;
+  private hoveredTag: TagMouseEvent | undefined;
   private isDestroyed = false;
 
   constructor(private renderer: Renderer2, private ngZone: NgZone, private cdr: ChangeDetectorRef) {}
@@ -232,9 +232,8 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
         this.textareaEventListeners.push(onMouseMove);
 
         const onMouseLeave = this.renderer.listen(this.textInputElement, 'mouseleave', (event) => {
-          if (this.mouseHoveredTag) {
-            this.tagMouseLeave.emit(this.mouseHoveredTag);
-            this.mouseHoveredTag = undefined;
+          if (this.hoveredTag) {
+            this.onMouseLeave(this.hoveredTag, event);
           }
         });
         this.textareaEventListeners.push(onMouseLeave);
@@ -291,6 +290,7 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
     parts.push('&nbsp;');
     this.highlightedText = parts.join('');
     this.cdr.detectChanges();
+
     this.highlightTagElements = Array.from(this.highlightElement.nativeElement.getElementsByTagName('span')).map(
       (element: HTMLElement) => {
         return { element, clientRect: element.getBoundingClientRect() };
@@ -302,24 +302,44 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
     const matchingTagIndex = this.highlightTagElements.findIndex((elm) =>
       isCoordinateWithinRect(elm.clientRect, event.clientX, event.clientY)
     );
+
     if (matchingTagIndex > -1) {
       const target = this.highlightTagElements[matchingTagIndex].element;
       const tagClass = Array.from(target.classList).find((className) => className.startsWith(tagIndexIdPrefix));
       if (tagClass) {
         const tagId = tagClass.replace(tagIndexIdPrefix, '');
-        const tag: HighlightTag = this.tags[+tagId];
+        const tag: HighlightTag = this.tags[Number(tagId)];
         const tagMouseEvent = { tag, target, event };
+
         if (eventName === 'click') {
           this.tagClick.emit(tagMouseEvent);
-        } else if (!this.mouseHoveredTag) {
-          this.mouseHoveredTag = tagMouseEvent;
-          this.tagMouseEnter.emit(tagMouseEvent);
+        } else {
+          if (this.hoveredTag) {
+            if (this.hoveredTag.target !== tagMouseEvent.target) {
+              this.onMouseLeave(this.hoveredTag, event);
+              this.onMouseEnter(tagMouseEvent, event);
+            }
+          } else {
+            this.onMouseEnter(tagMouseEvent, event);
+          }
         }
       }
-    } else if (eventName === 'mousemove' && this.mouseHoveredTag) {
-      this.mouseHoveredTag.event = event;
-      this.tagMouseLeave.emit(this.mouseHoveredTag);
-      this.mouseHoveredTag = undefined;
+    } else if (eventName === 'mousemove' && this.hoveredTag) {
+      this.onMouseLeave(this.hoveredTag, event);
     }
+  }
+
+  private onMouseEnter(tag: TagMouseEvent, event: MouseEvent): void {
+    tag.event = event;
+    tag.target.classList.add('flx-text-highlight-tag-hovered');
+    this.hoveredTag = tag;
+    this.tagMouseEnter.emit(tag);
+  }
+
+  private onMouseLeave(tag: TagMouseEvent, event: MouseEvent): void {
+    tag.event = event;
+    tag.target.classList.remove('flx-text-highlight-tag-hovered');
+    this.hoveredTag = undefined;
+    this.tagMouseLeave.emit(tag);
   }
 }

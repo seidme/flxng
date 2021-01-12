@@ -1,15 +1,12 @@
-<div class="container">
+<div class="mentions-demo-container">
   <textarea cols="80"
             rows="10"
             #textareaRef
             placeholder="Enter '@' and start typing some name, e.g. 'Doe'"
             [(ngModel)]="text"></textarea>
 
-  <!-- <input type="text" #inputRef> -->
-
   <ng-template #menuTemplate
                let-selectChoice="selectChoice">
-    <!-- TODO: user MAT menu here! Loader may not be needed! -->
     <ul flxLoader
         [flxLoaderVisible]="loading"
         class="flx-selectable-list"
@@ -23,21 +20,21 @@
     </ul>
   </ng-template>
 
-  <flx-text-input-autocomplete [textInputElement]="textareaRef"
-                               [menuTemplate]="menuTemplate"
-                               triggerCharacter="@"
-                               [findChoices]="getChoices"
-                               [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
-                               [getChoiceLabel]="getChoiceLabel"
-                               [selectedChoices]="getSelectedChoices()"
-                               (selectedChoicesChange)="onSelectedChoicesChange($event)"
-                               (menuShown)="onMenuShown()"
-                               (menuHidden)="onMenuHidden()"></flx-text-input-autocomplete>
-
-  <flx-text-input-highlight #textInputHighlight
-                            [tags]="mentions"
-                            [textInputElement]="textareaRef"
-                            (tagClick)="onHighlighTagClick($event)"
-                            (tagMouseEnter)="onHighlightTagMouseEnter($event)"
-                            (tagMouseLeave)="onHighlightTagMouseLeave($event)"></flx-text-input-highlight>
+  <flx-mentions [textInputElement]="textareaRef"
+                [menuTemplate]="menuTemplate"
+                [triggerCharacter]="'@'"
+                [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
+                [closeMenuOnBlur]="false"
+                [getChoiceLabel]="getChoiceLabel"
+                [selectedChoices]="getSelectedChoices()"
+                (choicesSearch)="loadChoices($event)"
+                (choiceSelected)="onChoiceSelected($event)"
+                (choiceRemoved)="onChoiceRemoved($event)"
+                (selectedChoicesChange)="onSelectedChoicesChange($event)"
+                (menuShown)="onMenuShown()"
+                (menuHidden)="onMenuHidden()"
+                [tagCssClass]="'highlight-tag'"
+                (tagClick)="onHighlighTagClick($event)"
+                (tagMouseEnter)="onHighlightTagMouseEnter($event)"
+                (tagMouseLeave)="onHighlightTagMouseLeave($event)"></flx-mentions>
 </div>
