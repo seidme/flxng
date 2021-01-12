@@ -5,21 +5,6 @@
             placeholder="Enter '@' and start typing some name, e.g. 'Doe'"
             [(ngModel)]="text"></textarea>
 
-  <ng-template #menuTemplate
-               let-selectChoice="selectChoice">
-    <ul flxLoader
-        [flxLoaderVisible]="loading"
-        class="flx-selectable-list"
-        [class.loader-only]="!choices.length && loading">
-
-      <li *ngFor="let user of choices"
-          class="flx-selectable-list-item"
-          (click)="selectChoice(user)">
-        <span title="{{user.name}}">{{user.name}}</span>
-      </li>
-    </ul>
-  </ng-template>
-
   <flx-mentions [textInputElement]="textareaRef"
                 [menuTemplate]="menuTemplate"
                 [triggerCharacter]="'@'"
@@ -37,4 +22,19 @@
                 (tagClick)="onHighlighTagClick($event)"
                 (tagMouseEnter)="onHighlightTagMouseEnter($event)"
                 (tagMouseLeave)="onHighlightTagMouseLeave($event)"></flx-mentions>
+
+  <ng-template #menuTemplate
+               let-selectChoice="selectChoice">
+    <ul flxLoader
+        [flxLoaderVisible]="loading"
+        class="flx-selectable-list"
+        [class.loader-only]="!choices.length && loading">
+
+      <li *ngFor="let user of choices"
+          class="flx-selectable-list-item"
+          (click)="selectChoice(user)">
+        <span title="{{user.name}}">{{user.name}}</span>
+      </li>
+    </ul>
+  </ng-template>
 </div>
