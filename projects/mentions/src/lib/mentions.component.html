@@ -5,12 +5,12 @@
                              [closeMenuOnBlur]="closeMenuOnBlur"
                              [getChoiceLabel]="getChoiceLabel"
                              [selectedChoices]="selectedChoices"
-                             (choicesSearch)="choicesSearch.emit($event)"
+                             (search)="search.emit($event)"
                              (choiceSelected)="choiceSelected.emit($event)"
                              (choiceRemoved)="choiceRemoved.emit($event)"
                              (selectedChoicesChange)="onSelectedChoicesChange($event)"
-                             (menuShown)="menuShown.emit()"
-                             (menuHidden)="menuHidden.emit()"></flx-text-input-autocomplete>
+                             (menuShow)="menuShow.emit()"
+                             (menuHide)="menuHide.emit()"></flx-text-input-autocomplete>
 
 <flx-text-input-highlight [textInputElement]="textInputElement"
                           [tags]="selectedCwis"

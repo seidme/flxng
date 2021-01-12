@@ -9,6 +9,7 @@
                 [menuTemplate]="menuTemplate"
                 [triggerCharacter]="'@'"
                 [getChoiceLabel]="getChoiceLabel"
+                [selectedChoices]="getSelectedChoices()"
                 (search)="loadChoices($event)"
                 (selectedChoicesChange)="onSelectedChoicesChange($event)"
                 (menuShow)="onMenuShow()"

@@ -8,12 +8,12 @@ interface User {
 }
 
 @Component({
-  selector: 'app-overview-a',
-  templateUrl: './overview-a.component.html',
-  styleUrls: ['./overview-a.component.scss'],
+  selector: 'app-overview-b',
+  templateUrl: './overview-b.component.html',
+  styleUrls: ['./overview-b.component.scss']
 })
-export class OverviewAComponent implements OnInit {
-  text = ``;
+export class OverviewBComponent implements OnInit {
+  text = `Hello \n@Amelia \n@John J. Doe \n`;
   loading = false;
   choices: User[] = [];
   mentions: ChoiceWithIndices[] = [];
@@ -39,7 +39,6 @@ export class OverviewAComponent implements OnInit {
 
   onSelectedChoicesChange(choices: ChoiceWithIndices[]): void {
     this.mentions = choices;
-    console.log('mentions:', this.mentions);
   }
 
   onMenuShow(): void {
@@ -49,6 +48,23 @@ export class OverviewAComponent implements OnInit {
   onMenuHide(): void {
     console.log('Menu hide!');
     this.choices = [];
+  }
+
+  getSelectedChoices(): User[] {
+    if (this.mentions.length) {
+      return this.mentions.map((m) => m.choice);
+    } else {
+      return [
+        {
+          id: 1,
+          name: 'Amelia',
+        },
+        {
+          id: 4,
+          name: 'John J. Doe',
+        },
+      ];
+    }
   }
 
   async getUsers(): Promise<User[]> {

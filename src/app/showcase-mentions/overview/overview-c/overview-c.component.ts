@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { ChoiceWithIndices } from '@flxng/mentions';
+import { ChoiceWithIndices, HighlightTag } from '@flxng/mentions';
 
 interface User {
   id: number;
@@ -8,12 +8,13 @@ interface User {
 }
 
 @Component({
-  selector: 'app-overview-a',
-  templateUrl: './overview-a.component.html',
-  styleUrls: ['./overview-a.component.scss'],
+  selector: 'app-overview-c',
+  templateUrl: './overview-c.component.html',
+  styleUrls: ['./overview-c.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class OverviewAComponent implements OnInit {
-  text = ``;
+export class OverviewCComponent implements OnInit {
+  text = `Hello \n@Amelia \n@John J. Doe \n`;
   loading = false;
   choices: User[] = [];
   mentions: ChoiceWithIndices[] = [];
@@ -42,6 +43,26 @@ export class OverviewAComponent implements OnInit {
     console.log('mentions:', this.mentions);
   }
 
+  onChoiceSelected(choice: ChoiceWithIndices): void {
+    console.log('choiceSelected:', choice);
+  }
+
+  onChoiceRemoved(choice: ChoiceWithIndices): void {
+    console.log('choiceRemoved:', choice);
+  }
+
+  onHighlighTagClick(tagEvent: { event: MouseEvent; tag: HighlightTag }): void {
+    console.log('highlighTagClick:', tagEvent);
+  }
+
+  onHighlightTagMouseEnter(tagEvent: { event: MouseEvent; tag: HighlightTag }): void {
+    console.log('highlightTagMouseEnter:', tagEvent);
+  }
+
+  onHighlightTagMouseLeave(tagEvent: { event: MouseEvent; tag: HighlightTag }): void {
+    console.log('highlightTagMouseLeave:', tagEvent);
+  }
+
   onMenuShow(): void {
     console.log('Menu show!');
   }
@@ -49,6 +70,23 @@ export class OverviewAComponent implements OnInit {
   onMenuHide(): void {
     console.log('Menu hide!');
     this.choices = [];
+  }
+
+  getSelectedChoices(): User[] {
+    if (this.mentions.length) {
+      return this.mentions.map((m) => m.choice);
+    } else {
+      return [
+        {
+          id: 1,
+          name: 'Amelia',
+        },
+        {
+          id: 4,
+          name: 'John J. Doe',
+        },
+      ];
+    }
   }
 
   async getUsers(): Promise<User[]> {

@@ -11,9 +11,11 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { OverviewComponent } from './overview.component';
 import { OverviewAComponent } from './overview-a/overview-a.component';
+import { OverviewBComponent } from './overview-b/overview-b.component';
+import { OverviewCComponent } from './overview-c/overview-c.component';
 
 @NgModule({
-  declarations: [OverviewComponent, OverviewAComponent],
+  declarations: [OverviewComponent, OverviewAComponent, OverviewBComponent, OverviewCComponent],
   imports: [
     CommonModule,
     FormsModule,

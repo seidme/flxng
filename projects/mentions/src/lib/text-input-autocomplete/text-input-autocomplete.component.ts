@@ -69,12 +69,12 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   /**
    * Called when the options menu is shown
    */
-  @Output() menuShown = new EventEmitter();
+  @Output() menuShow = new EventEmitter();
 
   /**
    * Called when the options menu is hidden
    */
-  @Output() menuHidden = new EventEmitter();
+  @Output() menuHide = new EventEmitter();
 
   /**
    * Called when a choice is selected
@@ -94,7 +94,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   /**
    * Called on user input after entering trigger character. Emits search term to search by
    */
-  @Output() choicesSearch = new EventEmitter<string>();
+  @Output() search = new EventEmitter<string>();
 
   private _eventListeners: Array<() => void> = [];
 
@@ -234,7 +234,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       return;
     }
 
-    this.choicesSearch.emit(searchText);
+    this.search.emit(searchText);
   }
 
   onBlur(event: FocusEvent): void {
@@ -273,7 +273,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     }
 
     this.menuCtrl = undefined;
-    this.menuHidden.emit();
+    this.menuHide.emit();
 
     if (this._editingCwi) {
       // If user didn't make any changes to it, add it back to the selected choices
@@ -312,7 +312,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       triggerCharacterPosition: this.textInputElement.selectionStart,
     };
 
-    this.menuShown.emit();
+    this.menuShow.emit();
   }
 
   selectChoice = (choice: any) => {
@@ -362,7 +362,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
 
     // TODO: editValue to be provided externally?
     const editValue = label.replace(this.triggerCharacter, '');
-    this.choicesSearch.emit(editValue);
+    this.search.emit(editValue);
   }
 
   dumpNonExistingChoices(): void {

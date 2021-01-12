@@ -48,12 +48,12 @@ export class MentionsComponent implements OnInit {
   /**
    * Called when the options menu is shown
    */
-  @Output() menuShown = new EventEmitter();
+  @Output() menuShow = new EventEmitter();
 
   /**
    * Called when the options menu is hidden
    */
-  @Output() menuHidden = new EventEmitter();
+  @Output() menuHide = new EventEmitter();
 
   /**
    * Called when a choice is selected
@@ -73,7 +73,7 @@ export class MentionsComponent implements OnInit {
   /**
    * Called on user input after entering trigger character. Emits search term to search by
    */
-  @Output() choicesSearch = new EventEmitter<string>();
+  @Output() search = new EventEmitter<string>();
 
   // --- text-input-highlight.component inputs/outputs ---
   /**
