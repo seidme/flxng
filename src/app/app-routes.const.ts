@@ -3,12 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/packages',
+    redirectTo: '/mentions',
     pathMatch: 'full',
   },
   {
     path: '**',
-    redirectTo: '/packages',
+    redirectTo: '/mentions',
     pathMatch: 'full',
   },
   // {

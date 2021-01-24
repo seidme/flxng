@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { ChoiceWithIndices, HighlightTag } from '@flxng/mentions';
+import { ChoiceWithIndices, HighlightTag, getChoiceIndex } from '@flxng/mentions';
 
 interface User {
   id: number;
@@ -14,7 +14,7 @@ interface User {
   encapsulation: ViewEncapsulation.None,
 })
 export class OverviewCComponent implements OnInit {
-  text = `Hello \n@Amelia \n@John J. Doe \n`;
+  text = `Hello \n#Amelia \n#John J. Doe \n`;
   loading = false;
   choices: User[] = [];
   mentions: ChoiceWithIndices[] = [];
@@ -35,7 +35,7 @@ export class OverviewCComponent implements OnInit {
   }
 
   getChoiceLabel = (user: User): string => {
-    return `@${user.name}`;
+    return `#${user.name}`;
   };
 
   onSelectedChoicesChange(choices: ChoiceWithIndices[]): void {
@@ -101,7 +101,7 @@ export class OverviewCComponent implements OnInit {
           },
           {
             id: 2,
-            name: 'John',
+            name: 'Doe',
           },
           {
             id: 3,
@@ -117,35 +117,39 @@ export class OverviewCComponent implements OnInit {
           },
           {
             id: 6,
-            name: 'Donald',
+            name: 'Fredericka Wilkie',
           },
           {
             id: 7,
-            name: 'Brian',
+            name: 'Collin Warden',
           },
           {
             id: 8,
-            name: 'Ted',
+            name: 'Hyacinth Hurla',
           },
           {
             id: 9,
-            name: 'Joe Ted',
+            name: 'Paul Bud Mazzei',
           },
           {
             id: 10,
-            name: 'Clara',
+            name: 'Mamie Xander Blais',
           },
           {
             id: 11,
-            name: 'Lisa',
+            name: 'Sacha Murawski',
           },
           {
             id: 12,
-            name: 'Mia',
+            name: 'Marcellus Van Cheney',
           },
           {
             id: 12,
-            name: 'Fred',
+            name: 'Lamar Kowalski',
+          },
+          {
+            id: 13,
+            name: 'Queena Gauss',
           },
         ]);
       }, 600);
