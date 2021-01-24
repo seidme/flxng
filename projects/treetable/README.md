@@ -1,6 +1,8 @@
 
 # Angular Treetable Component
-**@flxng/treetable** - Flexible, feature-rich, customizable, lightweight, easy-to-use, without external dependencies - Treetable component for Angular.
+
+**@flxng/treetable**
+Flexible, feature-rich, customizable, lightweight, easy-to-use, without external dependencies - Treetable component for Angular.
 
 
 ## Docs and Demo
