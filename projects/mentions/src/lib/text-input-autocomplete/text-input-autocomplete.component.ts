@@ -483,6 +483,7 @@ export function precedingCharValid(char: string): boolean {
   return !char || char === '\n' || char === ' ' || char === '(';
 }
 
+// TODO: move to common!
 export function findStringIndex(
   text: string,
   value: string,

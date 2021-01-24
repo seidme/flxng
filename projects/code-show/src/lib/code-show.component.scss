@@ -1,5 +1,6 @@
 :host {
   .container {
+    width:100%;
     //padding-top: 1rem;
 
     &.expanded {
@@ -11,6 +12,7 @@
     }
 
     .content {
+      width:100%;
       background: #e9ecf5;
       padding: 0.2rem;
       border-radius: 0.2rem;
@@ -20,7 +22,9 @@
       }
 
       code {
+        width:100%;
         max-height: 30rem;
+        overflow: auto;
       }
 
       .controls {
