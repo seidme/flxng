@@ -1,6 +1,8 @@
 
 # Angular Loader Component
-**@flxng/loader** - Flexible, lightweight, easy-to-use, without external dependencies - Loader component for Angular.
+
+**@flxng/loader**
+Flexible, lightweight, easy-to-use, without external dependencies - Loader component for Angular.
 
 
 ## Docs and Demo

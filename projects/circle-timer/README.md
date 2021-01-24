@@ -1,6 +1,8 @@
 
 # Angular Circle Timer Component
-**@flxng/circle-timer** - Flexible, lightweight, easy-to-use, without external dependencies - Circle Timer component for Angular.
+
+**@flxng/circle-timer**
+Flexible, lightweight, easy-to-use, without external dependencies - Circle Timer component for Angular.
 
 
 ## Docs and Demo
