@@ -1,7 +1,7 @@
 
 # Angular Paginator component
-
 **@flxng/paginator**
+
 Flexible, lightweight, easy-to-use, without external dependencies - Paginator component for Angular.
 
 
