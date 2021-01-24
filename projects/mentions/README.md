@@ -58,7 +58,7 @@ Name | Description | Output type
 
 ### Basic example
 ```html
-<div class="mentions-demo-container">
+<div class="relative-block-container">
   <textarea cols="60"
             rows="10"
             #textareaRef

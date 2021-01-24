@@ -74,7 +74,7 @@ This way we will mimick imports from the lib while developing, all by having aut
 ### Publishing
 - Update `package.json` of the lib with addl info like "license", "description", etc.
 
-- Increment version of the lib in the `package.json`
+- Increment version of the lib in the `package.json` (update the main README page versions too)
 
 - Build lib:
 ```bash
