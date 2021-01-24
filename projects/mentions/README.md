@@ -1,24 +1,94 @@
-# Mentions
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+# @flxng/mentions
+Mentions component for Angular - Flexible, lightweight, easy-to-use, without external dependencies.
 
-## Code scaffolding
 
-Run `ng generate component component-name --project mentions` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project mentions`.
-> Note: Don't forget to add `--project mentions` or else it will be added to the default project in your `angular.json` file. 
+## Docs and Demo
+https://flxng.codeeve.com/#/mentions
 
-## Build
+![Mentions GIF](https://media.giphy.com/media/GPz7w0VgknlQ4ULRS6/giphy.gif)
 
-Run `ng build mentions` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Publishing
+## Getting Started
+Installation:
+```bash
+$ npm i @flxng/mentions
+```
 
-After building your library with `ng build mentions`, go to the dist folder `cd dist/mentions` and run `npm publish`.
+After importing the module the lib is ready to use:
+```typescript
+import { MentionsModule } from '@flxng/mentions';
 
-## Running unit tests
+@NgModule({
+  imports: [MentionsModule],
+  declarations: [],
+})
+export class DemoModule {}
+```
 
-Run `ng test mentions` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Usage
+Check also [Docs and Demo](https://flxng.codeeve.com/#/mentions).
 
-## Further help
+### @Inputs
+Name | Description | Type | Default
+--- | --- | --- | ---
+`textInputElement` | Reference to the text input element. | `HTMLTextAreaElement` | Required
+`menuTemplate` | Reference to the menu template (used to display the search results). | `TemplateRef` | Required
+`getChoiceLabel` | A function that formats the selected choice once selected. The result (label) is also used as a choice identifier (e.g. when editing choices).  | `(choice: any) => string` | Required
+`triggerCharacter` | The character which will trigger the search. | `string` | `@`
+`searchRegexp` | The regular expression that will match the search text after the trigger character. No match will hide the menu. | `RegExp` | `/^\w*$/`
+`closeMenuOnBlur` | Whether to close the menu when the host `textInputElement` loses focus. | `boolean` | `false`
+`selectedChoices` | Pre-set choices for edit text mode, or to select/mark choices from outside the mentions component. | `any[]` | `[]`
+`tagCssClass` | The CSS class to add to highlighted tags. | `string` | `''`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### @Outputs
+Name | Description | Output type
+--- | --- | ---
+`search` | Called on user input after entering trigger character. Emits search term to search by. | `string`
+`menuShow` | Called when the choices menu is shown. | `void`
+`menuHide` | Called when the choices menu is hidden. | `void`
+`choiceSelected` | Called when a choice is selected. | `ChoiceWithIndices`
+`choiceRemoved` | Called when a choice is removed. | `ChoiceWithIndices`
+`selectedChoicesChange` | Called when a choice is selected, removed, or if any of the choices' indices change. | `ChoiceWithIndices[]`
+`tagClick` | Called when the area over a tag is clicked. | `TagMouseEvent`
+`tagMouseEnter` | Called when the area over a tag is moused over. | `TagMouseEvent`
+`tagMouseLeave` | Called when the area over the tag has the mouse removed from it. | `TagMouseEvent`
+
+### Basic example
+```html
+<div class="mentions-demo-container">
+  <textarea cols="60"
+            rows="10"
+            #textareaRef
+            placeholder="Enter '@' and start typing some name, e.g. 'Doe'"
+            [(ngModel)]="text"></textarea>
+
+  <flx-mentions [textInputElement]="textareaRef"
+                [menuTemplate]="menuTemplate"
+                [triggerCharacter]="'@'"
+                [getChoiceLabel]="getChoiceLabel"
+                (search)="loadChoices($event)"
+                (selectedChoicesChange)="onSelectedChoicesChange($event)"
+                (menuShow)="onMenuShow()"
+                (menuHide)="onMenuHide()"></flx-mentions>
+
+  <ng-template #menuTemplate
+               let-selectChoice="selectChoice">
+    <ul class="flx-selectable-list"
+        [class.loader-only]="!choices.length && loading">
+      <li *ngFor="let user of choices"
+          class="flx-selectable-list-item"
+          (click)="selectChoice(user)">
+        <span title="{{user.name}}">{{user.name}}</span>
+      </li>
+    </ul>
+  </ng-template>
+</div>
+```
+
+## Support
+All suggestions and improvements are welcome and appreciated.
+
+
+## License
+The [MIT License](https://github.com/seidme/flxng/blob/master/LICENSE).

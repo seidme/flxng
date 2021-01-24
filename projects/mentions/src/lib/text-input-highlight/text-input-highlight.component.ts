@@ -90,37 +90,37 @@ export interface TagMouseEvent {
 })
 export class TextInputHighlightComponent implements OnChanges, OnDestroy {
   /**
-   * An array of indices of the textarea value to highlight
+   * An array of indices of the textarea value to highlight.
    */
   @Input() tags: HighlightTag[] = [];
 
   /**
-   * The textarea to highlight
+   * The textarea to highlight.
    */
   @Input() textInputElement: HTMLTextAreaElement;
 
   /**
-   * The textarea value, in not provided will fall back to trying to grab it automatically from the textarea
+   * The textarea value, in not provided will fall back to trying to grab it automatically from the textarea.
    */
   @Input() textInputValue: string;
 
   /**
-   * The CSS class to add to highlighted tags
+   * The CSS class to add to highlighted tags.
    */
   @Input() tagCssClass: string = '';
 
   /**
-   * Called when the area over a tag is clicked
+   * Called when the area over a tag is clicked.
    */
   @Output() tagClick = new EventEmitter<TagMouseEvent>();
 
   /**
-   * Called when the area over a tag is moused over
+   * Called when the area over a tag is moused over.
    */
   @Output() tagMouseEnter = new EventEmitter<TagMouseEvent>();
 
   /**
-   * Called when the area over the tag has the mouse is removed from it
+   * Called when the area over the tag has the mouse removed from it.
    */
   @Output() tagMouseLeave = new EventEmitter<TagMouseEvent>();
 
@@ -150,6 +150,7 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    // TODO: flxRelativeContainer directive instead?
     this.textInputElement.parentElement.style['position'] = 'relative';
     this.textInputElement.style['background'] = 'none';
     this.textInputElement.style['position'] = 'relative';

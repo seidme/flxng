@@ -31,68 +31,69 @@ export interface ChoiceWithIndices {
 })
 export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDestroy {
   /**
-   * Reference to the text input element
+   * Reference to the text input element.
    */
   @Input() textInputElement: HTMLTextAreaElement | HTMLInputElement;
 
   /**
-   * Reference to the menu template
+   * Reference to the menu template (used to display the search results).
    */
   @Input() menuTemplate: TemplateRef<any>;
 
   /**
-   * The character that will trigger the menu to appear
+   * The character which will trigger the search.
    */
   @Input() triggerCharacter = '@';
 
   /**
-   * The regular expression that will match the search text after the trigger character
+   * The regular expression that will match the search text after the trigger character.
+   * No match will hide the menu.
    */
   @Input() searchRegexp = /^\w*$/;
 
   /**
-   * Whether to close the menu when the host textInputElement loses focus
+   * Whether to close the menu when the host textInputElement loses focus.
    */
   @Input() closeMenuOnBlur = false;
 
   /**
-   * Selected choices (required in editing mode in order to keep track of choices)
+   * Pre-set choices for edit text mode, or to select/mark choices from outside the mentions component.
    */
   @Input() selectedChoices: any[] = [];
 
   /**
    * A function that formats the selected choice once selected.
-   * The result (label) is also used as a choice identifier (e.g. when editing choices)
+   * The result (label) is also used as a choice identifier (e.g. when editing choices).
    */
   @Input() getChoiceLabel: (choice: any) => string;
 
   /**
-   * Called when the options menu is shown
+   * Called when the choices menu is shown.
    */
   @Output() menuShow = new EventEmitter();
 
   /**
-   * Called when the options menu is hidden
+   * Called when the choices menu is hidden.
    */
   @Output() menuHide = new EventEmitter();
 
   /**
-   * Called when a choice is selected
+   * Called when a choice is selected.
    */
   @Output() choiceSelected = new EventEmitter<ChoiceWithIndices>();
 
   /**
-   * Called when a choice is removed
+   * Called when a choice is removed.
    */
   @Output() choiceRemoved = new EventEmitter<ChoiceWithIndices>();
 
   /**
-   * Called when a choice is selected, removed, or if any of the choices' indices change
+   * Called when a choice is selected, removed, or if any of the choices' indices change.
    */
   @Output() selectedChoicesChange = new EventEmitter<ChoiceWithIndices[]>();
 
   /**
-   * Called on user input after entering trigger character. Emits search term to search by
+   * Called on user input after entering trigger character. Emits search term to search by.
    */
   @Output() search = new EventEmitter<string>();
 
