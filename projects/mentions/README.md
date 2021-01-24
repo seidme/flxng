@@ -1,12 +1,12 @@
 
 # @flxng/mentions
-Mentions component for Angular - Flexible, lightweight, easy-to-use, without external dependencies.
+Angular mentions component - Flexible, lightweight, easy-to-use, without external dependencies.
 
 
 ## Docs and Demo
 https://flxng.codeeve.com/#/mentions
 
-![Mentions GIF](https://media.giphy.com/media/GPz7w0VgknlQ4ULRS6/giphy.gif)
+![Mentions GIF](https://media.giphy.com/media/dgQS1JGhSVUonPzJCX/giphy.gif)
 
 
 ## Getting Started
@@ -74,8 +74,7 @@ Name | Description | Output type
 
   <ng-template #menuTemplate
                let-selectChoice="selectChoice">
-    <ul class="flx-selectable-list"
-        [class.loader-only]="!choices.length && loading">
+    <ul class="flx-selectable-list">
       <li *ngFor="let user of choices"
           class="flx-selectable-list-item"
           (click)="selectChoice(user)">
