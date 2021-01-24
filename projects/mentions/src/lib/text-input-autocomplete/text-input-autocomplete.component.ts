@@ -202,6 +202,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     if (!this.menuCtrl) {
       // dump choices that are removed from the text (e.g. select all + paste),
       // and/or retrieve them if user e.g. UNDO the action
+      // BUG: if text that contains mentions is selected and deleted using trigger char, no choices will be dumped (this.menuCtrl will be defined)!
       this.dumpNonExistingChoices();
       this.retrieveExistingChoices();
       this.updateIndices();
