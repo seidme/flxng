@@ -152,6 +152,11 @@ export class TextInputHighlightComponent implements OnChanges, OnDestroy {
   ngOnInit(): void {
     // TODO: flxRelativeContainer directive instead?
     this.textInputElement.parentElement.style['position'] = 'relative';
+    if (getComputedStyle(this.textInputElement.parentElement).display === 'inline') {
+      // If textarea is direct child of a component (no DIV container)
+      this.textInputElement.parentElement.style['display'] = 'block';
+    }
+
     this.textInputElement.style['background'] = 'none';
     this.textInputElement.style['position'] = 'relative';
     this.textInputElement.style['z-index'] = '2';
