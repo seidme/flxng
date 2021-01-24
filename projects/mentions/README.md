@@ -1,7 +1,7 @@
 
 # Angular Mentions Component
-
 **@flxng/mentions**
+
 Flexible, lightweight, easy-to-use, without external dependencies - Mentions component for Angular.
 
 
