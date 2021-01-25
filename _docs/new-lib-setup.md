@@ -78,7 +78,7 @@ This way we will mimick imports from the lib while developing, all by having aut
 
 - Build lib:
 ```bash
-$ ng build my-lib
+$ ng build my-lib  # e.g. ng build mentions
 ```
 
 - Go to `dist/my-lib` and run:
