@@ -1,6 +1,15 @@
-.mentions-demo-container {
+.relative-block-container {
+  position: relative; 
+  
   textarea {
     outline: none;
+    resize: none;
+    // border: 2px solid #ededff;
+    // border-radius: 10px;
+
+    // &:focus {
+    //   border: 2px solid #e5e5ff;
+    // }
   }
 
   ul {

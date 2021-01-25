@@ -60,7 +60,7 @@ Name | Description | Output type
 ```html
 <div class="relative-block-container">
   <textarea cols="60"
-            rows="10"
+            rows="6"
             #textareaRef
             placeholder="Enter '@' and start typing some name, e.g. 'Doe'"
             [(ngModel)]="text"></textarea>
