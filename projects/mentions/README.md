@@ -59,16 +59,17 @@ Name | Description | Output type
 ### Basic example
 ```html
 <div class="relative-block-container">
-  <textarea cols="60"
+  <textarea cols="42"
             rows="6"
             #textareaRef
-            placeholder="Enter '@' and start typing some name, e.g. 'Doe'"
+            placeholder="Enter '@' and start typing..."
             [(ngModel)]="text"></textarea>
 
   <flx-mentions [textInputElement]="textareaRef"
                 [menuTemplate]="menuTemplate"
                 [triggerCharacter]="'@'"
                 [getChoiceLabel]="getChoiceLabel"
+                [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
                 (search)="loadChoices($event)"
                 (selectedChoicesChange)="onSelectedChoicesChange($event)"
                 (menuShow)="onMenuShow()"
@@ -86,6 +87,8 @@ Name | Description | Output type
   </ng-template>
 </div>
 ```
+
+More examples [here](https://flxng.codeeve.com/#/mentions).
 
 ## Support
 All suggestions and improvements are welcome and appreciated.

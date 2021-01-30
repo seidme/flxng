@@ -13,9 +13,18 @@ import { OverviewComponent } from './overview.component';
 import { OverviewAComponent } from './overview-a/overview-a.component';
 import { OverviewBComponent } from './overview-b/overview-b.component';
 import { OverviewCComponent } from './overview-c/overview-c.component';
+import { OverviewDComponent } from './overview-d/overview-d.component';
+import { OverviewEComponent } from './overview-e/overview-e.component';
 
 @NgModule({
-  declarations: [OverviewComponent, OverviewAComponent, OverviewBComponent, OverviewCComponent],
+  declarations: [
+    OverviewComponent,
+    OverviewAComponent,
+    OverviewBComponent,
+    OverviewCComponent,
+    OverviewDComponent,
+    OverviewEComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
