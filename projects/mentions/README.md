@@ -1,5 +1,5 @@
 
-# Angular Mentions Component
+# Angular @Mentions Component
 **@flxng/mentions**
 
 Flexible, lightweight, easy-to-use, without external dependencies - Mentions component for Angular.
@@ -8,7 +8,7 @@ Flexible, lightweight, easy-to-use, without external dependencies - Mentions com
 ## Docs and Demo
 https://flxng.codeeve.com/#/mentions
 
-![Mentions GIF](https://media.giphy.com/media/dgQS1JGhSVUonPzJCX/giphy.gif)
+![Mentions GIF](https://media.giphy.com/media/lbmJHnfOIiolzvJ0ZC/giphy.gif)
 
 
 ## Getting Started
