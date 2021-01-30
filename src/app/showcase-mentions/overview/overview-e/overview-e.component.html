@@ -1,0 +1,32 @@
+<div class="relative-block-container">
+
+  <input type="text"
+         #inputRef
+         placeholder="Enter '@' and start typing..."
+         [(ngModel)]="text">
+
+  <flx-text-input-autocomplete [textInputElement]="inputRef"
+                               [menuTemplate]="menuTemplate"
+                               [triggerCharacter]="'@'"
+                               [getChoiceLabel]="getChoiceLabel"
+                               [searchRegexp]="'^([-&.\\w]+ *){0,3}$'"
+                               (search)="loadChoices($event)"
+                               (selectedChoicesChange)="onSelectedChoicesChange($event)"
+                               (menuShow)="onMenuShow()"
+                               (menuHide)="onMenuHide()"></flx-text-input-autocomplete>
+
+  <ng-template #menuTemplate
+               let-selectChoice="selectChoice">
+    <ul flxLoader
+        [flxLoaderVisible]="loading"
+        class="flx-selectable-list"
+        [class.loader-only]="!choices.length && loading">
+
+      <li *ngFor="let user of choices"
+          class="flx-selectable-list-item"
+          (click)="selectChoice(user)">
+        <span title="{{user.name}}">{{user.name}}</span>
+      </li>
+    </ul>
+  </ng-template>
+</div>
