@@ -194,6 +194,8 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
         this.editChoice(cwiToEdit.choice);
       }
     }
+
+    // TODO: prevent arrow keys!?
   }
 
   onInput(event: any): void {

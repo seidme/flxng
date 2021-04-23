@@ -36,7 +36,7 @@ Name | Description | Type | Default
 --- | --- | --- | ---
 `textInputElement` | Reference to the text input element. | `HTMLTextAreaElement` | Required
 `menuTemplate` | Reference to the menu template (used to display the search results). | `TemplateRef` | Required
-`getChoiceLabel` | A function that formats the selected choice once selected. The result (label) is also used as a choice identifier (e.g. when editing choices).  | `(choice: any) => string` | Required
+`getChoiceLabel` | A function that formats the selected choice for view (label). The result (label) is also used as a choice identifier (e.g. when editing choices).  | `(choice: any) => string` | Required
 `triggerCharacter` | The character which will trigger the search. | `string` | `@`
 `searchRegexp` | The regular expression that will match the search text after the trigger character. No match will hide the menu. | `RegExp` | `/^\w*$/`
 `closeMenuOnBlur` | Whether to close the menu when the host `textInputElement` loses focus. | `boolean` | `false`
