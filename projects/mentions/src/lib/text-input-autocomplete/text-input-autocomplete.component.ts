@@ -103,6 +103,9 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   private _dumpedCwis: ChoiceWithIndices[] = [];
   private _editingCwi: ChoiceWithIndices;
 
+  private readonly KEY_BUFFERED = 229;
+  private lastKeyCode: number;
+
   menuCtrl?: {
     template: TemplateRef<any>;
     context: any;
@@ -114,7 +117,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     lastCaretPosition?: number;
   };
 
-  constructor(private ngZone: NgZone, private renderer: Renderer2) {}
+  constructor(private ngZone: NgZone, private renderer: Renderer2) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedChoices) {
@@ -176,6 +179,10 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     const cursorPosition = this.textInputElement.selectionStart;
     const precedingChar = this.textInputElement.value.charAt(cursorPosition - 1);
 
+    this.lastKeyCode = event.keyCode;
+    if (event.keyCode === this.KEY_BUFFERED) {
+      return;
+    }
     if (event.key === this.triggerCharacter && precedingCharValid(precedingChar)) {
       this.showMenu();
       return;
@@ -200,6 +207,15 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     const value = event.target.value;
     const selectedCwisPrevious = JSON.stringify(this._selectedCwis);
 
+    if (this.lastKeyCode === this.KEY_BUFFERED && event.data) {
+      const cursorPosition = this.textInputElement.selectionStart;
+      const precedingChar = this.textInputElement.value.charAt(cursorPosition - 2);
+
+      if (event.data.charAt(0) === this.triggerCharacter && precedingCharValid(precedingChar)) {
+        this.showMenu();
+      }
+    }
+
     if (!this.menuCtrl) {
       // dump choices that are removed from the text (e.g. select all + paste),
       // and/or retrieve them if user e.g. UNDO the action
@@ -219,7 +235,8 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       this.selectedChoicesChange.emit(this._selectedCwis);
     }
 
-    if (value[this.menuCtrl.triggerCharacterPosition] !== this.triggerCharacter) {
+    const triggerCharacterPosition = this.patchAndroidChromeIndex(this.menuCtrl.triggerCharacterPosition);
+    if (value[triggerCharacterPosition] !== this.triggerCharacter) {
       this.hideMenu();
       return;
     }
@@ -267,6 +284,10 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
       this.hideMenu();
       return;
     }
+  }
+
+  private patchAndroidChromeIndex(inputIndex: number): number {
+    return this.lastKeyCode === this.KEY_BUFFERED ? inputIndex - 1 : inputIndex;
   }
 
   private hideMenu() {
@@ -319,7 +340,7 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
 
   selectChoice = (choice: any) => {
     const label = this.getChoiceLabel(choice);
-    const startIndex = this.menuCtrl!.triggerCharacterPosition;
+    const startIndex = this.patchAndroidChromeIndex(this.menuCtrl!.triggerCharacterPosition);
     const start = this.textInputElement.value.slice(0, startIndex);
     const caretPosition = this.menuCtrl!.lastCaretPosition || this.textInputElement.selectionStart;
     const end = this.textInputElement.value.slice(caretPosition);
