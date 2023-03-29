@@ -18,8 +18,8 @@
     "component"
   ],
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14",
-    "@flxng/common": "^1.0.0"
+    "@angular/common": "^9.1.13",
+    "@angular/core": "^9.1.13",
+    "@flxng/common": "^2.0.0"
   }
 }

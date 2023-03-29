@@ -18,10 +18,10 @@
     "component"
   ],
   "peerDependencies": {
-    "@angular/animations": "^8.2.14",
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14",
-    "@flxng/common": "^1.0.0",
-    "@flxng/paginator": "^1.0.0"
+    "@angular/animations": "^9.1.13",
+    "@angular/common": "^9.1.13",
+    "@angular/core": "^9.1.13",
+    "@flxng/common": "^2.0.0",
+    "@flxng/paginator": "^2.0.0"
   }
 }
