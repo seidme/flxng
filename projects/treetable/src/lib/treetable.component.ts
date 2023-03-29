@@ -82,13 +82,13 @@ export class TreetableComponent implements OnInit, AfterContentInit, AfterViewIn
 
   @ViewChild('contentRef', { static: true }) contentRef: ElementRef;
   @ViewChild('contentInnerRef', { static: true }) contentInnerRef: ElementRef;
-  @ViewChild('headRef', { static: false }) headRef: ElementRef;
+  @ViewChild('headRef') headRef: ElementRef;
   @ViewChild('bodyRef', { static: true }) bodyRef: ElementRef;
   @ViewChild('bodyInnerRef', { static: true }) bodyInnerRef: ElementRef;
 
-  @ViewChild(PaginatorComponent, { static: false }) paginator: PaginatorComponent;
+  @ViewChild(PaginatorComponent) paginator: PaginatorComponent;
 
-  @ContentChild(PaginationComponent, { static: false }) pagination: PaginationComponent;
+  @ContentChild(PaginationComponent) pagination: PaginationComponent;
 
   @ContentChildren(forwardRef(() => ColumnComponent)) columnList: QueryList<ColumnComponent>;
   @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
