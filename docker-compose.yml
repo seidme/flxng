@@ -1,0 +1,15 @@
+services:
+  flxng-app:
+    build: .
+    container_name: flxng-app
+    restart: always
+    # Ports are not exposed here. Nginx-proxy will route traffic to this container.
+    networks:
+      - public-network
+      - default
+
+# Define the network used by this stack
+networks:
+  default:
+  public-network:
+    external: true
