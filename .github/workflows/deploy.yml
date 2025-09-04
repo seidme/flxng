@@ -25,7 +25,7 @@ jobs:
             # Navigate to the directory where your project is on the server
             cd /var/www/flxng 
 
-            # Pull the latest changes from GitHub (not needed since checkout command is already doing it?)
+            # Pull the latest changes from GitHub  (not needed since checkout command is already doing it?)
             # git pull
 
             # Rebuild and restart the Docker services
