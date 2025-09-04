@@ -26,7 +26,7 @@ jobs:
             cd /var/www/flxng 
 
             # Pull the latest changes from GitHub  (not needed since checkout command is already doing it?)
-            # git pull
+            git pull
 
             # Rebuild and restart the Docker services
             sudo docker compose up --build -d
