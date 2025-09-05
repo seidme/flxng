@@ -1,7 +1,7 @@
 
 # STAGE 1: Build the Angular application
 # Use Node 12 for compatibility with your Angular 9 app
-FROM node:12-alpine
+FROM node:12-alpine as build-stage
 
 # Set the working directory inside the container
 WORKDIR /app
