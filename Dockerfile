@@ -19,6 +19,8 @@ COPY . .
 # Build the Angular application for production
 RUN npm run build-prod-limit-ram
 
+RUN ls -la /app
+
 # STAGE 2: Serve the application with Nginx
 FROM nginx:1.25.3-alpine as production-stage
 
@@ -27,3 +29,6 @@ COPY --from=build-stage /app/dist/flxng /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
+
+# The default Nginx command is sufficient to start the web server
+CMD ["nginx", "-g", "daemon off;"]
