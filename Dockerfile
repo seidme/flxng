@@ -24,7 +24,7 @@ RUN npm run build-prod-limit-ram
 FROM nginx:1.25.3-alpine as production-stage
 
 # Copy the built application files from the previous stage to the Nginx serving directory
-COPY --from=build-stage /app/dist/flxng-app /usr/share/nginx/html
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
