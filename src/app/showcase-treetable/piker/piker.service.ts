@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 export class PikerService {
 
   isLocalhost = false;
+  apiEndpoint = 'https://scout.codeeve.com';
 
   constructor(
     //private _ngZone: NgZone
@@ -22,7 +23,7 @@ export class PikerService {
     if (this.isLocalhost) {
       reqUrl = 'https://localhost:5001' + `/api/sources/${sourceId}/items/count`;
     } else {
-      reqUrl = `/api/sources/${sourceId}/items/count`;
+      reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/items/count`;
     }
 
     let headers = new HttpHeaders();
@@ -55,7 +56,7 @@ export class PikerService {
     if (this.isLocalhost) {
       reqUrl = 'https://localhost:5001' + '/api/items';
     } else {
-      reqUrl = '/api/items';
+      reqUrl = `${this.apiEndpoint}/api/items`;
     }
 
     const reqBody = filters;
@@ -89,7 +90,7 @@ export class PikerService {
     if (this.isLocalhost) {
       reqUrl = 'https://localhost:5001' + `/api/sources/${sourceId}/iterate-pages`;
     } else {
-      reqUrl = `/api/sources/${sourceId}/iterate-pages`;
+      reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/iterate-pages`;
     }
 
     let headers = new HttpHeaders();
@@ -121,7 +122,7 @@ export class PikerService {
     if (this.isLocalhost) {
       reqUrl = 'https://localhost:5001' + '/api/items/test/' + suggestionsInput;
     } else {
-      reqUrl = '/api/items/test/' + suggestionsInput;
+      reqUrl = `${this.apiEndpoint}/api/items/test/` + suggestionsInput;
     }
 
     let headers = new HttpHeaders();

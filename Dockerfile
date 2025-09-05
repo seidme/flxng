@@ -19,7 +19,8 @@ COPY . .
 # Build the Angular application for production
 RUN npm run build-prod-limit-ram
 
-RUN ls -la /app
+# List the contents of the /app directory to verify the build output
+# RUN ls -la /app
 
 # STAGE 2: Serve the application with Nginx
 FROM nginx:1.25.3-alpine as production-stage
