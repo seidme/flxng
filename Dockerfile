@@ -8,8 +8,9 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json first to leverage Docker's build cache.
 # npm install step will only be re-run if these files change.
-COPY package*.json ./
-RUN npm install
+# Comment out COPY and npm install commands for now completely.... 
+#COPY package*.json ./
+#RUN npm install
 
 # Copy the rest of the application source code into the image's working directory.
 # This ensures the build environment has all the necessary files.
