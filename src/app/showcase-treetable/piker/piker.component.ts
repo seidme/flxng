@@ -27,7 +27,7 @@ export class PikerComponent implements OnInit {
   totalItemsCount = 0;
   suggestionsInput = '';
   emailsInput = '';
-  triggerNameINput = 'Email Trigger 1';
+  triggerNameINput = '';
   isLocalhost = false;
 
   source: any;

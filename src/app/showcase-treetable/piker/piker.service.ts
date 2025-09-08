@@ -14,7 +14,7 @@ export class PikerService {
   ) {
     // const origin = window.location.protocol + '//' + window.location.host;
     this.isLocalhost = window.location.hostname === 'localhost';
-    this.apiEndpoint = 'https://localhost:44315';
+    this.apiEndpoint = this.isLocalhost ? 'https://localhost:44315' : 'https://scout.codeeve.com';
   }
 
   getSource(sourceId: number): any {
