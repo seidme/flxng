@@ -5,7 +5,6 @@ import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class PikerService {
-
   isLocalhost = false;
   apiEndpoint = 'https://scout.codeeve.com';
 
@@ -13,19 +12,13 @@ export class PikerService {
     //private _ngZone: NgZone
     private _http: HttpClient
   ) {
+    // const origin = window.location.protocol + '//' + window.location.host;
     this.isLocalhost = window.location.hostname === 'localhost';
+    this.apiEndpoint = 'https://localhost:44315';
   }
 
-  getTotalItemsCount(sourceId: number): Promise<any> {
-    const origin = window.location.protocol + '//' + window.location.host;
-
-    let reqUrl: string;
-    if (this.isLocalhost) {
-      reqUrl = 'https://localhost:5001' + `/api/sources/${sourceId}/items/count`;
-    } else {
-      reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/items/count`;
-    }
-
+  getSource(sourceId: number): any {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}`;
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -34,7 +27,31 @@ export class PikerService {
       responseType: 'json',
       observe: 'response',
       headers: headers,
-      params: {}
+      params: {},
+    };
+
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  getTotalItemsCount(sourceId: number): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/items/count`;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
     };
 
     return this._http
@@ -43,23 +60,38 @@ export class PikerService {
         map((response: any) => {
           return response.body.count;
         }),
-        catchError(error => throwError(error))
+        catchError((error) => throwError(error))
       )
       .toPromise();
   }
 
   searchItems(filters: any[]): Promise<any[]> {
-    // console.log('search items..:', this.filters);
-    const origin = window.location.protocol + '//' + window.location.host;
-
-    let reqUrl: string;
-    if (this.isLocalhost) {
-      reqUrl = 'https://localhost:5001' + '/api/items';
-    } else {
-      reqUrl = `${this.apiEndpoint}/api/items`;
-    }
-
+    let reqUrl = `${this.apiEndpoint}/api/items`;
     const reqBody = filters;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .post(reqUrl, reqBody, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body as any[];
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  updateSource(source: any): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
@@ -69,30 +101,22 @@ export class PikerService {
       responseType: 'json',
       observe: 'response',
       headers: headers,
-      params: {}
+      params: {},
     };
 
     return this._http
-      .post(reqUrl, reqBody, reqOpts)
+      .put(reqUrl, source, reqOpts)
       .pipe(
         map((response: any) => {
-          return response.body as any[];
+          return response.body;
         }),
-        catchError(error => throwError(error))
+        catchError((error) => throwError(error))
       )
       .toPromise();
   }
 
   iteratePages(sourceId: number, limit: number = 0): Promise<null> {
-    const origin = window.location.protocol + '//' + window.location.host;
-
-    let reqUrl: string;
-    if (this.isLocalhost) {
-      reqUrl = 'https://localhost:5001' + `/api/sources/${sourceId}/iterate-pages`;
-    } else {
-      reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/iterate-pages`;
-    }
-
+    let reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/iterate-pages`;
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -102,29 +126,21 @@ export class PikerService {
       observe: 'response',
       headers: headers,
       params: {
-        limit: limit
-      }
+        limit: limit,
+      },
     };
 
     return this._http
       .get(reqUrl, reqOpts)
       .pipe(
         map((response: any) => null), // no content
-        catchError(error => throwError(error))
+        catchError((error) => throwError(error))
       )
       .toPromise();
   }
 
   testPredictions(suggestionsInput: string): Promise<any[]> {
-    const origin = window.location.protocol + '//' + window.location.host;
-
-    let reqUrl: string;
-    if (this.isLocalhost) {
-      reqUrl = 'https://localhost:5001' + '/api/items/test/' + suggestionsInput;
-    } else {
-      reqUrl = `${this.apiEndpoint}/api/items/test/` + suggestionsInput;
-    }
-
+    let reqUrl = `${this.apiEndpoint}/api/items/test/` + suggestionsInput;
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -133,7 +149,7 @@ export class PikerService {
       responseType: 'json',
       observe: 'response',
       headers: headers,
-      params: {}
+      params: {},
     };
 
     return this._http
@@ -142,7 +158,7 @@ export class PikerService {
         map((response: any) => {
           return response.body.predictions;
         }),
-        catchError(error => throwError(error))
+        catchError((error) => throwError(error))
       )
       .toPromise();
   }
@@ -184,5 +200,4 @@ export class PikerService {
   //       }
   //     );
   // }
-
 }

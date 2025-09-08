@@ -55,6 +55,45 @@
         button.add-new-filter {
           margin: 10px;
         }
+        button.remove-filter {
+          margin: 10px;
+          background-color: #f0a49c;
+        }
+      }
+
+      &.email-triggers {
+        display: flex;
+        flex-direction: row;
+        align-items: space-between;
+
+        .left {
+          width: 60%;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .right {
+          width: 40%;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          max-height: 130px;
+          overflow: auto;
+
+          .email-trigger {
+            display: flex;
+            margin: 5px;
+            background-color: aliceblue;
+            padding: 5px;
+            .trigger-name {
+              display: inline-block;
+              width: 300px;
+            }
+            button {
+              margin-left: 10px;
+            }
+          }
+        }
       }
     }
 

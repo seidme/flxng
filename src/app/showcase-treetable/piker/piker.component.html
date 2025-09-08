@@ -70,6 +70,12 @@
                         rows="2"></textarea>
             </div>
 
+            <div>
+              <button type="button"
+                      class="remove-filter"
+                      (click)="removeFilter(filter)">-</button>
+            </div>
+
             <!-- <div>
               <input type="checkbox"
                      [(ngModel)]="filter.caseSensitive">
@@ -88,10 +94,8 @@
 
           <br>
           <br>
-          <br>
-          <br>
 
-          <ng-container *ngIf="isLocalhost">
+          <ng-container *ngIf="isLocalhost && false">
             <button (click)="iteratePages($event)">Iterate pages</button>
             <br>
 
@@ -102,6 +106,33 @@
                     class=""
                     (click)="testPredictions($event)">Get suggestions</button>
           </ng-container>
+        </div>
+
+        <div class="grid-options-row email-triggers">
+          <div class="left">
+            <input type="text"
+                   [(ngModel)]="triggerNameINput">
+            <textarea name="emailsInput"
+                      id="emailsInput"
+                      [(ngModel)]="emailsInput"
+                      placeholder="Enter emails separated by comma..."
+                      cols="60"
+                      rows="2"></textarea>
+            <button type="button"
+                    class="add-email-trigger"
+                    (click)="addEmailTrigger()">Create email trigger</button>
+          </div>
+
+          <div class="right trigger-list">
+            <div *ngFor="let trigger of source?.parsedItemFilters"
+                 class="email-trigger">
+              <span class="trigger-name">{{trigger.name}}</span>
+              <button type="button"
+                      (click)="applyFiltersFromTrigger(trigger)">Apply filters from trigger</button>
+              <button type="button"
+                      (click)="removeTrigger(trigger)">Delete</button>
+            </div>
+          </div>
         </div>
 
         <div class="grid-options-row">
