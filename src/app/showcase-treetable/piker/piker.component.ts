@@ -204,6 +204,8 @@ export class PikerComponent implements OnInit {
 
   applyFiltersFromTrigger(trigger) {
     this.filters = JSON.parse(JSON.stringify(trigger.filters));
+    this.emailsInput = trigger.emailsToNotify.join(', ');
+    this.triggerNameINput = trigger.name;
   }
 
   async removeTrigger(trigger) {
@@ -220,5 +222,18 @@ export class PikerComponent implements OnInit {
     // The test() method executes a search for a match between a regular expression and a specified string.
     // Returns true if it finds a match, otherwise false.
     return regex.test(email);
+  }
+
+  removeItem(item) {
+    this._service
+      .deleteItem(item.id)
+      .then(() => {
+        console.log('Item removed successfully.');
+        this.items = this.items.filter((i) => i !== item);
+        this.totalItemsCount--;
+      })
+      .catch((error) => {
+        console.error('Error removing item:', error);
+      });
   }
 }

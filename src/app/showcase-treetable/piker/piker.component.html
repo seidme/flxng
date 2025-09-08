@@ -72,7 +72,7 @@
 
             <div>
               <button type="button"
-                      class="remove-filter"
+                      class="remove-button"
                       (click)="removeFilter(filter)">-</button>
             </div>
 
@@ -131,6 +131,7 @@
               <button type="button"
                       (click)="applyFiltersFromTrigger(trigger)">Apply filters from trigger</button>
               <button type="button"
+                      class="remove-button"
                       (click)="removeTrigger(trigger)">Delete</button>
             </div>
           </div>
@@ -204,6 +205,16 @@
                class="flx-link">{{item[col.field]}}</a>
           </span>
         </div>
+      </ng-template>
+    </flx-column>
+    <flx-column [field]="'actions'"
+                [header]="'Actions'"
+                [sortable]="false">
+      <ng-template flxTemplate="bodyCell"
+                   let-item="rowData">
+        <button type="button"
+                class="remove-button"
+                (click)="removeItem(item)">-</button>
       </ng-template>
     </flx-column>
 

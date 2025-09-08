@@ -163,6 +163,31 @@ export class PikerService {
       .toPromise();
   }
 
+  deleteItem(itemId: number): Promise<void> {
+    let reqUrl = `${this.apiEndpoint}/api/items/${itemId}`;
+
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .delete(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
   // testPredictions(): void {
   //   let reqUrl = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
 
