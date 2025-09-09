@@ -31,6 +31,7 @@ export class PikerComponent implements OnInit {
   isLocalhost = false;
 
   source: any;
+  searchResponse: any;
 
   readonly operators: Array<{ [key: string]: any }> = [
     {
@@ -109,10 +110,10 @@ export class PikerComponent implements OnInit {
     }
 
     try {
-      const items = await this._service.searchItems(this.filters);
-      console.log('response items: ', items);
+      this.searchResponse = await this._service.searchItems(this.filters);
+      console.log('searchResponse: ', this.searchResponse);
 
-      this.items = items.map((item) => Object.assign(item, item.parsedDetails));
+      this.items = this.searchResponse.items.map((item) => Object.assign(item, item.parsedDetails));
 
       // this.items = this.items.filter(i => {
       //   var address = i.parsedDetails['11']; // formatted address
@@ -161,7 +162,7 @@ export class PikerComponent implements OnInit {
       {
         fieldId: '0', // title
         operatorId: 'NOT_CONTAINS',
-        value: 'izdavanje && izdajem && iznajm && kupujem && trazim && stan na dan && duzi period',
+        value: 'stup && Stup && tibra && Tibra && Istocno && istocno && kuca && kuci && izdav && izdaj && iznajm && kupujem && trazim && na dan && duzi period',
         caseSensitive: true,
       },
     ];

@@ -14,7 +14,7 @@ export class PikerService {
   ) {
     // const origin = window.location.protocol + '//' + window.location.host;
     this.isLocalhost = window.location.hostname === 'localhost';
-    this.apiEndpoint = this.isLocalhost ? 'https://localhost:44315' : 'https://scout.codeeve.com';
+    this.apiEndpoint = this.isLocalhost && false ? 'https://localhost:44315' : 'https://scout.codeeve.com';
   }
 
   getSource(sourceId: number): any {
@@ -65,7 +65,7 @@ export class PikerService {
       .toPromise();
   }
 
-  searchItems(filters: any[]): Promise<any[]> {
+  searchItems(filters: any[]): Promise<any> {
     let reqUrl = `${this.apiEndpoint}/api/items`;
     const reqBody = filters;
     let headers = new HttpHeaders();
@@ -83,7 +83,7 @@ export class PikerService {
       .post(reqUrl, reqBody, reqOpts)
       .pipe(
         map((response: any) => {
-          return response.body as any[];
+          return response.body as any;
         }),
         catchError((error) => throwError(error))
       )

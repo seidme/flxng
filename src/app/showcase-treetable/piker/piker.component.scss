@@ -12,6 +12,10 @@
     background-color: #f0a49c;
   }
 
+  .bg-green {
+    background-color: #daf9da;
+  }
+
   flx-treetable {
     //height: 100%;
     //min-height: min-content;
@@ -36,6 +40,21 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+
+      &.search-stats {
+        min-height: auto;
+        display: flex;
+        padding: 5px;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 5px;
+        div {
+          margin-right: 10px;
+          &.db-count {
+            margin-right: 50px;
+          }
+        }
+      }
 
       &.api-filters {
         margin: 10px;
