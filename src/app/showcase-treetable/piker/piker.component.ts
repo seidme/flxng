@@ -104,10 +104,10 @@ export class PikerComponent implements OnInit {
   }
 
   async searchItems() {
-    if (!this.filters.length) {
-      console.error('No filters provided!');
-      return;
-    }
+    // if (!this.filters.length) {
+    //   console.error('No filters provided!');
+    //   return;
+    // }
 
     try {
       this.searchResponse = await this._service.searchItems(this.filters);
