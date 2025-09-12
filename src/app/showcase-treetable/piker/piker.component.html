@@ -131,9 +131,15 @@
                       placeholder="Enter emails separated by comma..."
                       cols="60"
                       rows="2"></textarea>
-            <button type="button"
-                    class="add-email-trigger"
-                    (click)="addEmailTrigger()">Create email trigger</button>
+            <div class="flex-direction-row">
+              <button type="button"
+                      class="add-email-trigger"
+                      (click)="addEmailTrigger()">Create new trigger</button>
+              <button *ngIf="updatingTrigger"
+                      type="button"
+                      class="add-email-trigger"
+                      (click)="addEmailTrigger(true)">Update selected trigger</button>
+            </div>
           </div>
 
           <div class="right trigger-list">
@@ -200,7 +206,7 @@
                 [header]="'pricePerSquareMeter'">
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData">
-        <span [class.bg-green]="item['10'] <= item['12']">{{item['10']}}</span>
+        <span [style.background-color]="item['10'] > 0 && getGradingColor(item['10'], searchResponse?.m2PriceAverage.median)">{{item['10']}}</span>
       </ng-template>
     </flx-column>
     <flx-column [field]="'12'"

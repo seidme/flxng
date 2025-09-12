@@ -29,6 +29,7 @@ export class PikerComponent implements OnInit {
   emailsInput = '';
   triggerNameINput = '';
   isLocalhost = false;
+  updatingTrigger: any;
 
   source: any;
   searchResponse: any;
@@ -57,7 +58,7 @@ export class PikerComponent implements OnInit {
     {
       id: 'GREATER_THAN',
       name: 'Greater than',
-      placeholder: 'E.g: 2',
+      placeholder: 'E.g: 2, or a date using YYYY-MM-DD format',
     },
     {
       id: 'LOWER_THAN',
@@ -162,13 +163,14 @@ export class PikerComponent implements OnInit {
       {
         fieldId: '0', // title
         operatorId: 'NOT_CONTAINS',
-        value: 'stup && Stup && tibra && Tibra && Istocno && istocno && kuca && kuci && izdav && izdaj && iznajm && kupujem && trazim && na dan && duzi period',
+        value:
+          'stup && Stup && tibra && Tibra && Istocno && istocno && kuca && kuci && izdav && izdaj && iznajm && kupujem && trazim && na dan && duzi period',
         caseSensitive: true,
       },
     ];
   }
 
-  async addEmailTrigger(): Promise<void> {
+  async addEmailTrigger(updateExisting = false): Promise<void> {
     if (!this.triggerNameINput) {
       console.error('No trigger name provided!');
       return;
@@ -188,15 +190,23 @@ export class PikerComponent implements OnInit {
       return;
     }
 
-    const emailTrigger = {
-      name: this.triggerNameINput,
-      filters: this.filters,
-      emailsToNotify: emails,
-    };
-    this.source.parsedItemFilters.push(emailTrigger);
+    if (updateExisting && this.updatingTrigger) {
+      // holds the same reference, so just mutate object
+      this.updatingTrigger.name = this.triggerNameINput;
+      this.updatingTrigger.filters = this.filters;
+      this.updatingTrigger.emailsToNotify = emails;
+    } else {
+      const emailTrigger = {
+        name: this.triggerNameINput,
+        filters: this.filters,
+        emailsToNotify: emails,
+      };
+      this.source.parsedItemFilters.push(emailTrigger);
+    }
 
     const updatedSource = await this._service.updateSource(this.source);
     console.log('updated source: ', updatedSource);
+    this.updatingTrigger = undefined;
   }
 
   removeFilter(filter) {
@@ -204,6 +214,7 @@ export class PikerComponent implements OnInit {
   }
 
   applyFiltersFromTrigger(trigger) {
+    this.updatingTrigger = trigger;
     this.filters = JSON.parse(JSON.stringify(trigger.filters));
     this.emailsInput = trigger.emailsToNotify.join(', ');
     this.triggerNameINput = trigger.name;
@@ -236,5 +247,35 @@ export class PikerComponent implements OnInit {
       .catch((error) => {
         console.error('Error removing item:', error);
       });
+  }
+
+  getGradingColor(value, average): string {
+    if (value > average) {
+      return '';
+    }
+
+    // The color will reach its darkest shade when the difference is 40% of the average.
+    // Increase this value for a more gradual transition, or decrease it for a more aggressive one.
+    const aggressiveness = 0.33;
+
+    const difference = average - value;
+
+    const subtleGreen = [245, 255, 230];
+    const darkGreen = [34, 139, 34];
+
+    const maxDifferencePercentage = aggressiveness;
+    const maxDifference = average * maxDifferencePercentage;
+
+    const normalizedDiff = Math.min(1, Math.max(0, difference / maxDifference));
+
+    // The square function makes the color change very subtle for small differences
+    // and then increases more noticeably as the difference grows.
+    const scaledDiff = normalizedDiff * normalizedDiff;
+
+    const r = subtleGreen[0] + (darkGreen[0] - subtleGreen[0]) * scaledDiff;
+    const g = subtleGreen[1] + (darkGreen[1] - subtleGreen[1]) * scaledDiff;
+    const b = subtleGreen[2] + (darkGreen[2] - subtleGreen[2]) * scaledDiff;
+
+    return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
   }
 }
