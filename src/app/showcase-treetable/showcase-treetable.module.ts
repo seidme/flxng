@@ -7,7 +7,7 @@ import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable'; // remove these imoprts once all packages are moved to projects
 
 import { SharedModule } from '../shared/shared.module';
-import { OverviewModule} from './overview/overview.module';
+import { OverviewModule } from './overview/overview.module';
 import { ScrollingModule } from './scrolling/scrolling.module';
 
 import { showcaseTreetableRoutes } from './showcase-treetable-routes.const';
@@ -19,6 +19,9 @@ import { GetStartedComponent } from './get-started/get-started.component';
 import { PikerComponent } from './piker/piker.component';
 import { PikerService } from './piker/piker.service';
 
+// stuff for Piker
+import { ItemEditComponent } from './piker/modals/item-edit/item-edit.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -28,9 +31,10 @@ import { PikerService } from './piker/piker.service';
     FlxngCommonModule,
     FlxngTreetableModule,
     OverviewModule,
-    ScrollingModule
+    ScrollingModule,
   ],
-  declarations: [PikerComponent, ShowcaseTreetableComponent, TestComponent, GetStartedComponent],
-  providers: [PikerService, ShowcaseTreetableService]
+  declarations: [PikerComponent, ShowcaseTreetableComponent, TestComponent, GetStartedComponent, ItemEditComponent],
+  entryComponents: [ItemEditComponent],
+  providers: [PikerService, ShowcaseTreetableService],
 })
 export class ShowcaseTreetableModule {}

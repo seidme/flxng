@@ -137,7 +137,7 @@
                       (click)="addEmailTrigger()">Create new trigger</button>
               <button *ngIf="updatingTrigger"
                       type="button"
-                      class="add-email-trigger"
+                      class="update-email-trigger"
                       (click)="addEmailTrigger(true)">Update selected trigger</button>
             </div>
           </div>
@@ -240,6 +240,9 @@
                 [sortable]="false">
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData">
+        <button type="button"
+                class="edit-button maring-right-10"
+                (click)="editItem(item)">Edit</button>
         <button type="button"
                 class="remove-button"
                 (click)="removeItem(item)">-</button>

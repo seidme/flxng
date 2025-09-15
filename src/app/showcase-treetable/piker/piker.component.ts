@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
@@ -10,7 +10,9 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, retry, tap } from 'rxjs/operators';
 
-import { PikerService } from './piker.service';
+import { Item, PikerService } from './piker.service';
+import { ModalService } from '../../shared/components/modal/modal.service';
+import { ItemEditComponent } from './modals/item-edit/item-edit.component';
 
 declare var window: any;
 
@@ -20,7 +22,7 @@ declare var window: any;
   styleUrls: ['./piker.component.scss'],
 })
 export class PikerComponent implements OnInit {
-  items: Array<{ [key: string]: any }> = [];
+  items: Item[] = [];
 
   filters: Array<{ [key: string]: any }> = [];
 
@@ -67,7 +69,12 @@ export class PikerComponent implements OnInit {
     },
   ];
 
-  constructor(private _http: HttpClient, private _service: PikerService) {}
+  constructor(
+    private _http: HttpClient,
+    private cdr: ChangeDetectorRef,
+    private _service: PikerService,
+    private modal: ModalService
+  ) {}
 
   ngOnInit() {
     this.isLocalhost = window.location.hostname === 'localhost';
@@ -114,7 +121,9 @@ export class PikerComponent implements OnInit {
       this.searchResponse = await this._service.searchItems(this.filters);
       console.log('searchResponse: ', this.searchResponse);
 
+      // just so it's easier for table to consume, should not bue used outside the table...
       this.items = this.searchResponse.items.map((item) => Object.assign(item, item.parsedDetails));
+      // this.items = this.searchResponse.items;
 
       // this.items = this.items.filter(i => {
       //   var address = i.parsedDetails['11']; // formatted address
@@ -277,5 +286,13 @@ export class PikerComponent implements OnInit {
     const b = subtleGreen[2] + (darkGreen[2] - subtleGreen[2]) * scaledDiff;
 
     return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+  }
+
+  async editItem(item: Item): Promise<void> {
+    const updatedItem = await this.modal.open(ItemEditComponent, { item: item, source: this.source });
+    if (updatedItem) {
+      this.items = [];
+      this.searchItems(); // refresh list, could be optimized to just update the item in place
+    }
   }
 }

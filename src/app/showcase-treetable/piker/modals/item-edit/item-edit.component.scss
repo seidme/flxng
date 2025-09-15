@@ -1,0 +1,45 @@
+:host {
+}
+
+.modal-content-wrapper {
+  width: 800px;
+  height: 500px;
+
+  .head {
+  }
+
+  .body {
+    overflow: auto;
+    .form {
+      .form-field-group {
+        margin-bottom: 10px;
+        .form-field {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 5px;
+
+          label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 12px;
+          }
+
+          // input, select, textarea {
+          //   padding: 8px;
+          //   font-size: 14px;
+          //   border: 1px solid #ccc;
+          //   border-radius: 4px;
+          // }
+
+          // textarea {
+          //   resize: vertical;
+          //   min-height: 80px;
+          // }
+        }
+      }
+    }
+
+    .foot {
+    }
+  }
+}

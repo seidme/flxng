@@ -3,6 +3,69 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
+export interface ItemDetailsSchemaField {
+  id: string; // e.g., '0', '1', ...
+  name: string;
+  type: 'string' | 'number' | 'boolean' | 'date';
+  xPath: string; // "//*[contains(@class, 'main-title-listing')]/text()"
+  pattern: string | null;
+  selector: string;
+}
+
+export enum ItemField {
+  Title = '0',
+  Price = '1',
+  Location = '2',
+  Address = '3',
+  M2 = '4',
+  M2Balcony = '5',
+  Floor = '6',
+  ConstructionPeriod = '7',
+  ShortDescription = '8',
+  LongDescription = '9',
+  M2Price = '10',
+  FormattedAddress = '11',
+  M2PriceStreetMedianAverage = '12',
+  M2PriceStreetMeanAverage = '13',
+  StreetGroupingCount = '14',
+}
+
+export type ItemDetails = {
+  [value in ItemField]: any;
+};
+
+export interface Item {
+  id: number;
+  identifier: string;
+  detailsUrl: string;
+  // details: ItemDetails; // exists but should not be used
+  parsedDetails: ItemDetails;
+  dateCreated: string;
+  sourceId: number;
+
+  // // scraped fields are assgined to the item itself
+  // [value in ItemField]: any;
+}
+
+export interface Source {
+  id: number;
+  name: string;
+  Url: string;
+  Description: string;
+  // itemDetailsSchema: ItemDetailsSchemaField[]; // exists but should not be used
+  parsedItemDetailsSchema: ItemDetailsSchemaField[];
+  active: boolean;
+  dateCreated: string;
+  dateChecked: string;
+  itemFilters: any[]; // triggers
+}
+
+export interface SearchResponse {
+  items: Item[];
+  totalCount: number;
+  m2PriceAverage: { median: number; mean: number };
+}
+
 @Injectable()
 export class PikerService {
   isLocalhost = false;
@@ -65,7 +128,34 @@ export class PikerService {
       .toPromise();
   }
 
-  searchItems(filters: any[]): Promise<any> {
+  getPageDetail(detailsUrl: string, xPath: string): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/parse-tem-detial`;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {
+        itemDetailsUrl: detailsUrl,
+        selector: xPath,
+      },
+    };
+
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  searchItems(filters: any[]): Promise<SearchResponse> {
     let reqUrl = `${this.apiEndpoint}/api/items`;
     const reqBody = filters;
     let headers = new HttpHeaders();
@@ -90,7 +180,7 @@ export class PikerService {
       .toPromise();
   }
 
-  updateSource(source: any): Promise<any> {
+  updateSource(source: any): Promise<Source> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}`;
 
     let headers = new HttpHeaders();
@@ -106,6 +196,36 @@ export class PikerService {
 
     return this._http
       .put(reqUrl, source, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  updateItem(item: Item): Promise<Item> {
+    let reqUrl = `${this.apiEndpoint}/api/items/${item.id}`;
+
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    for(var i = 0; i < Object.keys(item.parsedDetails).length; i++) {
+      // remove parsedDetails properties from the item itself, since only table consumes them
+      delete item[Object.keys(item.parsedDetails)[i]];
+    }
+
+    return this._http
+      .put(reqUrl, item, reqOpts)
       .pipe(
         map((response: any) => {
           return response.body;

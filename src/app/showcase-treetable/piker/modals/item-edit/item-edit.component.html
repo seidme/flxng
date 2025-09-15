@@ -1,0 +1,26 @@
+<div class="modal-content-wrapper">
+  <div class="head">
+    <h2>Edit item</h2>
+    <!-- <button class="close-button" (click)="close()">×</button> -->
+  </div>
+  <div class="body">
+    <div class="form">
+      <ng-container *ngFor="let fieldSchema of source.parsedItemDetailsSchema">
+        <div class="form-field-group"
+             *ngIf="isFieldEditable(fieldSchema.id)">
+          <div class="form-field">
+            <label for="{{fieldSchema.id}}">{{fieldSchema.name}}:</label>
+            <input id="{{fieldSchema.id}}"
+                   [(ngModel)]="editingItem.parsedDetails[fieldSchema.id]" />
+          </div>
+
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+  <div class="foot">
+    <button type="submit"
+            (click)="save()">Save</button>
+  </div>
+</div>
