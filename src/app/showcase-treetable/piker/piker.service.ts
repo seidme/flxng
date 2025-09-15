@@ -180,6 +180,31 @@ export class PikerService {
       .toPromise();
   }
 
+  getReport(filters: any[]): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/items/report/month`;
+    const reqBody = filters;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .post(reqUrl, reqBody, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body as any;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
   updateSource(source: any): Promise<Source> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}`;
 

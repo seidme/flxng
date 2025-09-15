@@ -295,4 +295,9 @@ export class PikerComponent implements OnInit {
       this.searchItems(); // refresh list, could be optimized to just update the item in place
     }
   }
+
+  async getReport(): Promise<void> {
+    const report = await this._service.getReport(this.filters);
+    console.log('report:', report);
+  }
 }
