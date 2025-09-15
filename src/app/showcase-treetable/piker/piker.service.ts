@@ -43,7 +43,7 @@ export interface Item {
   dateCreated: string;
   sourceId: number;
 
-  // // scraped fields are assgined to the item itself
+  // // scraped fields are assgined to the item itself (only connsumerd by table, should not be used)
   // [value in ItemField]: any;
 }
 

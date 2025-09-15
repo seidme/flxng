@@ -12,20 +12,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
 import { ModalService } from './modal.service';
-
-// --- Dynamic Content Component ---
-// A simple component to demonstrate dynamic rendering.
-@Component({
-  template: `
-    <h2>Dynamic Component</h2>
-    <p>This content was rendered dynamically from a separate component passed to the service.</p>
-  `,
-  selector: 'flxng-dynamic-content',
-})
-export class DynamicContentComponent {}
 
 // --- Modal Component ---
 // This component listens to the ModalService to display content.
