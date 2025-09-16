@@ -11,7 +11,13 @@
           <div class="form-field">
             <label for="{{fieldSchema.id}}">{{fieldSchema.name}}:</label>
             <input id="{{fieldSchema.id}}"
+                   *ngIf="fieldSchema.id !== '9'"
                    [(ngModel)]="editingItem.parsedDetails[fieldSchema.id]" />
+            <textarea id="{{fieldSchema.id}}"
+                      *ngIf="fieldSchema.id === '9'"
+                      cols="60"
+                      rows="3"
+                      [(ngModel)]="editingItem.parsedDetails[fieldSchema.id]"></textarea>
           </div>
 
         </div>
@@ -21,7 +27,7 @@
   </div>
   <div class="foot">
     <button type="button"
-            class="delete-button bg-red" 
+            class="delete-button bg-red"
             (click)="delete()">Delete</button>
     <button type="submit"
             (click)="save()">Save</button>

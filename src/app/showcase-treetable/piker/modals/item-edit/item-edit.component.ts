@@ -40,7 +40,7 @@ export class ItemEditComponent implements OnInit {
       '6',
       // '7',
       // '8',
-      // '9',
+       '9',
       '10',
       // '11', // FormattedAddress
       // '12', // M2PriceStreetMedianAverage
