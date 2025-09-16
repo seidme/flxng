@@ -49,4 +49,10 @@ export class ItemEditComponent implements OnInit {
     ];
     return editableFieldIds.includes(fieldId);
   }
+
+  delete(): Promise<void> {
+    return this._service.deleteItem(this.item.id).then(() => {
+      this.modalService.close(true);
+    });
+  }
 }

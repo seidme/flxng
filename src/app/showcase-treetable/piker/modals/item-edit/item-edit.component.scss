@@ -4,12 +4,18 @@
 .modal-content-wrapper {
   width: 800px;
   height: 500px;
+  // padding: 10px;
 
   .head {
+    padding: 0 20px;
+    height: 50px;
   }
 
   .body {
+    padding: 0 20px;
+    height: 400px;
     overflow: auto;
+
     .form {
       .form-field-group {
         margin-bottom: 10px;
@@ -38,8 +44,21 @@
         }
       }
     }
+  }
 
-    .foot {
+  .foot {
+    padding: 0 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      margin-right: 10px;
     }
   }
+}
+
+.bg-red {
+  background-color: #f0a49c;
 }

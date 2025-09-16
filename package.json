@@ -29,6 +29,8 @@
     "@angular/platform-server": "~8.2.14",
     "@angular/router": "~8.2.14",
     "core-js": "~2.5.7",
+    "highcharts": "^8.0.0",
+    "highcharts-angular": "^2.8.0",
     "rxjs": "~6.4.0",
     "tslib": "~1.10.0",
     "zone.js": "~0.9.1"

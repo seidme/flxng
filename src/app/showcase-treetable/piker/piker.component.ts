@@ -13,6 +13,8 @@ import { map, catchError, retry, tap } from 'rxjs/operators';
 import { Item, PikerService } from './piker.service';
 import { ModalService } from '../../shared/components/modal/modal.service';
 import { ItemEditComponent } from './modals/item-edit/item-edit.component';
+import { AnalyticsComponent } from './modals/analytics/analytics.component';
+import { ActivatedRoute } from '@angular/router';
 
 declare var window: any;
 
@@ -32,7 +34,7 @@ export class PikerComponent implements OnInit {
   triggerNameINput = '';
   isLocalhost = false;
   updatingTrigger: any;
-
+  queryParams: any = {};
   source: any;
   searchResponse: any;
 
@@ -60,30 +62,46 @@ export class PikerComponent implements OnInit {
     {
       id: 'GREATER_THAN',
       name: 'Greater than',
-      placeholder: 'E.g: 2, or a date using YYYY-MM-DD format',
+      placeholder: 'Number, date (YYYY-MM-DD), or keyword "AVERAGE" (search results considered)',
     },
     {
       id: 'LOWER_THAN',
       name: 'Lower than',
-      placeholder: 'E.g: 4',
+      placeholder: 'Number, date (YYYY-MM-DD), or keyword "AVERAGE (search results considered)"',
     },
   ];
 
   constructor(
     private _http: HttpClient,
     private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
     private _service: PikerService,
     private modal: ModalService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.isLocalhost = window.location.hostname === 'localhost';
 
-    this._service.getSource(1).then((s) => {
-      this.source = s;
-    });
+    this.source = await this._service.getSource(1);
 
     this.getTotalItemsCount();
+
+    this.route.queryParams.subscribe(async (params) => {
+      // The `queryParams` observable provides the parameter object.
+      // This is the ideal way to get params because it reacts to changes.
+      Object.keys(params).forEach((key) => {
+        this.queryParams[key] = params[key];
+      });
+
+      console.log('this.queryParams:', this.queryParams);
+
+      if (this.queryParams['editItemId']) {
+        const item = await this._service.getItem(this.queryParams['editItemId']);
+        if (item) {
+          this.editItem(item);
+        }
+      }
+    });
   }
 
   async getTotalItemsCount() {
@@ -296,8 +314,11 @@ export class PikerComponent implements OnInit {
     }
   }
 
-  async getReport(): Promise<void> {
-    const report = await this._service.getReport(this.filters);
-    console.log('report:', report);
+  async openAnalytics(): Promise<void> {
+    const result = await this.modal.open(AnalyticsComponent, { source: this.source, filters: this.filters });
+    if (result) {
+      // this.items = [];
+      // this.searchItems();
+    }
   }
 }

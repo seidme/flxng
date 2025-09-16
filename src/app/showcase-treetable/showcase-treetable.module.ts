@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { HighchartsChartModule } from 'highcharts-angular';
+
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable'; // remove these imoprts once all packages are moved to projects
 
@@ -21,6 +23,7 @@ import { PikerService } from './piker/piker.service';
 
 // stuff for Piker
 import { ItemEditComponent } from './piker/modals/item-edit/item-edit.component';
+import { AnalyticsComponent } from './piker/modals/analytics/analytics.component';
 
 @NgModule({
   imports: [
@@ -32,9 +35,17 @@ import { ItemEditComponent } from './piker/modals/item-edit/item-edit.component'
     FlxngTreetableModule,
     OverviewModule,
     ScrollingModule,
+    HighchartsChartModule,
   ],
-  declarations: [PikerComponent, ShowcaseTreetableComponent, TestComponent, GetStartedComponent, ItemEditComponent],
-  entryComponents: [ItemEditComponent],
+  declarations: [
+    PikerComponent,
+    ShowcaseTreetableComponent,
+    TestComponent,
+    GetStartedComponent,
+    AnalyticsComponent,
+    ItemEditComponent,
+  ],
+  entryComponents: [ItemEditComponent, AnalyticsComponent],
   providers: [PikerService, ShowcaseTreetableService],
 })
 export class ShowcaseTreetableModule {}

@@ -80,8 +80,32 @@ export class PikerService {
     this.apiEndpoint = this.isLocalhost ? 'https://localhost:44315' : 'https://scout.codeeve.com';
   }
 
-  getSource(sourceId: number): any {
+  getSource(sourceId: number): Promise<Source> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}`;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  getItem(itemId: number): Promise<Item> {
+    let reqUrl = `${this.apiEndpoint}/api/items/${itemId}`;
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -244,7 +268,7 @@ export class PikerService {
       params: {},
     };
 
-    for(var i = 0; i < Object.keys(item.parsedDetails).length; i++) {
+    for (var i = 0; i < Object.keys(item.parsedDetails).length; i++) {
       // remove parsedDetails properties from the item itself, since only table consumes them
       delete item[Object.keys(item.parsedDetails)[i]];
     }

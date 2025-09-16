@@ -99,11 +99,15 @@
                   class="add-new-filter"
                   (click)="addNewFilter($event)">+</button>
           <br>
+          <div class="sarch-action-buttons">
+            <button type="submit"
+                    class="maring-right-10"
+                    (click)="searchItems($event)">Search</button>
 
-          <button type="submit"
-                  class=""
-                  (click)="searchItems($event)">Search</button>
-
+            <button type="button"
+                    *ngIf="filters.length"
+                    (click)="openAnalytics()">Analytics</button>
+          </div>
           <br>
           <br>
 
@@ -139,8 +143,6 @@
                       type="button"
                       class="update-email-trigger"
                       (click)="addEmailTrigger(true)">Update selected trigger</button>
-              <button type="button"
-                      (click)="getReport()">Get report</button>
             </div>
           </div>
 
@@ -202,15 +204,25 @@
                 [header]="'formattedAddress'"></flx-column>
     <flx-column [field]="'4'"
                 [header]="'squareMeters'"></flx-column>
+
     <flx-column [field]="'1'"
-                [header]="'price'"></flx-column>
+                [header]="'price'">
+      <ng-template flxTemplate="bodyCell"
+                   let-col="column"
+                   let-item="rowData">
+        <span [style.background-color]="item[col.field] !== 0 && (item[col.field] < 10000 || item[col.field] > 1000000) ? '#f7dede' : ''">{{item[col.field]}}</span>
+      </ng-template>
+    </flx-column>
+
     <flx-column [field]="'10'"
                 [header]="'pricePerSquareMeter'">
       <ng-template flxTemplate="bodyCell"
+                   let-col="column"
                    let-item="rowData">
-        <span [style.background-color]="item['10'] > 0 && getGradingColor(item['10'], searchResponse?.m2PriceAverage.median)">{{item['10']}}</span>
+        <span [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], searchResponse?.m2PriceAverage.median)">{{item[col.field]}}</span>
       </ng-template>
     </flx-column>
+
     <flx-column [field]="'12'"
                 [header]="'streetMedian'"></flx-column>
     <flx-column [field]="'14'"

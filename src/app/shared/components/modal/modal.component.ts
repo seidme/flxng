@@ -64,13 +64,11 @@ import { ModalService } from './modal.service';
       }
       .modal-content-container {
         background-color: white;
-        padding: 2rem;
         border-radius: 0.5rem;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         position: relative;
         max-width: 90%;
         max-height: 90%;
-        overflow: auto;
       }
       .modal-close-button {
         position: absolute;
