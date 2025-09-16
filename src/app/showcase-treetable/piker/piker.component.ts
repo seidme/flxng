@@ -308,7 +308,7 @@ export class PikerComponent implements OnInit {
 
   async editItem(item: Item): Promise<void> {
     const updatedItem = await this.modal.open(ItemEditComponent, { item: item, source: this.source });
-    if (updatedItem) {
+    if (updatedItem && !this.queryParams['editItemId']) {
       this.items = [];
       this.searchItems(); // refresh list, could be optimized to just update the item in place
     }
