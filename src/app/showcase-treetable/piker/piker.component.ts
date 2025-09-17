@@ -62,12 +62,12 @@ export class PikerComponent implements OnInit {
     {
       id: 'GREATER_THAN',
       name: 'Greater than',
-      placeholder: 'Number, date (YYYY-MM-DD), or keyword "AVERAGE" (search results considered)',
+      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
     },
     {
       id: 'LOWER_THAN',
       name: 'Lower than',
-      placeholder: 'Number, date (YYYY-MM-DD), or keyword "AVERAGE (search results considered)"',
+      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
     },
   ];
 

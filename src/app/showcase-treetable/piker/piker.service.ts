@@ -333,7 +333,7 @@ export class PikerService {
   }
 
   deleteItem(itemId: number): Promise<void> {
-    let reqUrl = `${this.apiEndpoint}/api/items/${itemId}`;
+    let reqUrl = `${this.apiEndpoint}/api/items/soft/${itemId}`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
