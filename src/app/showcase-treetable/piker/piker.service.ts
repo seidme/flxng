@@ -13,6 +13,8 @@ export interface ItemDetailsSchemaField {
 }
 
 export enum ItemField {
+  DateCreated = 'dateCreated',
+  DetailsUrl = 'detailsUrl',
   Title = '0',
   Price = '1',
   Location = '2',
@@ -29,6 +31,39 @@ export enum ItemField {
   M2PriceStreetMeanAverage = '13',
   StreetGroupingCount = '14',
 }
+
+  export const operators: { [key: string]: any } = {
+    EQUALS: {
+      id: 'EQUALS',
+      name: 'Equals to', // combos: or
+      placeholder: 'E.g: Sarajevo - Centar || Ilidza',
+    },
+    NOT_EQUALS: {
+      id: 'NOT_EQUALS',
+      name: 'Not equals to', // combos: and
+      placeholder: 'E.g: Vogosca && Hadzici',
+    },
+    CONTAINS: {
+      id: 'CONTAINS',
+      name: 'Contains', // combos: or
+      placeholder: 'E.g: Tit || Hamze || Vraz',
+    },
+    NOT_CONTAINS: {
+      id: 'NOT_CONTAINS',
+      name: 'Not contains', // combos: and
+      placeholder: 'E.g: IZDAVANJE && najam',
+    },
+    GREATER_THAN: {
+      id: 'GREATER_THAN',
+      name: 'Greater than',
+      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
+    },
+    LOWER_THAN: {
+      id: 'LOWER_THAN',
+      name: 'Lower than',
+      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
+    },
+  };
 
 export type ItemDetails = {
   [value in ItemField]: any;

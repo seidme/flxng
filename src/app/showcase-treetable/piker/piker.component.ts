@@ -10,7 +10,7 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, retry, tap } from 'rxjs/operators';
 
-import { Item, PikerService } from './piker.service';
+import { Item, ItemField, PikerService, operators } from './piker.service';
 import { ModalService } from '../../shared/components/modal/modal.service';
 import { ItemEditComponent } from './modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './modals/analytics/analytics.component';
@@ -37,39 +37,10 @@ export class PikerComponent implements OnInit {
   queryParams: any = {};
   source: any;
   searchResponse: any;
+  commonFilters: Array<{ name: string; filters: any[] }> = [];
+  ItemField = ItemField;
 
-  readonly operators: Array<{ [key: string]: any }> = [
-    {
-      id: 'EQUALS',
-      name: 'Equals to', // combos: or
-      placeholder: 'E.g: Sarajevo - Centar || Ilidza',
-    },
-    {
-      id: 'NOT_EQUALS',
-      name: 'Not equals to', // combos: and
-      placeholder: 'E.g: Vogosca && Hadzici',
-    },
-    {
-      id: 'CONTAINS',
-      name: 'Contains', // combos: or
-      placeholder: 'E.g: Tit || Hamze || Vraz',
-    },
-    {
-      id: 'NOT_CONTAINS',
-      name: 'Not contains', // combos: and
-      placeholder: 'E.g: IZDAVANJE && najam',
-    },
-    {
-      id: 'GREATER_THAN',
-      name: 'Greater than',
-      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
-    },
-    {
-      id: 'LOWER_THAN',
-      name: 'Lower than',
-      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
-    },
-  ];
+  readonly operatorsIterable: Array<{ [key: string]: any }> = Object.values(operators);
 
   constructor(
     private _http: HttpClient,
@@ -81,6 +52,7 @@ export class PikerComponent implements OnInit {
 
   async ngOnInit() {
     this.isLocalhost = window.location.hostname === 'localhost';
+    this.commonFilters = this.getCommonFilters();
 
     this.source = await this._service.getSource(1);
 
@@ -154,7 +126,7 @@ export class PikerComponent implements OnInit {
   }
 
   getOperator(operatorId: string): { [key: string]: any } {
-    const operator = this.operators.find((o) => o.id === operatorId);
+    const operator = this.operatorsIterable.find((o) => o.id === operatorId);
     return operator;
   }
 
@@ -167,34 +139,109 @@ export class PikerComponent implements OnInit {
     });
   }
 
-  applyPredefinedFilters(): void {
-    this.filters = [
+  getCommonFilters(): Array<{ name: string; filters: any[] }> {
+    return [
       {
-        fieldId: '2', // location
-        operatorId: 'EQUALS',
-        value: 'Sarajevo - Centar || Sarajevo - Centar',
-        caseSensitive: true,
-      },
-      // {
-      //   fieldId: '2', // location
-      //   operatorId: 'NOT_EQUALS',
-      //   value: 'Dobrinja && Hadzici',
-      //   caseSensitive: true
-      // },
-      {
-        fieldId: '11', // formattedAddress
-        operatorId: 'CONTAINS',
-        value: 'Tit || Hamze || Vraz',
-        caseSensitive: false,
+        name: 'Yesterday',
+        filters: [
+          {
+            fieldId: ItemField.DateCreated,
+            operatorId: operators.GREATER_THAN.id,
+            value: this.getFormattedDateMinusDays(1),
+          },
+        ],
       },
       {
-        fieldId: '0', // title
-        operatorId: 'NOT_CONTAINS',
-        value:
-          'stup && Stup && tibra && Tibra && Istocno && istocno && kuca && kuci && izdav && izdaj && iznajm && kupujem && trazim && na dan && duzi period',
-        caseSensitive: true,
+        name: 'Last Week',
+        filters: [
+          {
+            fieldId: ItemField.DateCreated,
+            operatorId: operators.GREATER_THAN.id,
+            value: this.getFormattedDateMinusDays(7),
+          },
+        ],
+      },
+      {
+        name: 'Last Month',
+        filters: [
+          {
+            fieldId: ItemField.DateCreated,
+            operatorId: operators.GREATER_THAN.id,
+            value: this.getFormattedDateMinusDays(30),
+          },
+        ],
+      },
+      {
+        name: 'Last Year',
+        filters: [
+          {
+            fieldId: ItemField.DateCreated,
+            operatorId: operators.GREATER_THAN.id,
+            value: this.getFormattedDateMinusDays(365),
+          },
+        ],
+      },
+      {
+        name: 'Floor 0 - 4',
+        filters: [
+          {
+            fieldId: ItemField.Floor,
+            operatorId: operators.GREATER_THAN.id,
+            value: '0',
+          },
+          {
+            fieldId: ItemField.Floor,
+            operatorId: operators.LOWER_THAN.id,
+            value: '4',
+          },
+        ],
+      },
+      {
+        name: 'm2Price < SEARCH average',
+        filters: [
+          {
+            fieldId: ItemField.M2Price,
+            operatorId: operators.LOWER_THAN.id,
+            value: 'SEARCH AVERAGE',
+          },
+        ],
+      },
+      {
+        name: 'm2Price < STREET average',
+        filters: [
+          {
+            fieldId: ItemField.M2Price,
+            operatorId: operators.LOWER_THAN.id,
+            value: 'STREET AVERAGE',
+          },
+        ],
+      },
+      {
+        name: '3 main locations',
+        filters: [
+          {
+            fieldId: ItemField.Location,
+            operatorId: operators.EQUALS.id,
+            value: 'Ilidza || Sarajevo - Novo Sarajevo || Sarajevo - Centar',
+            caseSensitive: true,
+          },
+        ],
+      },
+      {
+        name: 'Address contains',
+        filters: [
+          {
+            fieldId: ItemField.FormattedAddress,
+            operatorId: operators.CONTAINS.id,
+            value: '',
+          },
+        ],
       },
     ];
+  }
+
+  selectCommonFilter(commonFIlter: { name: string; filters: any[] }) {
+    this.filters = [...this.filters, ...commonFIlter.filters];
   }
 
   async addEmailTrigger(updateExisting = false): Promise<void> {
@@ -304,6 +351,19 @@ export class PikerComponent implements OnInit {
     const b = subtleGreen[2] + (darkGreen[2] - subtleGreen[2]) * scaledDiff;
 
     return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+  }
+
+  getFormattedDateMinusDays(daysToSubtract) {
+    const date = new Date();
+    date.setDate(date.getDate() - daysToSubtract);
+    const year = date.getFullYear();
+    // Months are 0-indexed, so add 1 to get the correct month number
+    // Use padStart to ensure a two-digit format (e.g., '01' instead of '1')
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    // Return the date in YYYY-MM-DD format
+    return `${year}-${month}-${day}`;
   }
 
   async editItem(item: Item): Promise<void> {

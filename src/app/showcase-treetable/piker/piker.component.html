@@ -34,9 +34,6 @@
         </div>
 
         <div class="grid-options-row api-filters">
-          <button type="button"
-                  (click)="applyPredefinedFilters()">Apply example filters</button>
-
           <div class="api-filter"
                *ngFor="let filter of filters;">
             <flx-menu #fieldSelectorMenu
@@ -58,7 +55,7 @@
                       [header]="filter.operatorId ? getOperator(filter.operatorId)?.name : 'operator'">
               <div class="menu-body">
                 <ul class="flx-selectable-list">
-                  <ng-container *ngFor="let operator of operators">
+                  <ng-container *ngFor="let operator of operatorsIterable">
                     <li class="flx-selectable-list-item"
                         (click)="filter.operatorId = operator.id; fieldSelectorMenu.close();">
                       <span title="{{operator.name}}">{{operator.name}}</span>
@@ -95,9 +92,28 @@
             </div> -->
           </div>
 
-          <button type="button"
-                  class="add-new-filter"
-                  (click)="addNewFilter($event)">+</button>
+          <div class="sarch-action-buttons">
+            <button type="button"
+                    class="add-new-filter"
+                    (click)="addNewFilter($event)">Add new filter</button>
+
+            <span> -or- </span>
+
+            <flx-menu #commonFiltersSelectorMenu
+                      [header]="'Select common filters'">
+              <div class="menu-body">
+                <ul class="flx-selectable-list">
+                  <ng-container *ngFor="let commonFilter of commonFilters">
+                    <li class="flx-selectable-list-item"
+                        (click)="selectCommonFilter(commonFilter); commonFiltersSelectorMenu.close();">
+                      <span title="{{commonFilter.name}}">{{commonFilter.name}}</span>
+                      <!-- <i class="material-icons"><span *ngIf="filter.operatorId === operator.id">check</span></i> -->
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </flx-menu>
+          </div>
           <br>
           <div class="sarch-action-buttons">
             <button type="submit"
@@ -193,19 +209,19 @@
                 [header]="'id'"></flx-column> -->
     <!-- <flx-column [field]="'identifier'"
                 [header]="'identifier'"></flx-column> -->
-    <flx-column [field]="'0'"
+    <flx-column [field]="ItemField.Title"
                 [width]="'10%'"
                 [header]="'title'"></flx-column>
-    <flx-column [field]="'2'"
+    <flx-column [field]="ItemField.Location"
                 [header]="'location'"></flx-column>
-    <flx-column [field]="'3'"
+    <flx-column [field]="ItemField.Address"
                 [header]="'address'"></flx-column>
-    <flx-column [field]="'11'"
+    <flx-column [field]="ItemField.FormattedAddress"
                 [header]="'formattedAddress'"></flx-column>
-    <flx-column [field]="'4'"
+    <flx-column [field]="ItemField.M2"
                 [header]="'m2'"></flx-column>
 
-    <flx-column [field]="'1'"
+    <flx-column [field]="ItemField.Price"
                 [header]="'price'">
       <ng-template flxTemplate="bodyCell"
                    let-col="column"
@@ -214,7 +230,7 @@
       </ng-template>
     </flx-column>
 
-    <flx-column [field]="'10'"
+    <flx-column [field]="ItemField.M2Price"
                 [header]="'m2Price'">
       <ng-template flxTemplate="bodyCell"
                    let-col="column"
@@ -223,15 +239,15 @@
       </ng-template>
     </flx-column>
 
-    <flx-column [field]="'12'"
+    <flx-column [field]="ItemField.M2PriceStreetMedianAverage"
                 [header]="'streetMedian'"></flx-column>
-    <flx-column [field]="'14'"
+    <flx-column [field]="ItemField.StreetGroupingCount"
                 [header]="'streetGroupingCount'"></flx-column>
-    <flx-column [field]="'6'"
+    <flx-column [field]="ItemField.Floor"
                 [header]="'floor'"></flx-column>
-    <flx-column [field]="'dateCreated'"
+    <flx-column [field]="ItemField.DateCreated"
                 [header]="'dateCreated'"></flx-column>
-    <flx-column [field]="'detailsUrl'"
+    <flx-column [field]="ItemField.DetailsUrl"
                 [header]="'detailsUrl'">
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData"
