@@ -22,13 +22,16 @@
           </div>
           <ng-container *ngIf="searchResponse">
             <div>
-              SEARCH results: <strong>{{searchResponse?.itemsCount}}</strong>
+              <span>Results:</span>
+              <button type="button"
+                      [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
+                      (click)="searchItems(true)"><strong>{{searchResponse?.itemsCount}}</strong></button>
             </div>
             <div>
-              m2 price median: <strong>{{searchResponse?.m2PriceAverage.median}}</strong>
-            </div>
-            <div>
-              m2 price mean: <strong>{{searchResponse?.m2PriceAverage.mean}}</strong>
+              <span>m2 price median:</span>
+              <button type="button"
+                      [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
+                      (click)="searchItems(true)"><strong>{{searchResponse?.m2PriceAverage.median}}</strong></button>
             </div>
           </ng-container>
         </div>
@@ -118,7 +121,7 @@
           <div class="sarch-action-buttons">
             <button type="submit"
                     class="maring-right-10"
-                    (click)="searchItems($event)">Search</button>
+                    (click)="searchItems()">Search</button>
 
             <button type="button"
                     *ngIf="filters.length"
@@ -279,9 +282,29 @@
       </ng-template>
     </flx-column>
 
-    <flx-pagination [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500, 1000, 2000]"
+    <!-- <flx-pagination [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500]"
                     [itemsPerPage]="100"
-                    [pageLinksSize]="7"></flx-pagination>
+                    [pageLinksSize]="7"></flx-pagination> -->
 
   </flx-treetable>
+
+  <!-- * currentPage + 1 so next page is clickable (to check if there are more results) -->
+  <!-- <flx-paginator [autoInit]="false"
+                 [itemsCount]="searchResponse?.itemsCount * currentPage + 1 || 0"
+                 [pageLinksSize]="5"
+                 [itemsPerPage]="itemsPerPage"
+                 [itemsPerPageOptions]="[5, 10, 20, 50, 100, 200, 500]"
+                 [currentPage]="currentPage"
+                 (onPageChange)="onPageChange($event)"
+                 (onItemsPerPageValueChange)="onItemsPerPageValueChange($event)"></flx-paginator> -->
+
+  <div class="simple-paginator"
+       *ngIf="items.length">
+    <button type="button"
+            [disabled]="currentPage <= 1"
+            (click)="onPageChange({currentPage: currentPage - 1})">Prev</button>
+    <button type="button"
+            [disabled]="searchResponse?.itemsCount < itemsPerPage"
+            (click)="onPageChange({currentPage: currentPage + 1})">Next</button>
+  </div>
 </div>

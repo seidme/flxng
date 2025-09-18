@@ -32,38 +32,38 @@ export enum ItemField {
   StreetGroupingCount = '14',
 }
 
-  export const operators: { [key: string]: any } = {
-    EQUALS: {
-      id: 'EQUALS',
-      name: 'Equals to', // combos: or
-      placeholder: 'E.g: Sarajevo - Centar || Ilidza',
-    },
-    NOT_EQUALS: {
-      id: 'NOT_EQUALS',
-      name: 'Not equals to', // combos: and
-      placeholder: 'E.g: Vogosca && Hadzici',
-    },
-    CONTAINS: {
-      id: 'CONTAINS',
-      name: 'Contains', // combos: or
-      placeholder: 'E.g: Tit || Hamze || Vraz',
-    },
-    NOT_CONTAINS: {
-      id: 'NOT_CONTAINS',
-      name: 'Not contains', // combos: and
-      placeholder: 'E.g: IZDAVANJE && najam',
-    },
-    GREATER_THAN: {
-      id: 'GREATER_THAN',
-      name: 'Greater than',
-      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
-    },
-    LOWER_THAN: {
-      id: 'LOWER_THAN',
-      name: 'Lower than',
-      placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
-    },
-  };
+export const operators: { [key: string]: any } = {
+  EQUALS: {
+    id: 'EQUALS',
+    name: 'Equals to', // combos: or
+    placeholder: 'E.g: Sarajevo - Centar || Ilidza',
+  },
+  NOT_EQUALS: {
+    id: 'NOT_EQUALS',
+    name: 'Not equals to', // combos: and
+    placeholder: 'E.g: Vogosca && Hadzici',
+  },
+  CONTAINS: {
+    id: 'CONTAINS',
+    name: 'Contains', // combos: or
+    placeholder: 'E.g: Tit || Hamze || Vraz',
+  },
+  NOT_CONTAINS: {
+    id: 'NOT_CONTAINS',
+    name: 'Not contains', // combos: and
+    placeholder: 'E.g: IZDAVANJE && najam',
+  },
+  GREATER_THAN: {
+    id: 'GREATER_THAN',
+    name: 'Greater than',
+    placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
+  },
+  LOWER_THAN: {
+    id: 'LOWER_THAN',
+    name: 'Lower than',
+    placeholder: 'Number, date (YYYY-MM-DD), or keywords: "SEARCH AVERAGE", "STREET AVERAGE", etc. ',
+  },
+};
 
 export type ItemDetails = {
   [value in ItemField]: any;
@@ -214,9 +214,9 @@ export class PikerService {
       .toPromise();
   }
 
-  searchItems(filters: any[]): Promise<SearchResponse> {
+  searchItems(filters: any[], skip = 0, take = 100, countOnly = false): Promise<SearchResponse> {
     let reqUrl = `${this.apiEndpoint}/api/items`;
-    const reqBody = filters;
+
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -228,8 +228,14 @@ export class PikerService {
       params: {},
     };
 
+    const payload = {
+      filters: filters,
+      skip: skip,
+      take: take
+    };
+
     return this._http
-      .post(reqUrl, reqBody, reqOpts)
+      .post(reqUrl, payload, reqOpts)
       .pipe(
         map((response: any) => {
           return response.body as any;
@@ -241,7 +247,7 @@ export class PikerService {
 
   getReport(filters: any[]): Promise<any> {
     let reqUrl = `${this.apiEndpoint}/api/items/report/month`;
-    const reqBody = filters;
+
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -253,8 +259,14 @@ export class PikerService {
       params: {},
     };
 
+    const payload = {
+      filters: filters,
+      skip: 0,
+      take: 0
+    };
+
     return this._http
-      .post(reqUrl, reqBody, reqOpts)
+      .post(reqUrl, payload, reqOpts)
       .pipe(
         map((response: any) => {
           return response.body as any;

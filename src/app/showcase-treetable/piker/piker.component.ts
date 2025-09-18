@@ -39,6 +39,10 @@ export class PikerComponent implements OnInit {
   searchResponse: any;
   commonFilters: Array<{ name: string; filters: any[] }> = [];
   ItemField = ItemField;
+  loading = false;
+
+  currentPage = 1;
+  itemsPerPage = 100;
 
   readonly operatorsIterable: Array<{ [key: string]: any }> = Object.values(operators);
 
@@ -101,42 +105,62 @@ export class PikerComponent implements OnInit {
     }
   }
 
-  async searchItems() {
-    // if (!this.filters.length) {
-    //   console.error('No filters provided!');
-    //   return;
-    // }
+  onItemsPerPageValueChange(output: any) {
+    console.log('Items per page changed to: ', output);
+    this.itemsPerPage = output;
+    this.currentPage = 1;
+    this.searchItems();
+  }
 
+  onPageChange(output: any) {
+    console.log('Page changed to: ', output.currentPage);
+    this.currentPage = output.currentPage;
+    this.searchItems();
+  }
+
+  async searchItems(countOnly = false): Promise<void> {
+    if (this.loading) {
+      console.log('Already loading, please wait...');
+      return;
+    }
+    if (!this.filters.length && countOnly) {
+      console.error('No filters provided!');
+      return;
+    }
+
+    let skip = 0;
+    let take = 0;
+
+    if (!countOnly) {
+      skip = (this.currentPage - 1) * this.itemsPerPage;
+      take = this.itemsPerPage;
+    }
+
+    this.loading = true;
     try {
-      this.searchResponse = await this._service.searchItems(this.filters);
+      this.searchResponse = await this._service.searchItems(this.filters, skip, take, countOnly);
       console.log('searchResponse: ', this.searchResponse);
 
-      // just so it's easier for table to consume, should not bue used outside the table...
-      this.items = this.searchResponse.items.map((item) => Object.assign(item, item.parsedDetails));
-      // this.items = this.searchResponse.items;
+      if (!countOnly) {
+        // just so it's easier for table to consume, should not bue used outside the table...
+        this.items = this.searchResponse.items.map((item) => Object.assign(item, item.parsedDetails));
+        // this.items = this.searchResponse.items;
 
-      // this.items = this.items.filter(i => {
-      //   var address = i.parsedDetails['11']; // formatted address
-      //   var threeCharWord = address.split(' ').find(w => w.length === 3);
-      //   return !!threeCharWord;
-      // });
+        // this.items = this.items.filter(i => {
+        //   var address = i.parsedDetails['11']; // formatted address
+        //   var threeCharWord = address.split(' ').find(w => w.length === 3);
+        //   return !!threeCharWord;
+        // });
+      }
     } catch (e) {
       console.error('Error getting items:', e);
     }
+    this.loading = false;
   }
 
   getOperator(operatorId: string): { [key: string]: any } {
     const operator = this.operatorsIterable.find((o) => o.id === operatorId);
     return operator;
-  }
-
-  addNewFilter(): void {
-    this.filters.push({
-      fieldId: '',
-      operatorId: 0,
-      value: '',
-      caseSensitive: false,
-    });
   }
 
   getCommonFilters(): Array<{ name: string; filters: any[] }> {
@@ -240,8 +264,32 @@ export class PikerComponent implements OnInit {
     ];
   }
 
+  addNewFilter(): void {
+    this.filters.push({
+      fieldId: '',
+      operatorId: 0,
+      value: '',
+      caseSensitive: false,
+    });
+    this.currentPage = 1;
+  }
+
   selectCommonFilter(commonFIlter: { name: string; filters: any[] }) {
     this.filters = [...this.filters, ...commonFIlter.filters];
+    this.currentPage = 1;
+  }
+
+  removeFilter(filter) {
+    this.filters = this.filters.filter((f) => f !== filter);
+    this.currentPage = 1;
+  }
+
+  applyFiltersFromTrigger(trigger) {
+    this.updatingTrigger = trigger;
+    this.filters = JSON.parse(JSON.stringify(trigger.filters));
+    this.emailsInput = trigger.emailsToNotify.join(', ');
+    this.triggerNameINput = trigger.name;
+    this.currentPage = 1;
   }
 
   async addEmailTrigger(updateExisting = false): Promise<void> {
@@ -281,17 +329,6 @@ export class PikerComponent implements OnInit {
     const updatedSource = await this._service.updateSource(this.source);
     console.log('updated source: ', updatedSource);
     this.updatingTrigger = undefined;
-  }
-
-  removeFilter(filter) {
-    this.filters = this.filters.filter((f) => f !== filter);
-  }
-
-  applyFiltersFromTrigger(trigger) {
-    this.updatingTrigger = trigger;
-    this.filters = JSON.parse(JSON.stringify(trigger.filters));
-    this.emailsInput = trigger.emailsToNotify.join(', ');
-    this.triggerNameINput = trigger.name;
   }
 
   async removeTrigger(trigger) {

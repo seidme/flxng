@@ -7,6 +7,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { TreetableModule as FlxngTreetableModule } from '@flxng/treetable'; // remove these imoprts once all packages are moved to projects
+import { PaginatorModule } from '@flxng/paginator';
 
 import { SharedModule } from '../shared/shared.module';
 import { OverviewModule } from './overview/overview.module';
@@ -33,6 +34,7 @@ import { AnalyticsComponent } from './piker/modals/analytics/analytics.component
     SharedModule,
     FlxngCommonModule,
     FlxngTreetableModule,
+    PaginatorModule,
     OverviewModule,
     ScrollingModule,
     HighchartsChartModule,
