@@ -22,7 +22,7 @@ export class ItemEditComponent implements OnInit {
   }
 
   async save(): Promise<void> {
-    this._service.updateItem(this.editingItem).then((updatedItem) => {
+    this._service.updateItem(this.source, this.editingItem).then((updatedItem) => {
       console.log('updatedItem:', updatedItem);
       Object.assign(this.item, updatedItem);
       this.modalService.close(true);

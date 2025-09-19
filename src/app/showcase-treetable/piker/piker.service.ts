@@ -214,8 +214,8 @@ export class PikerService {
       .toPromise();
   }
 
-  searchItems(filters: any[], skip = 0, take = 100, countOnly = false): Promise<SearchResponse> {
-    let reqUrl = `${this.apiEndpoint}/api/items`;
+  searchItems(source: Source, filters: any[], skip = 0, take = 100, countOnly = false): Promise<SearchResponse> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
@@ -245,8 +245,8 @@ export class PikerService {
       .toPromise();
   }
 
-  getReport(filters: any[]): Promise<any> {
-    let reqUrl = `${this.apiEndpoint}/api/items/report/month`;
+  getReport(source: Source, filters: any[]): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/source/${source.id}/items/report/month`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');
@@ -276,7 +276,7 @@ export class PikerService {
       .toPromise();
   }
 
-  updateSource(source: any): Promise<Source> {
+  updateSource(source: Source): Promise<Source> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}`;
 
     let headers = new HttpHeaders();
@@ -301,8 +301,8 @@ export class PikerService {
       .toPromise();
   }
 
-  updateItem(item: Item): Promise<Item> {
-    let reqUrl = `${this.apiEndpoint}/api/items/${item.id}`;
+  updateItem(source: Source, item: Item): Promise<Item> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${item.id}`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');

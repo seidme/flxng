@@ -35,7 +35,7 @@ export class AnalyticsComponent implements OnInit {
 
   async getm2PricePerMonthChartOptions(): Promise<void> {
     this.loading = true;
-    const reportData = await this._service.getReport(this.filters);
+    const reportData = await this._service.getReport(this.source, this.filters);
     this.loading = false;
     console.log('reportData:', reportData);
 

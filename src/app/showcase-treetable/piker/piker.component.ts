@@ -138,7 +138,7 @@ export class PikerComponent implements OnInit {
 
     this.loading = true;
     try {
-      this.searchResponse = await this._service.searchItems(this.filters, skip, take, countOnly);
+      this.searchResponse = await this._service.searchItems(this.source, this.filters, skip, take, countOnly);
       console.log('searchResponse: ', this.searchResponse);
 
       if (!countOnly) {
