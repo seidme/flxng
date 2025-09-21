@@ -12,6 +12,20 @@ export interface ItemDetailsSchemaField {
   selector: string;
 }
 
+export interface Filter {
+  value: string;
+  fieldId: string; // e.g., '0', '1', ...
+  operatorId: string; // e.g., 'EQUALS', 'CONTAINS', ...
+  caseSensitive?: boolean;
+}
+
+export interface SourceQuery {
+  //id: number;
+  name: string;
+  filters: Filter[];
+  emailsToNotify: string[];
+}
+
 export enum ItemField {
   Id = 'id',
   Identifier = 'identifier',
@@ -91,10 +105,11 @@ export interface Source {
   Description: string;
   // itemDetailsSchema: ItemDetailsSchemaField[]; // exists but should not be used
   parsedItemDetailsSchema: ItemDetailsSchemaField[];
+  parsedItemFilters: SourceQuery[]; // TODO: rename on the backend too
   active: boolean;
   dateCreated: string;
   dateChecked: string;
-  itemFilters: any[]; // triggers
+  itemFilters: SourceQuery[]; // triggers
 }
 
 export interface SearchResponse {
@@ -240,7 +255,7 @@ export class PikerService {
       .toPromise();
   }
 
-  searchItems(source: Source, filters: any[], skip = 0, take = 100, countOnly = false): Promise<SearchResponse> {
+  searchItems(source: Source, filters: Filter[], skip = 0, take = 100, countOnly = false): Promise<SearchResponse> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items`;
 
     let headers = new HttpHeaders();
@@ -271,7 +286,7 @@ export class PikerService {
       .toPromise();
   }
 
-  getReport(source: Source, filters: any[]): Promise<any> {
+  getReport(source: Source, filters: Filter[]): Promise<any> {
     let reqUrl = `${this.apiEndpoint}/api/source/${source.id}/items/report/month`;
 
     let headers = new HttpHeaders();

@@ -10,7 +10,7 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, retry, tap } from 'rxjs/operators';
 
-import { Item, ItemField, PikerService, Source, operators } from './piker.service';
+import { Filter, Item, ItemField, PikerService, Source, SourceQuery, operators } from './piker.service';
 import { ModalService } from '../../shared/components/modal/modal.service';
 import { ItemEditComponent } from './modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './modals/analytics/analytics.component';
@@ -26,7 +26,7 @@ declare var window: any;
 export class PikerComponent implements OnInit {
   items: Item[] = [];
 
-  filters: Array<{ [key: string]: any }> = [];
+  filters: Filter[] = [];
 
   totalItemsCount = 0;
   suggestionsInput = '';
@@ -38,7 +38,7 @@ export class PikerComponent implements OnInit {
   source: Source;
   sources: Source[] = [];
   searchResponse: any;
-  commonFilters: Array<{ name: string; filters: any[] }> = [];
+  commonFilters: Array<{ name: string; filters: Filter[] }> = [];
   ItemField = ItemField;
   loading = false;
 
