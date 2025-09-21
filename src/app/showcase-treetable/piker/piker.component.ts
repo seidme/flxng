@@ -284,7 +284,7 @@ export class PikerComponent implements OnInit {
   addNewFilter(): void {
     this.filters.push({
       fieldId: '',
-      operatorId: 0,
+      operatorId: '0',
       value: '',
       caseSensitive: false,
     });
