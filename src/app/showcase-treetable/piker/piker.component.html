@@ -16,24 +16,41 @@
                  let-colsMap="columnsMap">
       <div class="grid-options-container">
 
-        <div class="grid-options-row search-stats">
-          <div class="db-count">
-            DB Total: <strong>{{totalItemsCount}}</strong>
+        <div class="grid-options-row top-row">
+          <div class="left">
+            <div class="db-count">
+              DB Total: <strong>{{totalItemsCount}}</strong>
+            </div>
+            <ng-container *ngIf="searchResponse">
+              <div>
+                <span>Results:</span>
+                <button type="button"
+                        [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
+                        (click)="searchItems(true)"><strong>{{searchResponse?.itemsCount}}</strong></button>
+              </div>
+              <div>
+                <span>m2 price median:</span>
+                <button type="button"
+                        [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
+                        (click)="searchItems(true)"><strong>{{searchResponse?.m2PriceAverage.median}}</strong></button>
+              </div>
+            </ng-container>
           </div>
-          <ng-container *ngIf="searchResponse">
-            <div>
-              <span>Results:</span>
-              <button type="button"
-                      [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
-                      (click)="searchItems(true)"><strong>{{searchResponse?.itemsCount}}</strong></button>
-            </div>
-            <div>
-              <span>m2 price median:</span>
-              <button type="button"
-                      [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
-                      (click)="searchItems(true)"><strong>{{searchResponse?.m2PriceAverage.median}}</strong></button>
-            </div>
-          </ng-container>
+          <div class="right">
+            <flx-menu #sourceSelectorMenu
+                      [header]="source ? source.name : 'Select source...'">
+              <div class="menu-body">
+                <ul class="flx-selectable-list">
+                  <ng-container *ngFor="let source of sources">
+                    <li class="flx-selectable-list-item"
+                        (click)="selectSource(source); sourceSelectorMenu.close();">
+                      <span title="{{source.name}}">{{source.name}}</span>
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </flx-menu>
+          </div>
         </div>
 
         <div class="grid-options-row api-filters">
@@ -117,7 +134,7 @@
               </div>
             </flx-menu>
           </div>
-          
+
           <br>
 
           <div class="sarch-action-buttons">
@@ -210,8 +227,8 @@
       </div>
     </ng-template>
 
-    <!-- <flx-column [field]="'id'"
-                [header]="'id'"></flx-column> -->
+    <flx-column [field]="ItemField.Id"
+                [header]="'ID'"></flx-column>
     <!-- <flx-column [field]="'identifier'"
                 [header]="'identifier'"></flx-column> -->
     <flx-column [field]="ItemField.Title"

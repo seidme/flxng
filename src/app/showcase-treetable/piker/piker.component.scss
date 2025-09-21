@@ -58,18 +58,24 @@
       align-items: center;
       justify-content: space-between;
 
-      &.search-stats {
+      &.top-row {
         min-height: auto;
-        display: flex;
         padding: 5px;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 5px;
-        div {
-          margin-right: 10px;
-          &.db-count {
-            margin-right: 50px;
+
+        .left {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+
+          div {
+            margin-right: 10px;
+            &.db-count {
+              margin-right: 50px;
+            }
           }
+        }
+        .right {
+          padding-right: 40px;
         }
       }
 

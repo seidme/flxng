@@ -10,11 +10,11 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, retry, tap } from 'rxjs/operators';
 
-import { Item, ItemField, PikerService, operators } from './piker.service';
+import { Item, ItemField, PikerService, Source, operators } from './piker.service';
 import { ModalService } from '../../shared/components/modal/modal.service';
 import { ItemEditComponent } from './modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './modals/analytics/analytics.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var window: any;
 
@@ -35,7 +35,8 @@ export class PikerComponent implements OnInit {
   isLocalhost = false;
   updatingTrigger: any;
   queryParams: any = {};
-  source: any;
+  source: Source;
+  sources: Source[] = [];
   searchResponse: any;
   commonFilters: Array<{ name: string; filters: any[] }> = [];
   ItemField = ItemField;
@@ -49,6 +50,7 @@ export class PikerComponent implements OnInit {
   constructor(
     private _http: HttpClient,
     private cdr: ChangeDetectorRef,
+    private router: Router,
     private route: ActivatedRoute,
     private _service: PikerService,
     private modal: ModalService
@@ -58,9 +60,7 @@ export class PikerComponent implements OnInit {
     this.isLocalhost = window.location.hostname === 'localhost';
     this.commonFilters = this.getCommonFilters();
 
-    this.source = await this._service.getSource(1);
-
-    this.getTotalItemsCount();
+    this.sources = await this._service.getSources();
 
     this.route.queryParams.subscribe(async (params) => {
       // The `queryParams` observable provides the parameter object.
@@ -71,6 +71,15 @@ export class PikerComponent implements OnInit {
 
       console.log('this.queryParams:', this.queryParams);
 
+      this.source = this.queryParams['sourceId']
+        ? this.sources.find((s) => s.id === +this.queryParams['sourceId'])
+        : this.sources[0];
+      this.items = [];
+      this.currentPage = 1;
+      this.searchResponse = undefined;
+
+      this.getTotalItemsCount();
+
       if (this.queryParams['editItemId']) {
         const item = await this._service.getItem(this.queryParams['editItemId']);
         if (item) {
@@ -80,8 +89,16 @@ export class PikerComponent implements OnInit {
     });
   }
 
+  selectSource(source: Source) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { sourceId: source.id },
+      queryParamsHandling: 'merge', // This option merges with any existing query params
+    });
+  }
+
   async getTotalItemsCount() {
-    this.totalItemsCount = await this._service.getTotalItemsCount(1);
+    this.totalItemsCount = await this._service.getTotalItemsCount(this.source.id);
   }
 
   async iteratePages() {

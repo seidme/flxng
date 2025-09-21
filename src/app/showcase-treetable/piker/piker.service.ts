@@ -13,6 +13,8 @@ export interface ItemDetailsSchemaField {
 }
 
 export enum ItemField {
+  Id = 'id',
+  Identifier = 'identifier',
   DateCreated = 'dateCreated',
   DetailsUrl = 'detailsUrl',
   Title = '0',
@@ -139,6 +141,30 @@ export class PikerService {
       .toPromise();
   }
 
+  getSources(): Promise<Source[]> {
+    let reqUrl = `${this.apiEndpoint}/api/sources`;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
   getItem(itemId: number): Promise<Item> {
     let reqUrl = `${this.apiEndpoint}/api/items/${itemId}`;
     let headers = new HttpHeaders();
@@ -231,7 +257,7 @@ export class PikerService {
     const payload = {
       filters: filters,
       skip: skip,
-      take: take
+      take: take,
     };
 
     return this._http
@@ -262,7 +288,7 @@ export class PikerService {
     const payload = {
       filters: filters,
       skip: 0,
-      take: 0
+      take: 0,
     };
 
     return this._http
