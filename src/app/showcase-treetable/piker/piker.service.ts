@@ -341,6 +341,37 @@ export class PikerService {
       .toPromise();
   }
 
+  bulkItemsUpdate(bulkAction: string, source: Source, filters: Filter[], skip = 0, take = 100): Promise<{updatedItemsCount: number}> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${bulkAction}`;
+
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    const payload = {
+      filters: filters,
+      skip: skip,
+      take: take,
+    };
+
+    return this._http
+      .post(reqUrl, payload, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body as any;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
   updateSource(source: Source): Promise<Source> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}`;
 

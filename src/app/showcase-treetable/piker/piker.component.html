@@ -144,7 +144,12 @@
 
             <button type="button"
                     *ngIf="filters.length"
+                    class="maring-right-10"
                     (click)="openAnalytics()">Analytics</button>
+
+            <button type="button"
+                    *ngIf="filters.length && items.length && isAdmin"
+                    (click)="reformatAddress()">Re-format address</button>
           </div>
           <br>
           <br>
@@ -192,6 +197,7 @@
               <button type="button"
                       (click)="applyFiltersFromTrigger(trigger)">Apply filters from trigger</button>
               <button type="button"
+                      *ngIf="isAdmin"
                       class="remove-button"
                       (click)="removeTrigger(trigger)">-</button>
             </div>
@@ -294,12 +300,15 @@
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData">
         <button type="button"
+                *ngIf="isAdmin"
                 class="edit-button maring-right-10"
                 (click)="showMaps(item)">Maps</button>
         <button type="button"
+                *ngIf="isAdmin"
                 class="edit-button maring-right-10"
                 (click)="editItem(item)">Edit</button>
         <button type="button"
+                *ngIf="isAdmin"
                 class="remove-button"
                 (click)="removeItem(item)">-</button>
       </ng-template>

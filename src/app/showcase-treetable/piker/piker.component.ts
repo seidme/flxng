@@ -42,6 +42,7 @@ export class PikerComponent implements OnInit {
   commonFilters: Array<{ name: string; filters: Filter[] }> = [];
   ItemField = ItemField;
   loading = false;
+  isAdmin = true;
 
   currentPage = 1;
   itemsPerPage = 100;
@@ -443,5 +444,38 @@ export class PikerComponent implements OnInit {
       // this.items = [];
       // this.searchItems();
     }
+  }
+
+  async reformatAddress(): Promise<void> {
+    if (this.loading) {
+      console.log('Already loading, please wait...');
+      return;
+    }
+    if (!this.filters.length) {
+      console.error('No filters provided!');
+      return;
+    }
+    if (!this.items.length) {
+      console.error('Please perform a search first!');
+      return;
+    }
+
+    const skip = (this.currentPage - 1) * this.itemsPerPage;
+    const take = this.itemsPerPage;
+
+    this.loading = true;
+    try {
+      const updatedItemsCount = await this._service.bulkItemsUpdate(
+        'reformat-address',
+        this.source,
+        this.filters,
+        skip,
+        take
+      );
+      console.log('Updated items count: ', updatedItemsCount);
+    } catch (e) {
+      console.error('Error bulk updating items:', e);
+    }
+    this.loading = false;
   }
 }
