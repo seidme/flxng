@@ -25,6 +25,7 @@ import { PikerService } from './piker/piker.service';
 // stuff for Piker
 import { ItemEditComponent } from './piker/modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './piker/modals/analytics/analytics.component';
+import { MapsComponent } from './piker/modals/maps/maps.component';
 
 @NgModule({
   imports: [
@@ -46,8 +47,9 @@ import { AnalyticsComponent } from './piker/modals/analytics/analytics.component
     GetStartedComponent,
     AnalyticsComponent,
     ItemEditComponent,
+    MapsComponent
   ],
-  entryComponents: [ItemEditComponent, AnalyticsComponent],
+  entryComponents: [ItemEditComponent, AnalyticsComponent, MapsComponent],
   providers: [PikerService, ShowcaseTreetableService],
 })
 export class ShowcaseTreetableModule {}

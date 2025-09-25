@@ -15,6 +15,7 @@ import { ModalService } from '../../shared/components/modal/modal.service';
 import { ItemEditComponent } from './modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './modals/analytics/analytics.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MapsComponent } from './modals/maps/maps.component';
 
 declare var window: any;
 
@@ -284,7 +285,7 @@ export class PikerComponent implements OnInit {
   addNewFilter(): void {
     this.filters.push({
       fieldId: '',
-      operatorId: '0',
+      operatorId: operators.CONTAINS.id,
       value: '',
       caseSensitive: false,
     });
@@ -430,6 +431,14 @@ export class PikerComponent implements OnInit {
 
   async openAnalytics(): Promise<void> {
     const result = await this.modal.open(AnalyticsComponent, { source: this.source, filters: this.filters });
+    if (result) {
+      // this.items = [];
+      // this.searchItems();
+    }
+  }
+
+  async showMaps(item: Item): Promise<void> {
+    const result = await this.modal.open(MapsComponent, { source: this.source, item: item });
     if (result) {
       // this.items = [];
       // this.searchItems();

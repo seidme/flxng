@@ -204,6 +204,30 @@ export class PikerService {
       .toPromise();
   }
 
+  getCoords(source: Source, item: Item): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${item.id}/geocoding`;
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
   getTotalItemsCount(sourceId: number): Promise<any> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${sourceId}/items/count`;
     let headers = new HttpHeaders();

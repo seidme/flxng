@@ -52,7 +52,7 @@
     .grid-options-row {
       position: relative;
       width: 100%;
-      min-height: 4.2rem;
+      // min-height: 4.2rem;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -127,6 +127,10 @@
           display: flex;
           flex-direction: column;
           align-items: flex-start;
+
+          .trigger-name-input {
+            width: 280px;
+          }
         }
         .right {
           width: 50%;

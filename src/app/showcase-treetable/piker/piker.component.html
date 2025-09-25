@@ -165,6 +165,7 @@
         <div class="grid-options-row email-triggers">
           <div class="left">
             <input type="text"
+                   class="trigger-name-input"
                    placeholder="Enter trigger name..."
                    [(ngModel)]="triggerNameINput">
             <textarea name="emailsInput"
@@ -292,6 +293,9 @@
                 [sortable]="false">
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData">
+        <button type="button"
+                class="edit-button maring-right-10"
+                (click)="showMaps(item)">Maps</button>
         <button type="button"
                 class="edit-button maring-right-10"
                 (click)="editItem(item)">Edit</button>
