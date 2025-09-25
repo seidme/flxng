@@ -438,7 +438,7 @@ export class PikerComponent implements OnInit {
     }
   }
 
-  async showMaps(item: Item): Promise<void> {
+  async mapsItem(item: Item): Promise<void> {
     const result = await this.modal.open(MapsComponent, { source: this.source, item: item });
     if (result) {
       // this.items = [];
@@ -446,7 +446,15 @@ export class PikerComponent implements OnInit {
     }
   }
 
-  async reformatAddress(): Promise<void> {
+  async mapsItems(item: Item): Promise<void> {
+    const result = await this.modal.open(MapsComponent, { source: this.source, items: this.items });
+    if (result) {
+      // this.items = [];
+      // this.searchItems();
+    }
+  }
+
+  async bulkAction(action: string): Promise<void> {
     if (this.loading) {
       console.log('Already loading, please wait...');
       return;
@@ -461,17 +469,11 @@ export class PikerComponent implements OnInit {
     }
 
     const skip = (this.currentPage - 1) * this.itemsPerPage;
-    const take = this.itemsPerPage;
+    const take = 1000000; // TODO: remove once bulk updates done....
 
     this.loading = true;
     try {
-      const updatedItemsCount = await this._service.bulkItemsUpdate(
-        'reformat-address',
-        this.source,
-        this.filters,
-        skip,
-        take
-      );
+      const updatedItemsCount = await this._service.bulkItemsUpdate(action, this.source, this.filters, skip, take);
       console.log('Updated items count: ', updatedItemsCount);
     } catch (e) {
       console.error('Error bulk updating items:', e);

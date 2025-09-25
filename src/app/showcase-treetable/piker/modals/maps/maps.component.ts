@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Item, PikerService, Source } from '../../piker.service';
+import { Item, ItemField, PikerService, Source } from '../../piker.service';
 import { ModalService } from '../../../../shared/components/modal/modal.service';
 
 declare const google: any;
@@ -13,10 +13,11 @@ declare const google: any;
 export class MapsComponent implements OnInit {
   @Input() source: Source;
   @Input() item: Item;
+  @Input() items: Item[] = [];
 
   apiKey = 'AIzaSyBzZ-dfeaSbZZ7HbJ2KT7cTkm5VN_QarUw';
-  locations = [];
   map: any;
+  locations = [];
 
   constructor(private _service: PikerService, private modalService: ModalService) {}
 
@@ -24,9 +25,22 @@ export class MapsComponent implements OnInit {
     // console.log('item:', this.item);
     // console.log('source:', this.source);
 
-    const result = await this._service.getCoords(this.source, this.item);
-    console.log('Geocoding result:', result);
-    this.locations.push({ title: result.address, ...result });
+    if (this.item) {
+      const result = await this._service.getCoords(this.source, this.item);
+      console.log('Geocoding result:', result);
+      this.locations.push({ title: result.address, ...result });
+    } else if (this.items && this.items.length > 0) {
+      this.items.forEach(async (item) => {
+        const coords = item.parsedDetails[ItemField.addressLatLng].split(',');
+        const lat = parseFloat(coords[0]);
+        const lng = parseFloat(coords[1]);
+        const title = `${item.parsedDetails[ItemField.FormattedAddress]}, ${item.parsedDetails[ItemField.Location]}`;
+
+        this.locations.push({ title, lat, lng });
+      });
+    } else {
+      throw new Error('No item or items provided for maps!');
+    }
 
     this.loadGoogleMapsScript();
   }

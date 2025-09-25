@@ -142,14 +142,36 @@
                     class="search-button maring-right-10"
                     (click)="searchItems()">Search</button>
 
+            <button type="submit"
+                    *ngIf="items.length"
+                    class="search-button maring-right-10"
+                    (click)="mapsItems()">Maps</button>
+
             <button type="button"
                     *ngIf="filters.length"
                     class="maring-right-10"
                     (click)="openAnalytics()">Analytics</button>
 
-            <button type="button"
-                    *ngIf="filters.length && items.length && isAdmin"
-                    (click)="reformatAddress()">Re-format address</button>
+            <flx-menu #bulkItemsUpdateMenu
+                      *ngIf="filters.length && items.length && isAdmin"
+                      [header]="'Bulk update action'">
+              <div class="menu-body">
+                <ul class="flx-selectable-list">
+                  <li class="flx-selectable-list-item"
+                      (click)="bulkAction('format-address'); bulkItemsUpdateMenu.close();">
+                    <span>Format address</span>
+                  </li>
+                  <li class="flx-selectable-list-item"
+                      (click)="bulkAction('get-geocodes'); bulkItemsUpdateMenu.close();">
+                    <span>Get geocodes</span>
+                  </li>
+                  <li class="flx-selectable-list-item"
+                      (click)="bulkAction('calc-m2Price'); bulkItemsUpdateMenu.close();">
+                    <span>Calc m2Price</span>
+                  </li>
+                </ul>
+              </div>
+            </flx-menu>
           </div>
           <br>
           <br>
@@ -302,7 +324,7 @@
         <button type="button"
                 *ngIf="isAdmin"
                 class="edit-button maring-right-10"
-                (click)="showMaps(item)">Maps</button>
+                (click)="mapsItem(item)">Maps</button>
         <button type="button"
                 *ngIf="isAdmin"
                 class="edit-button maring-right-10"

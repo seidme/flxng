@@ -46,6 +46,8 @@ export enum ItemField {
   M2PriceStreetMedianAverage = '12',
   M2PriceStreetMeanAverage = '13',
   StreetGroupingCount = '14',
+  addressGeohash = '15',
+  addressLatLng = '16',
 }
 
 export const operators: { [key: string]: any } = {
@@ -341,7 +343,13 @@ export class PikerService {
       .toPromise();
   }
 
-  bulkItemsUpdate(bulkAction: string, source: Source, filters: Filter[], skip = 0, take = 100): Promise<{updatedItemsCount: number}> {
+  bulkItemsUpdate(
+    bulkAction: string,
+    source: Source,
+    filters: Filter[],
+    skip = 0,
+    take = 100
+  ): Promise<{ updatedItemsCount: number }> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${bulkAction}`;
 
     let headers = new HttpHeaders();
