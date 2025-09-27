@@ -18,6 +18,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MapsComponent } from './modals/maps/maps.component';
 
 declare var window: any;
+const notVisibleFilterFields = [
+  'Id',
+  'Identifier',
+  'DetailsUrl',
+  'M2Balcony',
+  'ConstructionPeriod',
+  'ShortDescription',
+  'M2PriceStreetMeanAverage',
+];
 
 @Component({
   selector: '',
@@ -39,8 +48,12 @@ export class PikerComponent implements OnInit {
   source: Source;
   sources: Source[] = [];
   searchResponse: any;
-  commonFilters: Array<{ name: string; filters: Filter[] }> = [];
+  commonFilters: Array<{ name: string; filters: Filter[] }> = this.getCommonFilters();
   ItemField = ItemField;
+  itemFieldIterable: Array<{ [key: string]: string }> = Object.keys(ItemField)
+    .filter((f) => notVisibleFilterFields.indexOf(f) === -1)
+    .map((key) => ({ name: key, id: ItemField[key] }));
+
   loading = false;
   isAdmin = true;
 
@@ -60,7 +73,6 @@ export class PikerComponent implements OnInit {
 
   async ngOnInit() {
     this.isLocalhost = window.location.hostname === 'localhost';
-    this.commonFilters = this.getCommonFilters();
 
     this.sources = await this._service.getSources();
 
@@ -89,6 +101,11 @@ export class PikerComponent implements OnInit {
         }
       }
     });
+  }
+
+  getItemFieldName(fieldId: string): string {
+    const field = this.itemFieldIterable.find((f) => f.id === fieldId);
+    return field ? field.name : 'field';
   }
 
   selectSource(source: Source) {
@@ -225,6 +242,16 @@ export class PikerComponent implements OnInit {
         ],
       },
       {
+        name: 'Since 2024-08-01',
+        filters: [
+          {
+            fieldId: ItemField.DateCreated,
+            operatorId: operators.GREATER_THAN.id,
+            value: '2024-08-01',
+          },
+        ],
+      },
+      {
         name: 'Floor 0 - 4',
         filters: [
           {
@@ -277,6 +304,36 @@ export class PikerComponent implements OnInit {
             fieldId: ItemField.FormattedAddress,
             operatorId: operators.CONTAINS.id,
             value: '',
+          },
+        ],
+      },
+      {
+        name: 'Invalid items',
+        filters: [
+          {
+            fieldId: ItemField.Invalid,
+            operatorId: operators.EQUALS.id,
+            value: true,
+          },
+        ],
+      },
+      {
+        name: 'AutoSanitized items',
+        filters: [
+          {
+            fieldId: ItemField.AutoSanitized,
+            operatorId: operators.EQUALS.id,
+            value: true,
+          },
+        ],
+      },
+      {
+        name: 'Deleted items',
+        filters: [
+          {
+            fieldId: ItemField.Deleted,
+            operatorId: operators.EQUALS.id,
+            value: true,
           },
         ],
       },

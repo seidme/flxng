@@ -57,14 +57,14 @@
           <div class="api-filter"
                *ngFor="let filter of filters;">
             <flx-menu #fieldSelectorMenu
-                      [header]="colsMap[filter.fieldId] ? colsMap[filter.fieldId].header : 'field'">
+                      [header]="getItemFieldName(filter.fieldId)">
               <div class="menu-body">
                 <ul class="flx-selectable-list">
-                  <ng-container *ngFor="let col of cols">
+                  <ng-container *ngFor="let field of itemFieldIterable">
                     <li class="flx-selectable-list-item"
-                        (click)="filter.fieldId = col.field; fieldSelectorMenu.close();">
-                      <span title="{{col.header}}">{{col.header}}</span>
-                      <i class="material-icons"><span *ngIf="filter.fieldId === col.field">check</span></i>
+                        (click)="filter.fieldId = field.id; fieldSelectorMenu.close();">
+                      <span title="{{field.name}}">{{field.name}}</span>
+                      <!-- <i class="material-icons"><span *ngIf="filter.fieldId === field.id">check</span></i> -->
                     </li>
                   </ng-container>
                 </ul>
@@ -79,7 +79,7 @@
                     <li class="flx-selectable-list-item"
                         (click)="filter.operatorId = operator.id; fieldSelectorMenu.close();">
                       <span title="{{operator.name}}">{{operator.name}}</span>
-                      <i class="material-icons"><span *ngIf="filter.operatorId === operator.id">check</span></i>
+                      <!-- <i class="material-icons"><span *ngIf="filter.operatorId === operator.id">check</span></i> -->
                     </li>
                   </ng-container>
                 </ul>
@@ -157,7 +157,7 @@
                       [header]="'Bulk update action'">
               <div class="menu-body">
                 <ul class="flx-selectable-list">
-                  <li class="flx-selectable-list-item"
+                  <!-- <li class="flx-selectable-list-item"
                       (click)="bulkAction('format-address'); bulkItemsUpdateMenu.close();">
                     <span>Format address</span>
                   </li>
@@ -168,6 +168,10 @@
                   <li class="flx-selectable-list-item"
                       (click)="bulkAction('calc-m2Price'); bulkItemsUpdateMenu.close();">
                     <span>Calc m2Price</span>
+                  </li> -->
+                  <li class="flx-selectable-list-item"
+                      (click)="bulkAction('compute-details'); bulkItemsUpdateMenu.close();">
+                    <span>Compute details</span>
                   </li>
                 </ul>
               </div>

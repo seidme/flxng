@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Item, ItemField, PikerService, Source } from '../../piker.service';
+import { Item, ItemField, operators, PikerService, Source } from '../../piker.service';
 import { ModalService } from '../../../../shared/components/modal/modal.service';
 
 declare const google: any;
@@ -18,6 +18,7 @@ export class MapsComponent implements OnInit {
   apiKey = 'AIzaSyBzZ-dfeaSbZZ7HbJ2KT7cTkm5VN_QarUw';
   map: any;
   locations = [];
+  // mapReady = true;
 
   constructor(private _service: PikerService, private modalService: ModalService) {}
 
@@ -30,14 +31,7 @@ export class MapsComponent implements OnInit {
       console.log('Geocoding result:', result);
       this.locations.push({ title: result.address, ...result });
     } else if (this.items && this.items.length > 0) {
-      this.items.forEach(async (item) => {
-        const coords = item.parsedDetails[ItemField.addressLatLng].split(',');
-        const lat = parseFloat(coords[0]);
-        const lng = parseFloat(coords[1]);
-        const title = `${item.parsedDetails[ItemField.FormattedAddress]}, ${item.parsedDetails[ItemField.Location]}`;
-
-        this.locations.push({ title, lat, lng });
-      });
+      this.mapItemsToLocations(this.items);
     } else {
       throw new Error('No item or items provided for maps!');
     }
@@ -46,16 +40,15 @@ export class MapsComponent implements OnInit {
   }
 
   loadGoogleMapsScript(): void {
-    if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+    if (document.querySelector('script[src*="maps.googleapis.com"]')) {
+      this.initMap();
+    } else {
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}`;
       script.async = true;
       script.defer = true;
       script.onload = () => this.initMap();
       document.head.appendChild(script);
-    } else {
-      // If the script is already loaded, initialize the map directly.
-      this.initMap();
     }
   }
 
@@ -70,9 +63,8 @@ export class MapsComponent implements OnInit {
 
     // Add a marker for each location.
     this.locations.forEach((location) => {
-      const position = { lat: location.lat, lng: location.lng };
       const marker = new google.maps.Marker({
-        position: position,
+        position: { lat: location.lat, lng: location.lng },
         map: this.map,
         title: location.title,
       });
@@ -87,6 +79,8 @@ export class MapsComponent implements OnInit {
       });
     });
 
+    console.log('Locations:', this.locations);
+
     // Provjerite broj lokacija kako biste odlučili o zumiranju.
     if (this.locations.length > 1) {
       // Ako postoji više od jedne lokacije, koristite fitBounds().
@@ -100,5 +94,43 @@ export class MapsComponent implements OnInit {
       this.map.setCenter({ lat: this.locations[0].lat, lng: this.locations[0].lng });
       this.map.setZoom(15); // Razina 15 je dobra za prikaz uličnog nivoa.
     }
+  }
+
+  async geohashSearch(item: Item) {
+    // this.mapReady = false;
+    const filters = [
+      {
+        fieldId: ItemField.addressGeohash,
+        operatorId: operators.CONTAINS.id,
+        value: item.parsedDetails[ItemField.addressGeohash].substring(0, 6), // City block precision
+      },
+      {
+        fieldId: ItemField.DateCreated,
+        operatorId: operators.GREATER_THAN.id,
+        value: '2024-08-01',
+      },
+    ];
+    const skip = 0;
+    const take = 1000;
+
+    const searchResponse = await this._service.searchItems(this.source, filters, skip, take);
+    console.log('searchResponse: ', searchResponse);
+    this.mapItemsToLocations(searchResponse.items);
+
+    // this.mapReady = true;
+    //setTimeout(() => {
+    this.initMap();
+    //});
+  }
+
+  mapItemsToLocations(items: Item[]) {
+    items.forEach((item) => {
+      const coords = item.parsedDetails[ItemField.addressLatLng].split(',');
+      const lat = parseFloat(coords[0]);
+      const lng = parseFloat(coords[1]);
+      const title = `${item.parsedDetails[ItemField.FormattedAddress]}, ${item.parsedDetails[ItemField.Location]}`;
+
+      this.locations.push({ title, lat, lng });
+    });
   }
 }

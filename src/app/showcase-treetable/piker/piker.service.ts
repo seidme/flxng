@@ -48,17 +48,20 @@ export enum ItemField {
   StreetGroupingCount = '14',
   addressGeohash = '15',
   addressLatLng = '16',
+  Invalid = 'invalid',
+  Deleted = 'deleted',
+  AutoSanitized = 'autoSanitized'
 }
 
 export const operators: { [key: string]: any } = {
   EQUALS: {
     id: 'EQUALS',
-    name: 'Equals to', // combos: or
+    name: 'Equals', // combos: or
     placeholder: 'E.g: Sarajevo - Centar || Ilidza',
   },
   NOT_EQUALS: {
     id: 'NOT_EQUALS',
-    name: 'Not equals to', // combos: and
+    name: 'Not equals', // combos: and
     placeholder: 'E.g: Vogosca && Hadzici',
   },
   CONTAINS: {
@@ -131,7 +134,7 @@ export class PikerService {
   ) {
     // const origin = window.location.protocol + '//' + window.location.host;
     this.isLocalhost = window.location.hostname === 'localhost';
-    this.apiEndpoint = this.isLocalhost ? 'https://localhost:44315' : 'https://scout.codeeve.com';
+    this.apiEndpoint = this.isLocalhost && false ? 'https://localhost:44315' : 'https://scout.codeeve.com';
   }
 
   getSource(sourceId: number): Promise<Source> {
@@ -313,7 +316,7 @@ export class PikerService {
   }
 
   getReport(source: Source, filters: Filter[]): Promise<any> {
-    let reqUrl = `${this.apiEndpoint}/api/source/${source.id}/items/report/month`;
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/report/month`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');

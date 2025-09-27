@@ -12,8 +12,9 @@
   <div class="foot">
     <!-- <button type="button"
             class="delete-button bg-red"
-            (click)="delete()">Delete</button>
+            (click)="delete()">Delete</button> -->
     <button type="submit"
-            (click)="save()">Save</button> -->
+            *ngIf="item"
+            (click)="geohashSearch(item)">Geohash search (city block)</button>
   </div>
 </div>
