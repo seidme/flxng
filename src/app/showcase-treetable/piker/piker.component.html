@@ -19,7 +19,7 @@
         <div class="grid-options-row top-row">
           <div class="left">
             <div class="db-count">
-              DB Total: <strong>{{totalItemsCount}}</strong>
+              {{isProdApi ? 'PROD' : 'LOCAL'}} DB Total: <strong>{{totalItemsCount}}</strong>
             </div>
             <ng-container *ngIf="searchResponse">
               <div>
@@ -153,8 +153,8 @@
                     (click)="openAnalytics()">Analytics</button>
 
             <flx-menu #bulkItemsUpdateMenu
-                      *ngIf="filters.length && items.length && isAdmin"
-                      [header]="'Bulk update action'">
+                      *ngIf="isAdmin"
+                      [header]="'Actions'">
               <div class="menu-body">
                 <ul class="flx-selectable-list">
                   <!-- <li class="flx-selectable-list-item"
@@ -172,6 +172,10 @@
                   <li class="flx-selectable-list-item"
                       (click)="bulkAction('compute-details'); bulkItemsUpdateMenu.close();">
                     <span>Compute details</span>
+                  </li>
+                  <li class="flx-selectable-list-item"
+                      (click)="groupItems(); bulkItemsUpdateMenu.close();">
+                    <span>Group items</span>
                   </li>
                 </ul>
               </div>

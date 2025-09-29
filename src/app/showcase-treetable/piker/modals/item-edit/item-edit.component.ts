@@ -33,7 +33,7 @@ export class ItemEditComponent implements OnInit {
     const editableFieldIds = [
       '0',
       '1',
-      // '2',
+      '2',
       '3',
       '4',
       // '5',

@@ -1,0 +1,25 @@
+<div class="modal-content-wrapper">
+  <div class="head">
+    <h2>Group items</h2>
+    <!-- <button class="close-button" (click)="close()">×</button> -->
+  </div>
+  <div class="body">
+    <div *ngIf="groups.length">
+      <div *ngIf="groups.length > 0">
+        <h3>Groups:</h3>
+        <ul>
+          <li *ngFor="let group of groups">
+            {{ group.key }} ({{ group.count }})
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <div class="foot">
+    <button type="button"
+            (click)="close()">Close</button>
+    <button type="button"
+            (click)="group()">Group</button>
+  </div>
+</div>

@@ -26,6 +26,7 @@ import { PikerService } from './piker/piker.service';
 import { ItemEditComponent } from './piker/modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './piker/modals/analytics/analytics.component';
 import { MapsComponent } from './piker/modals/maps/maps.component';
+import { GroupItemsComponent } from './piker/modals/group-items/group-items.component';
 
 @NgModule({
   imports: [
@@ -47,9 +48,10 @@ import { MapsComponent } from './piker/modals/maps/maps.component';
     GetStartedComponent,
     AnalyticsComponent,
     ItemEditComponent,
-    MapsComponent
+    MapsComponent,
+    GroupItemsComponent,
   ],
-  entryComponents: [ItemEditComponent, AnalyticsComponent, MapsComponent],
+  entryComponents: [ItemEditComponent, AnalyticsComponent, MapsComponent, GroupItemsComponent],
   providers: [PikerService, ShowcaseTreetableService],
 })
 export class ShowcaseTreetableModule {}

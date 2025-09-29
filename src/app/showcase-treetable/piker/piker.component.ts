@@ -16,6 +16,7 @@ import { ItemEditComponent } from './modals/item-edit/item-edit.component';
 import { AnalyticsComponent } from './modals/analytics/analytics.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MapsComponent } from './modals/maps/maps.component';
+import { GroupItemsComponent } from './modals/group-items/group-items.component';
 
 declare var window: any;
 const notVisibleFilterFields = [
@@ -43,6 +44,7 @@ export class PikerComponent implements OnInit {
   emailsInput = '';
   triggerNameINput = '';
   isLocalhost = false;
+  isProdApi = false;
   updatingTrigger: any;
   queryParams: any = {};
   source: Source;
@@ -73,6 +75,7 @@ export class PikerComponent implements OnInit {
 
   async ngOnInit() {
     this.isLocalhost = window.location.hostname === 'localhost';
+    this.isProdApi = this._service.apiEndpoint.indexOf('localhost') === -1;
 
     this.sources = await this._service.getSources();
 
@@ -351,7 +354,7 @@ export class PikerComponent implements OnInit {
   }
 
   selectCommonFilter(commonFIlter: { name: string; filters: any[] }) {
-    this.filters = [...this.filters, ...commonFIlter.filters];
+    this.filters = [...this.filters, ...JSON.parse(JSON.stringify(commonFIlter.filters))];
     this.currentPage = 1;
   }
 
@@ -505,6 +508,14 @@ export class PikerComponent implements OnInit {
 
   async mapsItems(item: Item): Promise<void> {
     const result = await this.modal.open(MapsComponent, { source: this.source, items: this.items });
+    if (result) {
+      // this.items = [];
+      // this.searchItems();
+    }
+  }
+
+  async groupItems(): Promise<void> {
+    const result = await this.modal.open(GroupItemsComponent, { source: this.source});
     if (result) {
       // this.items = [];
       // this.searchItems();
