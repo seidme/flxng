@@ -98,6 +98,9 @@ export interface Item {
   parsedDetails: ItemDetails;
   dateCreated: string;
   sourceId: number;
+  deleted: boolean;
+  invalid: boolean;
+  autoSanitized: boolean;
 
   // // scraped fields are assgined to the item itself (only connsumerd by table, should not be used)
   // [value in ItemField]: any;
