@@ -19,6 +19,8 @@ export class MapsComponent implements OnInit {
   map: any;
   locations = [];
   // mapReady = true;
+  searchResponse: any;
+  ItemField = ItemField;
 
   constructor(private _service: PikerService, private modalService: ModalService) {}
 
@@ -113,9 +115,9 @@ export class MapsComponent implements OnInit {
     const skip = 0;
     const take = 1000;
 
-    const searchResponse = await this._service.searchItems(this.source, filters, skip, take);
-    console.log('searchResponse: ', searchResponse);
-    this.mapItemsToLocations(searchResponse.items);
+    this.searchResponse = await this._service.searchItems(this.source, filters, skip, take);
+    console.log('searchResponse: ', this.searchResponse);
+    this.mapItemsToLocations(this.searchResponse.items);
 
     // this.mapReady = true;
     //setTimeout(() => {

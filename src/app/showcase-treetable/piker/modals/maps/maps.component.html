@@ -1,7 +1,8 @@
 <div class="modal-content-wrapper">
   <div class="head">
     <h2>Maps</h2>
-    <!-- <button class="close-button" (click)="close()">×</button> -->
+    <span *ngIf="item">m2 price: <strong>{{item[ItemField.M2Price]}}</strong></span>
+    <span *ngIf="searchResponse">City block m2 price median: <strong>{{searchResponse.m2PriceAverage.median}}</strong></span>
   </div>
   <div class="body">
 
