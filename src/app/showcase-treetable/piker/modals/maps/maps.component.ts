@@ -18,7 +18,6 @@ export class MapsComponent implements OnInit {
   apiKey = 'AIzaSyBzZ-dfeaSbZZ7HbJ2KT7cTkm5VN_QarUw';
   map: any;
   locations = [];
-  // mapReady = true;
   searchResponse: any;
   ItemField = ItemField;
 
@@ -29,6 +28,7 @@ export class MapsComponent implements OnInit {
     // console.log('source:', this.source);
 
     if (this.item) {
+      console.log('Item:', this.item);
       const result = await this._service.getCoords(this.source, this.item);
       console.log('Geocoding result:', result);
       this.locations.push({ title: result.address, ...result });
@@ -99,17 +99,31 @@ export class MapsComponent implements OnInit {
   }
 
   async geohashSearch(item: Item) {
-    // this.mapReady = false;
+    // first add the selected item to include in search results
+    let geohashesFilterValue = item.parsedDetails[ItemField.addressGeohash].substring(0, 7); // 6 = city block, 7 = street level
+
+    // now add geohashes of neighboring geo blocks (8 neighbors) - this will result in 1-2 streets away from the original address
+    this.locations[0].geohashNeighbors.forEach((neighbor) => {
+      geohashesFilterValue += ' || ' + neighbor;
+    });
+
+    console.log('geohashesFilterValue:', geohashesFilterValue);
+
     const filters = [
       {
         fieldId: ItemField.addressGeohash,
         operatorId: operators.CONTAINS.id,
-        value: item.parsedDetails[ItemField.addressGeohash].substring(0, 6), // City block precision
+        value: geohashesFilterValue,
       },
       {
         fieldId: ItemField.DateCreated,
         operatorId: operators.GREATER_THAN.id,
         value: '2024-08-01',
+      },
+      {
+        fieldId: ItemField.FormattedAddress,
+        operatorId: operators.NOT_CONTAINS.id,
+        value: '14 maja', // put here addresses to exclude - for which google maps can't get lat/lng correctly! TODO: check into flags that google returns indicating if it's not sure???
       },
     ];
     const skip = 0;
@@ -119,10 +133,7 @@ export class MapsComponent implements OnInit {
     console.log('searchResponse: ', this.searchResponse);
     this.mapItemsToLocations(this.searchResponse.items);
 
-    // this.mapReady = true;
-    //setTimeout(() => {
     this.initMap();
-    //});
   }
 
   mapItemsToLocations(items: Item[]) {

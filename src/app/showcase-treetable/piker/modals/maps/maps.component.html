@@ -15,7 +15,7 @@
             class="delete-button bg-red"
             (click)="delete()">Delete</button> -->
     <button type="submit"
-            *ngIf="item"
+            *ngIf="item && item[ItemField.FormattedAddress] && !item.invalid"
             (click)="geohashSearch(item)">Geohash search (city block)</button>
   </div>
 </div>
