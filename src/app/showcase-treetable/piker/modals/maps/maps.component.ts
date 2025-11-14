@@ -102,7 +102,7 @@ export class MapsComponent implements OnInit {
 
   async geohashSearch(item: Item) {
     // first add the selected item to include in search results
-    let geohashesFilterValue = item.parsedDetails[ItemField.addressGeohash].substring(0, 7); // 6 = city block, 7 = street level
+    let geohashesFilterValue = item.parsedDetails[ItemField.AddressGeohash].substring(0, 7); // 6 = city block, 7 = street level
 
     // now add geohashes of neighboring geo blocks (8 neighbors) - this will result in 1-2 streets away from the original address
     this.locations[0].geohashNeighbors.forEach((neighbor) => {
@@ -113,7 +113,7 @@ export class MapsComponent implements OnInit {
 
     const filters = [
       {
-        fieldId: ItemField.addressGeohash,
+        fieldId: ItemField.AddressGeohash,
         operatorId: operators.CONTAINS.id,
         value: geohashesFilterValue,
       },
@@ -140,7 +140,7 @@ export class MapsComponent implements OnInit {
 
   mapItemsToLocations(items: Item[]) {
     items.forEach((item) => {
-      const coords = item.parsedDetails[ItemField.addressLatLng].split(',');
+      const coords = item.parsedDetails[ItemField.AddressLatLng].split(',');
       const lat = parseFloat(coords[0]);
       const lng = parseFloat(coords[1]);
       const title = `${item.parsedDetails[ItemField.FormattedAddress]}, ${item.parsedDetails[ItemField.Location]}`;

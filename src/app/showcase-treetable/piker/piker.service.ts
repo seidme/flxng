@@ -31,6 +31,7 @@ export enum ItemField {
   Identifier = 'identifier',
   DateCreated = 'dateCreated',
   DetailsUrl = 'detailsUrl',
+  
   Title = '0',
   Price = '1',
   Location = '2',
@@ -46,8 +47,10 @@ export enum ItemField {
   M2PriceStreetMedianAverage = '12',
   M2PriceStreetMeanAverage = '13',
   StreetGroupingCount = '14',
-  addressGeohash = '15',
-  addressLatLng = '16',
+  AddressGeohash = '15',
+  AddressLatLng = '16',
+  Tags = '100',
+
   Invalid = 'invalid',
   Deleted = 'deleted',
   AutoSanitized = 'autoSanitized',
