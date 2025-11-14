@@ -515,7 +515,7 @@ export class PikerComponent implements OnInit {
   }
 
   async groupItems(): Promise<void> {
-    const result = await this.modal.open(GroupItemsComponent, { source: this.source});
+    const result = await this.modal.open(GroupItemsComponent, { source: this.source });
     if (result) {
       // this.items = [];
       // this.searchItems();
@@ -547,5 +547,10 @@ export class PikerComponent implements OnInit {
       console.error('Error bulk updating items:', e);
     }
     this.loading = false;
+  }
+
+  async geminiItem(item: Item): Promise<void> {
+    const response = await this._service.geminiItem(this.source, item);
+    console.log('Gemini response: ', response);
   }
 }

@@ -177,6 +177,10 @@
                       (click)="groupItems(); bulkItemsUpdateMenu.close();">
                     <span>Group items</span>
                   </li>
+                  <li class="flx-selectable-list-item"
+                      (click)="bulkAction('format-address'); bulkItemsUpdateMenu.close();">
+                    <span>Format address only</span>
+                  </li>
                 </ul>
               </div>
             </flx-menu>
@@ -329,6 +333,10 @@
                 [sortable]="false">
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData">
+        <button type="button"
+                *ngIf="isAdmin"
+                class="edit-button maring-right-10"
+                (click)="geminiItem(item)">Gem</button>
         <button type="button"
                 *ngIf="isAdmin"
                 class="edit-button maring-right-10"

@@ -31,6 +31,8 @@ export class MapsComponent implements OnInit {
       console.log('Item:', this.item);
       const result = await this._service.getCoords(this.source, this.item);
       console.log('Geocoding result:', result);
+      console.log('partial match:', result.allResults[0].partial_match);
+      console.log('types:', result.allResults[0].types);
       this.locations.push({ title: result.address, ...result });
     } else if (this.items && this.items.length > 0) {
       this.mapItemsToLocations(this.items);
