@@ -293,7 +293,7 @@ export class PikerComponent implements OnInit {
         name: '3 main locations',
         filters: [
           {
-            fieldId: ItemField.Location,
+            fieldId: ItemField.Locality,
             operatorId: operators.EQUALS.id,
             value: 'Ilidza || Sarajevo - Novo Sarajevo || Sarajevo - Centar',
             caseSensitive: true,

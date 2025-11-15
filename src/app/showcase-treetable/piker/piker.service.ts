@@ -34,7 +34,7 @@ export enum ItemField {
   
   Title = '0',
   Price = '1',
-  Location = '2',
+  Locality = '2',
   Address = '3',
   M2 = '4',
   M2Balcony = '5',
@@ -49,6 +49,7 @@ export enum ItemField {
   StreetGroupingCount = '14',
   AddressGeohash = '15',
   AddressLatLng = '16',
+  NormalizedAddress = '17',
   Tags = '100',
 
   Invalid = 'invalid',

@@ -143,7 +143,7 @@ export class MapsComponent implements OnInit {
       const coords = item.parsedDetails[ItemField.AddressLatLng].split(',');
       const lat = parseFloat(coords[0]);
       const lng = parseFloat(coords[1]);
-      const title = `${item.parsedDetails[ItemField.FormattedAddress]}, ${item.parsedDetails[ItemField.Location]}`;
+      const title = `${item.parsedDetails[ItemField.FormattedAddress]}, ${item.parsedDetails[ItemField.Locality]}`;
 
       this.locations.push({ title, lat, lng });
     });
