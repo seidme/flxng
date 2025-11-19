@@ -178,12 +178,16 @@
                     <span>AI complement details</span>
                   </li>
                   <li class="flx-selectable-list-item"
-                      (click)="groupItems(); bulkItemsUpdateMenu.close();">
-                    <span>Group items</span>
+                      (click)="bulkAction('format-address'); bulkItemsUpdateMenu.close();">
+                    <span>Format address</span>
                   </li>
                   <li class="flx-selectable-list-item"
-                      (click)="bulkAction('format-address'); bulkItemsUpdateMenu.close();">
-                    <span>Format address only</span>
+                      (click)="bulkAction('normalize-address'); bulkItemsUpdateMenu.close();">
+                    <span>Normalize address</span>
+                  </li>
+                  <li class="flx-selectable-list-item"
+                      (click)="groupItems(); bulkItemsUpdateMenu.close();">
+                    <span>Group items</span>
                   </li>
                 </ul>
               </div>
@@ -289,7 +293,10 @@
                 [header]="'address'"></flx-column>
 
     <flx-column [field]="ItemField.FormattedAddress"
-                [header]="'formattedAddress'"></flx-column>
+                [header]="'F Address'"></flx-column>
+
+    <flx-column [field]="ItemField.NormalizedAddress"
+                [header]="'N Address'"></flx-column>
 
     <flx-column [field]="ItemField.M2"
                 [header]="'m2'"></flx-column>
