@@ -315,15 +315,15 @@
       <ng-template flxTemplate="bodyCell"
                    let-col="column"
                    let-item="rowData">
-        <span [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], searchResponse?.m2PriceAverage.median)">{{item[col.field]}}</span>
+        <span [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.M2PriceStreetMedianAverage])">{{item[col.field]}}</span>
       </ng-template>
     </flx-column>
 
     <flx-column [field]="ItemField.M2PriceStreetMedianAverage"
                 [header]="'streetMedian'"></flx-column>
 
-    <!-- <flx-column [field]="ItemField.StreetGroupingCount"
-                [header]="'streetGroupingCount'"></flx-column> -->
+    <flx-column [field]="ItemField.StreetGroupingCount"
+                [header]="'streetGroupingCount'"></flx-column>
 
     <flx-column [field]="ItemField.Floor"
                 [header]="'floor'"></flx-column>
