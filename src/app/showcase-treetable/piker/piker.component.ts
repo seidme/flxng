@@ -559,7 +559,7 @@ export class PikerComponent implements OnInit {
 
   async geminiItem(item: Item): Promise<void> {
     const response = await this._service.geminiItem(this.source, item);
-    console.log('Gemini response: ', response.parsedDetails);
+    console.log('Gemini response: ', response);
   }
 
   async addressMatching(item: Item): Promise<void> {
