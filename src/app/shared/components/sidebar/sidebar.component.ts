@@ -34,7 +34,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.mobileView = this.isMobileView();
-    this.sidebarVisible = !this.mobileView;
+    this.sidebarVisible = !this.mobileView && window.location.href.indexOf('piker') === -1;
     this.fixedSidebarVisible = false;
     // this.fixedSidebarVisible = this.mobileView;
 
