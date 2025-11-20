@@ -1,0 +1,90 @@
+:host {
+}
+
+.modal-content-wrapper {
+  width: 800px;
+  height: 500px;
+  // padding: 10px;
+
+  @media screen and (max-width: 768px) {
+    /* Styles to apply when the screen width is 768px or less */
+    width: 360px;
+  }
+
+  .head {
+    padding: 0 20px;
+    height: 50px;
+  }
+
+  .body {
+    padding: 0 20px;
+    height: 400px;
+    overflow: auto;
+
+    button {
+      margin-right: 10px;
+    }
+
+    .suggestions {
+      .suggestions-list {
+        height: 160px;
+        overflow: auto;
+      }
+
+      .buttons {
+        display: flex;
+        align-items: center;
+      }
+
+      ul {
+        margin: 0;
+        margin-top: 10px;
+      }
+    }
+
+    .form {
+      .form-field-group {
+        margin-bottom: 10px;
+        .form-field {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 5px;
+
+          label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 17px;
+          }
+
+          // input, select, textarea {
+          //   padding: 8px;
+          //   font-size: 14px;
+          //   border: 1px solid #ccc;
+          //   border-radius: 4px;
+          // }
+
+          // textarea {
+          //   resize: vertical;
+          //   min-height: 80px;
+          // }
+        }
+      }
+    }
+  }
+
+  .foot {
+    padding: 0 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      margin-right: 10px;
+    }
+  }
+}
+
+.bg-red {
+  background-color: #f0a49c;
+}

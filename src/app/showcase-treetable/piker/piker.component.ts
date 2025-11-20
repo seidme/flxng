@@ -17,6 +17,7 @@ import { AnalyticsComponent } from './modals/analytics/analytics.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MapsComponent } from './modals/maps/maps.component';
 import { GroupItemsComponent } from './modals/group-items/group-items.component';
+import { AddressMatchingComponent } from './modals/address-matching/address-matching.component';
 
 declare var window: any;
 const notVisibleFilterFields = [
@@ -101,6 +102,13 @@ export class PikerComponent implements OnInit {
         const item = await this._service.getItem(this.queryParams['editItemId']);
         if (item) {
           this.editItem(item);
+        }
+      }
+
+      if (this.queryParams['matchAddressItemId']) {
+        const item = await this._service.getItem(this.queryParams['matchAddressItemId']);
+        if (item) {
+          this.addressMatching(item);
         }
       }
     });
@@ -552,5 +560,13 @@ export class PikerComponent implements OnInit {
   async geminiItem(item: Item): Promise<void> {
     const response = await this._service.geminiItem(this.source, item);
     console.log('Gemini response: ', response.parsedDetails);
+  }
+
+  async addressMatching(item: Item): Promise<void> {
+    const result = await this.modal.open(AddressMatchingComponent, { source: this.source, item: item });
+    if (result) {
+      // this.items = [];
+      // this.searchItems();
+    }
   }
 }

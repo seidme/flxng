@@ -31,7 +31,7 @@ export enum ItemField {
   Identifier = 'identifier',
   DateCreated = 'dateCreated',
   DetailsUrl = 'detailsUrl',
-  
+
   Title = '0',
   Price = '1',
   Locality = '2',
@@ -567,41 +567,78 @@ export class PikerService {
       .toPromise();
   }
 
-  // testPredictions(): void {
-  //   let reqUrl = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
+  getAddressGroupSuggestions(source: Source, item: Item): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${item.id}/address-group-suggestions`;
 
-  //   let headers = new HttpHeaders();
-  //   //headers = headers.append('Content-Type', 'application/json');
-  //   headers = headers.append('Accept', 'application/json');
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
 
-  //   const reqOpts: any = {
-  //     responseType: 'json',
-  //     observe: 'response',
-  //     headers: headers,
-  //     params: {
-  //       input: 'vrazova',
-  //       inputype: 'textquery',
-  //       fields: 'formatted_address,id,name,place_id',
-  //       key: '<GOOGLE API KEY HERE>'
-  //     }
-  //   };
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
 
-  //   this._http
-  //     .get(reqUrl, reqOpts)
-  //     .pipe(
-  //       map((response: any) => {
-  //         return response;
-  //       }),
-  //       catchError(error => throwError(error))
-  //     )
-  //     .toPromise()
-  //     .then(
-  //       (response: any) => {
-  //         console.log('response: ', response);
-  //       },
-  //       error => {
-  //         console.error('Error:', error);
-  //       }
-  //     );
-  // }
+    return this._http
+      .get(reqUrl, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body as any;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  createAddressGroup(source: Source, item: Item, groupKey: string): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${item.id}/create-address-group/${groupKey}`;
+
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .post(reqUrl, null, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body as any;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
+
+  matchAddressGroup(source: Source, item: Item, groupIdToMatch: number, aliasToAdd = null): Promise<any> {
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${item.id}/match-address-group/${groupIdToMatch}/${aliasToAdd}`;
+
+    let headers = new HttpHeaders();
+    //headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    const reqOpts: any = {
+      responseType: 'json',
+      observe: 'response',
+      headers: headers,
+      params: {},
+    };
+
+    return this._http
+      .put(reqUrl, null, reqOpts)
+      .pipe(
+        map((response: any) => {
+          return response.body as any;
+        }),
+        catchError((error) => throwError(error))
+      )
+      .toPromise();
+  }
 }

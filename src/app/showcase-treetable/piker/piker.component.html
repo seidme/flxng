@@ -175,7 +175,7 @@
                   </li>
                   <li class="flx-selectable-list-item"
                       (click)="bulkAction('ai-complement-details'); bulkItemsUpdateMenu.close();">
-                    <span>AI complement details</span>
+                    <span>AI details</span>
                   </li>
                   <li class="flx-selectable-list-item"
                       (click)="bulkAction('format-address'); bulkItemsUpdateMenu.close();">
@@ -357,10 +357,36 @@
                 [sortable]="false">
       <ng-template flxTemplate="bodyCell"
                    let-item="rowData">
+        <!-- 
+        <flx-menu #itemActionsMenu
+                  *ngIf="isAdmin"
+                  [header]="'Actions'">
+          <div class="menu-body">
+            <ul class="flx-selectable-list">
+              <li class="flx-selectable-list-item"
+                  (click)="mapsItem(item); itemActionsMenu.close();">
+                <span>Maps</span>
+              </li>
+              <li class="flx-selectable-list-item"
+                  (click)="geminiItem(item); itemActionsMenu.close();">
+                <span>AI details</span>
+              </li>
+              <li class="flx-selectable-list-item"
+                  (click)="addressMatching(item); itemActionsMenu.close();">
+                <span>Address matching</span>
+              </li>
+            </ul>
+          </div>
+        </flx-menu> -->
+
+        <!-- <button type="button"
+                *ngIf="isAdmin"
+                class="edit-button maring-right-10"
+                (click)="geminiItem(item)">Gem</button> -->
         <button type="button"
                 *ngIf="isAdmin"
                 class="edit-button maring-right-10"
-                (click)="geminiItem(item)">Gem</button>
+                (click)="addressMatching(item)">A suggs</button>
         <button type="button"
                 *ngIf="isAdmin"
                 class="edit-button maring-right-10"
