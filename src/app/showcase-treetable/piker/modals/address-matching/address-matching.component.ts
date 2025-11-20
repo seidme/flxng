@@ -72,4 +72,10 @@ export class AddressMatchingComponent implements OnInit {
     console.log('Created address group:', createdGroup);
     this.modalService.close(true);
   }
+
+    deleteItem(): Promise<void> {
+    return this._service.deleteItem(this.item.id).then(() => {
+      this.modalService.close(true);
+    });
+  }
 }
