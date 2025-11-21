@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MapsComponent } from './modals/maps/maps.component';
 import { GroupItemsComponent } from './modals/group-items/group-items.component';
 import { AddressMatchingComponent } from './modals/address-matching/address-matching.component';
+import { UpdateTriggerComponent } from './modals/update-trigger/update-trigger.component';
 
 declare var window: any;
 const notVisibleFilterFields = [
@@ -110,6 +111,10 @@ export class PikerComponent implements OnInit {
         if (item) {
           this.addressMatching(item);
         }
+      }
+
+      if (this.queryParams['triggerName'] && this.queryParams['streetNameToExclude']) {
+        this.excludeStreetFromTrigger(this.queryParams['triggerName'], this.queryParams['streetNameToExclude']);
       }
     });
   }
@@ -312,7 +317,7 @@ export class PikerComponent implements OnInit {
         name: 'Address contains',
         filters: [
           {
-            fieldId: ItemField.FormattedAddress,
+            fieldId: ItemField.NormalizedAddress,
             operatorId: operators.CONTAINS.id,
             value: '',
           },
@@ -405,6 +410,12 @@ export class PikerComponent implements OnInit {
       this.updatingTrigger.filters = this.filters;
       this.updatingTrigger.emailsToNotify = emails;
     } else {
+      var nameAlradyExists = this.source.parsedItemFilters.find((t) => t.name === this.triggerNameINput);
+      if (nameAlradyExists) {
+        console.error(`Trigger with name "${this.triggerNameINput}" already exists! (Unique name is important)`);
+        return;
+      }
+
       const emailTrigger = {
         name: this.triggerNameINput,
         filters: this.filters,
@@ -568,5 +579,13 @@ export class PikerComponent implements OnInit {
       // this.items = [];
       // this.searchItems();
     }
+  }
+
+  async excludeStreetFromTrigger(triggerName: string, streetNameToExclude: string): Promise<void> {
+    const result = await this.modal.open(UpdateTriggerComponent, {
+      source: this.source,
+      triggerName: triggerName,
+      streetNameToExclude: streetNameToExclude,
+    });
   }
 }

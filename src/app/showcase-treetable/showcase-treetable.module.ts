@@ -28,6 +28,7 @@ import { AnalyticsComponent } from './piker/modals/analytics/analytics.component
 import { MapsComponent } from './piker/modals/maps/maps.component';
 import { GroupItemsComponent } from './piker/modals/group-items/group-items.component';
 import { AddressMatchingComponent } from './piker/modals/address-matching/address-matching.component';
+import { UpdateTriggerComponent } from './piker/modals/update-trigger/update-trigger.component';
 
 @NgModule({
   imports: [
@@ -52,6 +53,7 @@ import { AddressMatchingComponent } from './piker/modals/address-matching/addres
     MapsComponent,
     GroupItemsComponent,
     AddressMatchingComponent,
+    UpdateTriggerComponent
   ],
   entryComponents: [
     ItemEditComponent,
@@ -59,6 +61,7 @@ import { AddressMatchingComponent } from './piker/modals/address-matching/addres
     MapsComponent,
     GroupItemsComponent,
     AddressMatchingComponent,
+    UpdateTriggerComponent
   ],
   providers: [PikerService, ShowcaseTreetableService],
 })
