@@ -39,6 +39,19 @@
 
     //height: 500px;
     background: #fff;
+
+    .cell-inner {
+      height: inherit;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+
+      .field-value {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
   }
 
   .grid-options-container {

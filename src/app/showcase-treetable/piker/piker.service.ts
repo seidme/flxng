@@ -347,7 +347,7 @@ export class PikerService {
   }
 
   getReport(source: Source, filters: Filter[]): Promise<any> {
-    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/report/month`;
+    let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/median-by-month`;
 
     let headers = new HttpHeaders();
     //headers = headers.append('Content-Type', 'application/json');

@@ -34,6 +34,12 @@
                         [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
                         (click)="searchItems(true)"><strong>{{searchResponse?.m2PriceAverage.median}}</strong></button>
               </div>
+              <div>
+                <span>m2 price median (adjusted):</span>
+                <button type="button"
+                        [disabled]="!filters.length || (items.length < itemsPerPage && currentPage === 1)"
+                        (click)="searchItems(true)"><strong>{{searchResponse?.m2PriceAverage.medianAdjusted}}</strong></button>
+              </div>
             </ng-container>
           </div>
           <div class="right">
@@ -296,7 +302,16 @@
                 [header]="'F Address'"></flx-column>
 
     <flx-column [field]="ItemField.NormalizedAddress"
-                [header]="'N Address'"></flx-column>
+                [header]="'N Address'">
+      <ng-template flxTemplate="bodyCell"
+                   let-col="column"
+                   let-item="rowData">
+        <div class="cell-inner">
+          <span class="field-value flx-clickable"
+                (click)="searchByAddress(item[col.field])">{{item[col.field]}}</span>
+        </div>
+      </ng-template>
+    </flx-column>
 
     <flx-column [field]="ItemField.M2"
                 [header]="'m2'"></flx-column>
@@ -306,7 +321,10 @@
       <ng-template flxTemplate="bodyCell"
                    let-col="column"
                    let-item="rowData">
-        <span [style.background-color]="item[col.field] !== 0 && (item[col.field] < 10000 || item[col.field] > 1000000) ? '#f7dede' : ''">{{item[col.field]}}</span>
+        <div class="cell-inner">
+          <span class="field-value"
+                [style.background-color]="item[col.field] !== 0 && (item[col.field] < 10000 || item[col.field] > 1000000) ? '#f7dede' : ''">{{item[col.field]}}</span>
+        </div>
       </ng-template>
     </flx-column>
 
@@ -315,7 +333,10 @@
       <ng-template flxTemplate="bodyCell"
                    let-col="column"
                    let-item="rowData">
-        <span [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.M2PriceStreetMedianAverage])">{{item[col.field]}}</span>
+        <div class="cell-inner">
+          <span class="field-value"
+                [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.M2PriceStreetMedianAverage])">{{item[col.field]}}</span>
+        </div>
       </ng-template>
     </flx-column>
 

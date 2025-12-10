@@ -384,6 +384,19 @@ export class PikerComponent implements OnInit {
     this.currentPage = 1;
   }
 
+  searchByAddress(address: string): void {
+    this.filters = [
+      {
+        fieldId: ItemField.NormalizedAddress,
+        operatorId: operators.EQUALS.id,
+        value: address,
+        caseSensitive: false,
+      },
+    ];
+    this.currentPage = 1;
+    // this.searchItems();
+  }
+
   async addEmailTrigger(updateExisting = false): Promise<void> {
     if (!this.triggerNameINput) {
       console.error('No trigger name provided!');
@@ -459,7 +472,7 @@ export class PikerComponent implements OnInit {
   }
 
   getGradingColor(value, average): string {
-    if (value > average) {
+    if (value >= average) {
       return '';
     }
 
