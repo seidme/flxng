@@ -192,6 +192,10 @@
                     <span>Normalize address</span>
                   </li>
                   <li class="flx-selectable-list-item"
+                      (click)="bulkAction('set-reference-m2price'); bulkItemsUpdateMenu.close();">
+                    <span>Set reference m2 price</span>
+                  </li>
+                  <li class="flx-selectable-list-item"
                       (click)="groupItems(); bulkItemsUpdateMenu.close();">
                     <span>Group items</span>
                   </li>

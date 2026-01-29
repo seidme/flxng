@@ -50,6 +50,7 @@ export enum ItemField {
   AddressGeohash = '15',
   AddressLatLng = '16',
   NormalizedAddress = '17',
+  referenceM2Price = '18',
   Tags = '100',
 
   Invalid = 'invalid',
@@ -137,7 +138,7 @@ export class PikerService {
 
   constructor(
     //private _ngZone: NgZone
-    private _http: HttpClient
+    private _http: HttpClient,
   ) {
     // const origin = window.location.protocol + '//' + window.location.host;
     this.isLocalhost = window.location.hostname === 'localhost';
@@ -163,7 +164,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -187,7 +188,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -211,7 +212,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -235,7 +236,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -259,7 +260,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -283,7 +284,7 @@ export class PikerService {
         map((response: any) => {
           return response.body.count;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -310,7 +311,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -341,7 +342,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -372,7 +373,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -382,7 +383,7 @@ export class PikerService {
     source: Source,
     filters: Filter[],
     skip = 0,
-    take = 100
+    take = 100,
   ): Promise<{ updatedItemsCount: number }> {
     let reqUrl = `${this.apiEndpoint}/api/sources/${source.id}/items/${bulkAction}`;
 
@@ -409,7 +410,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -434,7 +435,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -459,7 +460,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -489,7 +490,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -513,7 +514,7 @@ export class PikerService {
       .get(reqUrl, reqOpts)
       .pipe(
         map((response: any) => null), // no content
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -537,7 +538,7 @@ export class PikerService {
         map((response: any) => {
           return response.body.predictions;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -562,7 +563,7 @@ export class PikerService {
         map((response: any) => {
           return response.body;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -587,7 +588,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -612,7 +613,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
@@ -637,7 +638,7 @@ export class PikerService {
         map((response: any) => {
           return response.body as any;
         }),
-        catchError((error) => throwError(error))
+        catchError((error) => throwError(error)),
       )
       .toPromise();
   }
