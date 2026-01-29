@@ -339,21 +339,21 @@
                    let-item="rowData">
         <div class="cell-inner">
           <span class="field-value"
-                [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.M2PriceStreetMedianAverage])">{{item[col.field]}}</span>
+                [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.ReferenceM2Price])">{{item[col.field]}}</span>
         </div>
       </ng-template>
     </flx-column>
 
-    <flx-column [field]="ItemField.referenceM2Price"
+    <flx-column [field]="ItemField.ReferenceM2Price"
                 [header]="'refM2Price'">
-      <ng-template flxTemplate="bodyCell"
+      <!-- <ng-template flxTemplate="bodyCell"
                    let-col="column"
                    let-item="rowData">
         <div class="cell-inner">
           <span class="field-value"
-                [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.referenceM2Price])">{{item[col.field]}}</span>
+                [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.ReferenceM2Price])">{{item[col.field]}}</span>
         </div>
-      </ng-template>
+      </ng-template> -->
     </flx-column>
 
     <flx-column [field]="ItemField.M2PriceStreetMedianAverage"
