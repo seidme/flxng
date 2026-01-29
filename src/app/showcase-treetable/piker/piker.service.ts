@@ -50,7 +50,7 @@ export enum ItemField {
   AddressGeohash = '15',
   AddressLatLng = '16',
   NormalizedAddress = '17',
-  referenceM2Price = '18',
+  ReferenceM2Price = '18',
   Tags = '100',
 
   Invalid = 'invalid',
