@@ -344,6 +344,18 @@
       </ng-template>
     </flx-column>
 
+    <flx-column [field]="ItemField.referenceM2Price"
+                [header]="'refM2Price'">
+      <ng-template flxTemplate="bodyCell"
+                   let-col="column"
+                   let-item="rowData">
+        <div class="cell-inner">
+          <span class="field-value"
+                [style.background-color]="item[col.field] > 0 && getGradingColor(item[col.field], item[ItemField.referenceM2Price])">{{item[col.field]}}</span>
+        </div>
+      </ng-template>
+    </flx-column>
+
     <flx-column [field]="ItemField.M2PriceStreetMedianAverage"
                 [header]="'streetMedian'"></flx-column>
 
