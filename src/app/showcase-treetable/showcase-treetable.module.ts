@@ -19,17 +19,6 @@ import { ShowcaseTreetableComponent } from './showcase-treetable.component';
 
 import { TestComponent } from './test/test.component';
 import { GetStartedComponent } from './get-started/get-started.component';
-import { PikerComponent } from './piker/piker.component';
-import { PikerService } from './piker/piker.service';
-
-// stuff for Piker
-import { ItemEditComponent } from './piker/modals/item-edit/item-edit.component';
-import { AnalyticsComponent } from './piker/modals/analytics/analytics.component';
-import { MapsComponent } from './piker/modals/maps/maps.component';
-import { GroupItemsComponent } from './piker/modals/group-items/group-items.component';
-import { AddressMatchingComponent } from './piker/modals/address-matching/address-matching.component';
-import { UpdateTriggerComponent } from './piker/modals/update-trigger/update-trigger.component';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -44,25 +33,12 @@ import { UpdateTriggerComponent } from './piker/modals/update-trigger/update-tri
     HighchartsChartModule,
   ],
   declarations: [
-    PikerComponent,
     ShowcaseTreetableComponent,
     TestComponent,
-    GetStartedComponent,
-    AnalyticsComponent,
-    ItemEditComponent,
-    MapsComponent,
-    GroupItemsComponent,
-    AddressMatchingComponent,
-    UpdateTriggerComponent
+    GetStartedComponent
   ],
   entryComponents: [
-    ItemEditComponent,
-    AnalyticsComponent,
-    MapsComponent,
-    GroupItemsComponent,
-    AddressMatchingComponent,
-    UpdateTriggerComponent
   ],
-  providers: [PikerService, ShowcaseTreetableService],
+  providers: [ShowcaseTreetableService],
 })
 export class ShowcaseTreetableModule {}

@@ -6,8 +6,6 @@ import { TestComponent } from './test/test.component';
 import { GetStartedComponent } from './get-started/get-started.component';
 import { ScrollingComponent } from './scrolling/scrolling.component';
 
-import { PikerComponent } from './piker/piker.component';
-
 export const showcaseTreetableRoutes: Routes = [
   {
     path: 'treetable',
@@ -17,8 +15,7 @@ export const showcaseTreetableRoutes: Routes = [
       { path: '', component: OverviewComponent },
       { path: 'test', component: TestComponent },
       { path: 'get-started', component: GetStartedComponent },
-      { path: 'scrolling', component: ScrollingComponent },
-      { path: 'piker', component: PikerComponent }
+      { path: 'scrolling', component: ScrollingComponent }
     ]
   }
 ];
