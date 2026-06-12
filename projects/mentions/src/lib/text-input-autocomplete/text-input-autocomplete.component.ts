@@ -155,9 +155,6 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   ngOnInit() {
-    const onKeydown = this.renderer.listen(this.textInputElement, 'keydown', (event) => this.onKeydown(event));
-    this._eventListeners.push(onKeydown);
-
     const onInput = this.renderer.listen(this.textInputElement, 'input', (event) => this.onInput(event));
     this._eventListeners.push(onInput);
 
@@ -178,14 +175,14 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   // between '@' and backspace. beforeinput provides reliable inputType/data on both
   // desktop and Android, and fires before the change so selectionStart is still correct.
   @HostListener('beforeinput', ['$event'])
-  onBeforeInput(event: InputEvent) {
-    const cursorPosition = this.textarea.selectionStart;
+  onBeforeInput(event: any) {
+    const cursorPosition = this.textInputElement.selectionStart;
 
     if (
       event.inputType === 'insertText' &&
       event.data === this.triggerCharacter
     ) {
-      const precedingChar = this.textarea.value.charAt(cursorPosition - 1);
+      const precedingChar = this.textInputElement.value.charAt(cursorPosition - 1);
       if (precedingCharValid(precedingChar)) {
         this.showMenu();
       }
