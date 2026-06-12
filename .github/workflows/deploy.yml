@@ -1,0 +1,32 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - v1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy with Docker Compose
+      uses: appleboy/ssh-action@v1.2.2
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+            # Navigate to the directory where your project is on the server
+            cd /var/www/flxng 
+
+            # Pull the latest changes from GitHub  (not needed since checkout command is already doing it?)
+            git pull --ff-only
+
+            # Rebuild and restart the Docker services
+            sudo docker compose up --build -d

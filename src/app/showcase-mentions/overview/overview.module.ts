@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 import { MentionsModule as FlxngMentionsModule } from '@flxng/mentions';
@@ -28,6 +30,8 @@ import { OverviewEComponent } from './overview-e/overview-e.component';
   imports: [
     CommonModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatMenuModule,
     FlxngCommonModule,
     FlxngMentionsModule,
     FlxngLoaderModule,

@@ -52,6 +52,21 @@ button {
   }
 }
 
+.flx-clickable {
+  cursor: pointer;
+
+  &:hover {
+    font-weight: bold;
+  }
+}
+
+.flx-margin-top-10 {
+  margin-top: 10px;
+}
+.flx-margin-top-20 {
+  margin-top: 20px;
+}
+
 .flx-button {
   width: 100%;
   border: 1px solid #808080;

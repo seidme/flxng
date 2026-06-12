@@ -1,15 +1,12 @@
 export function getScrollbarWidth(): number {
-    let scrollbarWidth: number = 0;
-    let docBodyElem = document.body;
+  const elem = document.createElement('div');
+  elem.style['overflow'] = 'scroll';
+  elem.style['width'] = '100px';
+  elem.style['height'] = '100px';
 
-    let elem = document.createElement('div');
-    elem.style['overflow'] = 'scroll';
-    elem.style['width'] = '100px';
-    elem.style['height'] = '100px';
+  document.body.appendChild(elem);
+  const scrollbarWidth = elem.offsetWidth - elem.clientWidth;
+  document.body.removeChild(elem);
 
-    docBodyElem.appendChild(elem);
-    scrollbarWidth = elem.offsetWidth - elem.clientWidth;
-    docBodyElem.removeChild(elem);
-
-    return scrollbarWidth;
+  return scrollbarWidth;
 }

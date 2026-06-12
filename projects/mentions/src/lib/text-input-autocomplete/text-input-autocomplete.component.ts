@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   NgZone,
   OnChanges,
@@ -154,9 +155,6 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
   }
 
   ngOnInit() {
-    const onKeydown = this.renderer.listen(this.textInputElement, 'keydown', (event) => this.onKeydown(event));
-    this._eventListeners.push(onKeydown);
-
     const onInput = this.renderer.listen(this.textInputElement, 'input', (event) => this.onInput(event));
     this._eventListeners.push(onInput);
 
@@ -172,18 +170,29 @@ export class TextInputAutocompleteComponent implements OnChanges, OnInit, OnDest
     this._eventListeners.forEach((unregister) => unregister());
   }
 
-  onKeydown(event: KeyboardEvent): void {
+  // beforeinput is used instead of keydown because keydown fires with keyCode 229
+  // (Unidentified) for all keys on Android IME, making it impossible to distinguish
+  // between '@' and backspace. beforeinput provides reliable inputType/data on both
+  // desktop and Android, and fires before the change so selectionStart is still correct.
+  @HostListener('beforeinput', ['$event'])
+  onBeforeInput(event: any) {
     const cursorPosition = this.textInputElement.selectionStart;
-    const precedingChar = this.textInputElement.value.charAt(cursorPosition - 1);
 
-    if (event.key === this.triggerCharacter && precedingCharValid(precedingChar)) {
-      this.showMenu();
+    if (
+      event.inputType === 'insertText' &&
+      event.data === this.triggerCharacter
+    ) {
+      const precedingChar = this.textInputElement.value.charAt(cursorPosition - 1);
+      if (precedingCharValid(precedingChar)) {
+        this.showMenu();
+      }
       return;
     }
 
-    const keyCode = event.keyCode || event.charCode;
-    if (keyCode === 8 || keyCode === 46) {
-      // backspace or delete
+    if (
+      event.inputType === 'deleteContentBackward' ||
+      event.inputType === 'deleteContentForward'
+    ) {
       const cwiToEdit = this._selectedCwis.find((cwi) => {
         const label = this.getChoiceLabel(cwi.choice);
         const labelEndIndex = this.getChoiceIndex(label) + label.length;

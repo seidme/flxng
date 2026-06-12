@@ -48,7 +48,7 @@ export class LoaderService {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 100, 0.1);
         z-index: 999;
 
         display: flex;

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { CommonModule as FlxngCommonModule } from '@flxng/common';
 
+import { ModalService } from './components/modal/modal.service';
+
 import { MenuComponent } from './components/menu/menu.component';
 import { HamburgerComponent } from './components/hamburger/hamburger.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -12,6 +14,7 @@ import { ExpandableComponent } from './components/expandable/expandable.componen
 import { ChevronComponent } from './components/chevron/chevron.component';
 import { AccordionComponent } from './components/accordion/accordion.component';
 import { PackageSetupDocsComponent } from './components/package-setup-docs/package-setup-docs.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   imports: [CommonModule, FlxngCommonModule],
@@ -25,6 +28,7 @@ import { PackageSetupDocsComponent } from './components/package-setup-docs/packa
     ChevronComponent,
     AccordionComponent,
     PackageSetupDocsComponent,
+    ModalComponent,
   ],
   declarations: [
     MenuComponent,
@@ -36,7 +40,8 @@ import { PackageSetupDocsComponent } from './components/package-setup-docs/packa
     ChevronComponent,
     AccordionComponent,
     PackageSetupDocsComponent,
+    ModalComponent,
   ],
-  providers: [],
+  providers: [ModalService],
 })
 export class SharedModule {}

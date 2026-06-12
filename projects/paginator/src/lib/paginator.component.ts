@@ -16,6 +16,15 @@ import {
 import { TemplateDirective } from '@flxng/common';
 import { mapToIterable } from '@flxng/common';
 
+export interface PageChangeParams {
+  skip: number;
+  take: number;
+  startIndex: number;
+  endIndex: number;
+  currentPage: number;
+  initial: boolean;
+}
+
 @Component({
   selector: 'flx-paginator',
   templateUrl: './paginator.component.html',
@@ -23,7 +32,7 @@ import { mapToIterable } from '@flxng/common';
 })
 export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
   readonly templateTypes: any = {
-    //menuHead: 'menuHead'
+    // menuHead: 'menuHead'
   };
 
   @Input() itemsCount = 0;
@@ -32,11 +41,14 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() itemsPerPageOptions?: number[]; // e.g: [5, 10, 20, 50, 100]
   @Input() currentPage = 1;
   @Input() templateRefs: any = {};
+  @Input() autoInit = true; // whether it should fire onPageChange event on component init
+  @Input() reInitOnChanges = true; // when itemsCount change whether it should automatically refresh and switch to page 1
 
-  @Output() onPageChange = new EventEmitter<any>();
+  @Output() onPageChange = new EventEmitter<PageChangeParams>();
   @Output() onItemsPerPageValueChange = new EventEmitter<number>();
 
-  @ContentChildren(TemplateDirective) templateList: QueryList<TemplateDirective>;
+  @ContentChildren(TemplateDirective)
+  templateList: QueryList<TemplateDirective>;
 
   pageLinks = [1];
   visiblePageLinks = [1];
@@ -44,27 +56,50 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.init(this.currentPage);
+    this.setPageLinks();
+    if (this.autoInit) {
+      this.navigateToPage(this.currentPage);
+    }
   }
 
   ngAfterContentInit(): void {
     this.collectTemplateRefs();
   }
 
-  init(page = 1): void {
-    this.pageLinks = [];
+  init(page?: number): void {
+    this.setPageLinks();
+    this.navigateToPage(page || 1);
+  }
 
+  setPageLinks(): void {
+    this.pageLinks = [];
     const pageCount = this.getPageCount();
 
     for (let i = 1; i <= pageCount; ++i) {
       this.pageLinks.push(i);
     }
 
-    this.navigateToPage(page);
+    this.setVisiblePageLinks();
   }
 
   getPageCount(): number {
     return Math.ceil(this.itemsCount / this.itemsPerPage) || 1;
+  }
+
+  static getPageParams(page: number, itemsPerPage: number, event?: any): PageChangeParams {
+    const skip = itemsPerPage * (page - 1);
+    const take = itemsPerPage;
+    const endIndex = itemsPerPage * page;
+    const startIndex = endIndex - itemsPerPage;
+
+    return {
+      skip,
+      take,
+      startIndex,
+      endIndex,
+      currentPage: page,
+      initial: !event && page === 1,
+    };
   }
 
   navigateToPage(p: number, event?: any): void {
@@ -80,18 +115,9 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
     this.currentPage = p;
     this.setVisiblePageLinks();
 
-    const skip = this.itemsPerPage * (this.currentPage - 1);
-    const take = this.itemsPerPage;
-    const endIndex = this.itemsPerPage * this.currentPage;
-    const startIndex = endIndex - this.itemsPerPage;
+    const currentPageParams = PaginatorComponent.getPageParams(this.currentPage, this.itemsPerPage, event);
 
-    this.onPageChange.emit({
-      skip: skip,
-      take: take,
-      startIndex: startIndex,
-      endIndex: endIndex,
-      currentPage: this.currentPage,
-    });
+    this.onPageChange.emit(currentPageParams);
   }
 
   setVisiblePageLinks(): void {
@@ -118,7 +144,7 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
       }
     }
 
-    this.visiblePageLinks.sort((plA: number, plB: number) => plA - plB);
+    this.visiblePageLinks.sort((plA, plB) => plA - plB);
 
     const lowestVisiblePl = this.visiblePageLinks[0];
     const plsPriorLowestVisiblePlExist = this.pageLinks.indexOf(lowestVisiblePl) > 0;
@@ -149,11 +175,12 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
 
   itemsPerPageValueChange(event: any): void {
     this.itemsPerPage = parseInt(event.target.value, 10);
+    this.setPageLinks();
+    this.navigateToPage(1);
     this.onItemsPerPageValueChange.emit(this.itemsPerPage);
-    this.init(1);
   }
 
-  bindFnContext(fn: Function): Function {
+  bindFnContext(fn) {
     return fn.bind(this);
   }
 
@@ -185,7 +212,10 @@ export class PaginatorComponent implements OnInit, OnChanges, AfterContentInit {
       }
 
       if (!firstChange) {
-        this.init(1);
+        this.setPageLinks();
+        if (this.reInitOnChanges) {
+          this.navigateToPage(1);
+        }
       }
     }
 
